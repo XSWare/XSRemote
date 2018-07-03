@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{6BEC67C0-9771-4A6B-8B0F-55A6017CA3EA}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>RemoteShutdown</RootNamespace>
+    <AssemblyName>RemoteShutdown</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CommandoExecutionActor.cs" />
+    <Compile Include="CommandResolver\CommandResolver.cs" />
+    <Compile Include="CommandResolver\MediaPlayerResolver.cs" />
+    <Compile Include="CommandResolver\VolumeCommandResolver.cs" />
+    <Compile Include="CryptoModule.cs" />
+    <Compile Include="Functionalty\MediaPlayerHandler.cs" />
+    <Compile Include="Functionalty\ShutdownHandler.cs" />
+    <Compile Include="Functionalty\VolumeHandler.cs" />
+    <Compile Include="Functionalty\WindowsCalls.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="CommandResolver\ShutdownCommandResolve.cs" />
+    <Compile Include="Receiver.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\RemoteShutdowLibrary\RemoteShutdowLibrary.csproj">
+      <Project>{1ad910b7-df57-42f2-b520-9af8c63b8cf4}</Project>
+      <Name>RemoteShutdowLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\XSLibrary\XSLibrary\XSMultithreadingPatterns\XSMultithreadingPatterns.csproj">
+      <Project>{983f5871-11ee-4879-b80e-4529816f0f38}</Project>
+      <Name>XSMultithreadingPatterns</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\XSLibrary\XSLibrary\XSNetwork\XSNetwork.csproj">
+      <Project>{36A1D62E-EA81-4B77-AB0B-6753A7F394ED}</Project>
+      <Name>XSNetwork</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\XSLibrary\XSLibrary\XSThreadSafety\XSThreadSafety.csproj">
+      <Project>{1364168d-0353-49f5-9dac-2a501fd8055a}</Project>
+      <Name>XSThreadSafety</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\XSLibrary\XSLibrary\XSUtility\XSUtility.csproj">
+      <Project>{A37C8BF1-08E7-46BB-8F9E-536A82365FED}</Project>
+      <Name>XSUtility</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
