@@ -8,6 +8,7 @@ namespace RemoteServer.Device
     class ControllableDevice
     {
         public event EventHandler OnDeviceDisconnect;
+        public event DeviceConnection.CommandReceivedHandler OnCommandReceived;
 
         public int DeviceID { get; private set; }
         DeviceConnection m_connection;
@@ -18,6 +19,7 @@ namespace RemoteServer.Device
             DeviceID = -1;
             m_connection = connection;
             m_connection.OnDisconnect += OnDisconnect;
+            m_connection.OnCommandReceived += OnCommandReceived;
             m_modules = m_connection.RequestModules();
         }
 

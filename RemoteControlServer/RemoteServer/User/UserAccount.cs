@@ -1,4 +1,5 @@
-﻿using RemoteServer.Device;
+﻿using RemoteServer.Connections;
+using RemoteServer.Device;
 using System;
 using XSLibrary.ThreadSafety.Containers;
 using XSLibrary.Utility;
@@ -10,6 +11,7 @@ namespace RemoteServer.User
         public Logger Log { get; set; }
         public UserData UserData { get; private set; }
         SafeList<ControllableDevice> m_devices;
+        UserConnection m_userConnection;
 
         public UserAccount(UserData userData)
         {
@@ -19,9 +21,22 @@ namespace RemoteServer.User
             m_devices = new SafeList<ControllableDevice>();
         }
 
+        public void SetUserConnection(UserConnection connection)
+        {
+            m_userConnection.OnDisconnect += RemoveUserConnection;
+            m_userConnection = connection;
+        }
+
+        private void RemoveUserConnection(object sender)
+        {
+            m_userConnection.OnDisconnect -= RemoveUserConnection;
+            m_userConnection = null;
+        }
+
         public void AddDevice(ControllableDevice device)
         {
             device.OnDeviceDisconnect += DeviceDisconnecting;
+            device.OnCommandReceived += HandleDeviceReply;
             m_devices.Add(device);
         }
 
@@ -47,6 +62,15 @@ namespace RemoteServer.User
         {
             foreach (ControllableDevice device in m_devices.Entries)
                 device.SendCommand(command);
+        }
+
+        private void HandleDeviceReply(object sender, string reply)
+        {
+            if (m_userConnection != null)
+            {
+                ControllableDevice device = sender as ControllableDevice;
+                m_userConnection.SendCommand(string.Format("Device {0} reply: {1}", device.DeviceID, reply));
+            }
         }
 
         private void DeviceDisconnecting(object sender, EventArgs e)
