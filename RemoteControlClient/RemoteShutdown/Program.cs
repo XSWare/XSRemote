@@ -27,7 +27,13 @@ namespace RemoteShutdown
                         break;
                     }
 
-                    dataReceiver.ManualCommand(command);
+                    if (command == "reconnect")
+                        break;
+
+                    if (command.StartsWith("send ") && command.Length > 5)
+                        dataReceiver.SendReply(command.Substring(5));
+                    else
+                        dataReceiver.ManualCommand(command);
                 }
 
                 dataReceiver.Dispose();

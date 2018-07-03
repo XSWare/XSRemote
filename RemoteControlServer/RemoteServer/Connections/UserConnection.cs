@@ -21,7 +21,18 @@ namespace RemoteServer.Connections
         {
             Logger.Log("Received from user: {0}", command);
 
-            m_userAccount.BroadCastCommand(command);
+            if (WantsDeviceList(command))
+            {
+                string deviceList = m_userAccount.GetDeviceList();
+                SendCommand(deviceList);
+            }
+            else
+                m_userAccount.BroadCastCommand(command);
+        }
+
+        bool WantsDeviceList(string command)
+        {
+            return command == "getdevicelist";
         }
     }
 }

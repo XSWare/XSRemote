@@ -43,6 +43,7 @@ namespace RemoteServer.User
         public void RemoveDevice(ControllableDevice device)
         {
             m_devices.Remove(device);
+            device.OnCommandReceived -= HandleDeviceReply;
             device.OnDeviceDisconnect -= DeviceDisconnecting;
         }
 
@@ -64,20 +65,36 @@ namespace RemoteServer.User
                 device.SendCommand(command);
         }
 
+        public string GetDeviceList()
+        {
+            string deviceListReply = "devicelist";
+
+            foreach (ControllableDevice device in m_devices.Entries)
+            {
+                deviceListReply += " " + device.DeviceID;
+            }
+
+            return deviceListReply;
+        }
+
         private void HandleDeviceReply(object sender, string reply)
         {
+            ControllableDevice device = sender as ControllableDevice;
+
+            Log.Log("Received reply \"{0}\" from device {1} for user \"{2}\".", reply, device.DeviceID, UserData.Username);
+
             if (m_userConnection != null)
             {
-                ControllableDevice device = sender as ControllableDevice;
                 m_userConnection.SendCommand(string.Format("Device {0} reply: {1}", device.DeviceID, reply));
             }
         }
 
         private void DeviceDisconnecting(object sender, EventArgs e)
         {
-            RemoveDevice(sender as ControllableDevice);
+            ControllableDevice device = sender as ControllableDevice;
+            RemoveDevice(device);
 
-            Log.Log("Device disconnected from user \"{0}\".", UserData.Username);
+            Log.Log("Device {0} disconnected from user \"{1}\".", device.DeviceID, UserData.Username);
         }
     }
 

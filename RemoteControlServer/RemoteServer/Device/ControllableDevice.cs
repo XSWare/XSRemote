@@ -14,12 +14,12 @@ namespace RemoteServer.Device
         DeviceConnection m_connection;
         List<DeviceModule> m_modules;
 
-        public ControllableDevice(DeviceConnection connection)
+        public ControllableDevice(DeviceConnection connection, int deviceID)
         {
-            DeviceID = -1;
+            DeviceID = deviceID;
             m_connection = connection;
-            m_connection.OnDisconnect += OnDisconnect;
-            m_connection.OnCommandReceived += OnCommandReceived;
+            m_connection.OnDisconnect += HandleDisconnect;
+            m_connection.OnCommandReceived += HandleCommandReceived;
             m_modules = m_connection.RequestModules();
         }
 
@@ -34,7 +34,12 @@ namespace RemoteServer.Device
             m_connection.SendCommand(targetModule.TranslateCommand(command));
         }
 
-        private void OnDisconnect(object sender)
+        private void HandleCommandReceived(object sender, string command)
+        {
+            OnCommandReceived?.Invoke(this, command);
+        }
+
+        private void HandleDisconnect(object sender)
         {
             OnDeviceDisconnect.Invoke(this, new EventArgs());
         }

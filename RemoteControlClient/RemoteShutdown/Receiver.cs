@@ -36,7 +36,14 @@ namespace RemoteShutdown
             m_serverConnection.ReceiveErrorEvent += OnServerDisconnect;
             m_serverConnection.InitializeReceiving();
 
-            new Thread(KeepAliveLoop).Start();
+            Thread keepAliveThread = new Thread(KeepAliveLoop);
+            keepAliveThread.Name = "Keep alive";
+            keepAliveThread.Start();
+        }
+
+        public void SendReply(string reply)
+        {
+            m_serverConnection.Send(TransmissionConverter.ConvertStringToByte(reply));
         }
 
         public void ManualCommand(string command)

@@ -13,6 +13,7 @@ namespace RemoteServer.Registrations
         TCPAccepter m_accepter;
         KeyExchange m_keyExchange;
         Authentication m_authentication;
+        protected Logger Logger { get; private set; }
 
         public Registration(TCPAccepter accepter, KeyExchange keyExchange, Authentication authentication)
         {
@@ -20,11 +21,12 @@ namespace RemoteServer.Registrations
             m_keyExchange = keyExchange;
             m_authentication = authentication;
 
-            m_accepter.Logger = new LoggerConsole();
+            Logger = new LoggerConsole();
+            m_accepter.Logger = Logger;
             m_accepter.ClientConnected += OnClientConnected;
             m_accepter.Run();
 
-            m_accepter.Logger.Log("Registration is now accepting connections on port " + m_accepter.Port);
+            Logger.Log("Registration is now accepting connections on port " + m_accepter.Port);
         }
 
         void OnClientConnected(object sender, Socket acceptedSocket)
