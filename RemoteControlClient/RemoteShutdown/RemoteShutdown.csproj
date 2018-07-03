@@ -60,9 +60,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\RemoteShutdowLibrary\RemoteShutdowLibrary.csproj">
+    <ProjectReference Include="..\..\RemoteControlLibrary\RemoteShutdownLibrary.csproj">
       <Project>{1ad910b7-df57-42f2-b520-9af8c63b8cf4}</Project>
-      <Name>RemoteShutdowLibrary</Name>
+      <Name>RemoteShutdownLibrary</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\XSLibrary\XSLibrary\XSMultithreadingPatterns\XSMultithreadingPatterns.csproj">
       <Project>{983f5871-11ee-4879-b80e-4529816f0f38}</Project>

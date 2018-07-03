@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XSMultithreadingPatterns", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XSNetwork", "..\XSLibrary\XSLibrary\XSNetwork\XSNetwork.csproj", "{36A1D62E-EA81-4B77-AB0B-6753A7F394ED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemoteShutdowLibrary", "..\RemoteShutdowLibrary\RemoteShutdowLibrary.csproj", "{1AD910B7-DF57-42F2-B520-9AF8C63B8CF4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemoteShutdownLibrary", "..\RemoteControlLibrary\RemoteShutdownLibrary.csproj", "{1AD910B7-DF57-42F2-B520-9AF8C63B8CF4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
