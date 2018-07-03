@@ -35,11 +35,11 @@ namespace RemoteServer.Registrations
             if (!m_authentication.DoAuthentication(acceptedSocket, out UserAccount user))
                 return;
 
-            TCPConnection connection = new TCPConnection(acceptedSocket);
+            TCPPacketConnection connection = new TCPPacketConnection(acceptedSocket);
             //connection.Logger = new LoggerConsole();
             HandleVerifiedConnection(user, connection);
         }
 
-        protected abstract void HandleVerifiedConnection(UserAccount user, TCPConnection clientConnection);
+        protected abstract void HandleVerifiedConnection(UserAccount user, TCPPacketConnection clientConnection);
     }
 }

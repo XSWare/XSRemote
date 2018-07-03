@@ -20,7 +20,7 @@ namespace RemoteServer.Registrations
             m_userConnections = new SafeList<UserConnection>();
         }
 
-        protected override void HandleVerifiedConnection(UserAccount user, TCPConnection clientConnection)
+        protected override void HandleVerifiedConnection(UserAccount user, TCPPacketConnection clientConnection)
         {
             UserConnection userConnection = new UserConnection(clientConnection, user);
             userConnection.OnDisconnect += OnUserDisconnect;

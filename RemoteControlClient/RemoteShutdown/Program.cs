@@ -16,7 +16,7 @@ namespace RemoteShutdown
             {
                 ConnectLoop(out Socket connection);
 
-                DataReceiver dataReceiver = new DataReceiver(new TCPConnection(connection));
+                DataReceiver dataReceiver = new DataReceiver(new TCPPacketConnection(connection));
 
                 string command = "";
                 while ((command = Console.In.ReadLine()) != "connect")

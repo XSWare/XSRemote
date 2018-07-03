@@ -10,11 +10,11 @@ namespace RemoteServer.Connections
         public delegate void ClientDisconnectHandler(object sender);
         public event ClientDisconnectHandler OnDisconnect;
 
-        protected TCPConnection m_connection;
+        protected TCPPacketConnection m_connection;
 
         public Logger Logger { get; set; }
 
-        public ConnectionBase(TCPConnection connection)
+        public ConnectionBase(TCPPacketConnection connection)
         {
             Logger = new LoggerConsole();
 

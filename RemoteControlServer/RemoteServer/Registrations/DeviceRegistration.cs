@@ -15,7 +15,7 @@ namespace RemoteServer.Registrations
         {
         }
 
-        protected override void HandleVerifiedConnection(UserAccount user, TCPConnection clientConnection)
+        protected override void HandleVerifiedConnection(UserAccount user, TCPPacketConnection clientConnection)
         {
             DeviceConnection deviceConnection = new DeviceConnection(clientConnection);
             ControllableDevice device = new ControllableDevice(deviceConnection);

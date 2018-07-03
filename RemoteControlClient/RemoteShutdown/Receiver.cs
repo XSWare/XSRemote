@@ -12,12 +12,12 @@ namespace RemoteShutdown
     {
         public event EventHandler ServerDisconnect;
 
-        TCPConnection m_serverConnection;
+        TCPPacketConnection m_serverConnection;
         CommandoExecutionActor m_commandExecutionActor;
 
         CryptoModule m_crypto;
 
-        public DataReceiver(TCPConnection serverConnection)
+        public DataReceiver(TCPPacketConnection serverConnection)
         {
             m_serverConnection = serverConnection;
 
