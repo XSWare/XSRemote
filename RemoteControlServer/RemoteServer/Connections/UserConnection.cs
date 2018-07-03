@@ -1,4 +1,5 @@
 ﻿using RemoteServer.User;
+using RemoteShutdownLibrary;
 using XSLibrary.Network.Connections;
 
 namespace RemoteServer.Connections
@@ -12,9 +13,10 @@ namespace RemoteServer.Connections
             m_userAccount = userAccount;
         }
 
-        public override void SendCommand(string command)
+        public override void Send(string data)
         {
-            m_userAccount.BroadCastCommand(command);
+            m_connection.Send(TransmissionConverter.ConvertStringToByte(data));
+            Logger.Log("Send \"{0}\" to user: {1}", data, m_userAccount.UserData.Username);
         }
 
         protected override void ReceiveCommand(string command)
@@ -24,7 +26,7 @@ namespace RemoteServer.Connections
             if (WantsDeviceList(command))
             {
                 string deviceList = m_userAccount.GetDeviceList();
-                SendCommand(deviceList);
+                Send(deviceList);
             }
             else
                 m_userAccount.BroadCastCommand(command);

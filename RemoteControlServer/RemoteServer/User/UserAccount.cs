@@ -13,6 +13,8 @@ namespace RemoteServer.User
         SafeList<ControllableDevice> m_devices;
         UserConnection m_userConnection;
 
+        public bool UserConnected { get { return m_userConnection != null; } }
+
         public UserAccount(UserData userData)
         {
             UserData = userData;
@@ -23,12 +25,16 @@ namespace RemoteServer.User
 
         public void SetUserConnection(UserConnection connection)
         {
-            m_userConnection.OnDisconnect += RemoveUserConnection;
+            RemoveUserConnection(m_userConnection);
+            connection.OnDisconnect += RemoveUserConnection;
             m_userConnection = connection;
         }
 
         private void RemoveUserConnection(object sender)
         {
+            if (m_userConnection == null)
+                return;
+
             m_userConnection.OnDisconnect -= RemoveUserConnection;
             m_userConnection = null;
         }
@@ -83,10 +89,8 @@ namespace RemoteServer.User
 
             Log.Log("Received reply \"{0}\" from device {1} for user \"{2}\".", reply, device.DeviceID, UserData.Username);
 
-            if (m_userConnection != null)
-            {
-                m_userConnection.SendCommand(string.Format("Device {0} reply: {1}", device.DeviceID, reply));
-            }
+            if (UserConnected)
+                m_userConnection.Send(string.Format("Device {0} - {1}", device.DeviceID, reply));
         }
 
         private void DeviceDisconnecting(object sender, EventArgs e)

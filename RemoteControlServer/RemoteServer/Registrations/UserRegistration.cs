@@ -20,12 +20,13 @@ namespace RemoteServer.Registrations
             m_userConnections = new SafeList<UserConnection>();
         }
 
-        protected override void HandleVerifiedConnection(UserAccount user, TCPPacketConnection clientConnection)
+        protected override void HandleVerifiedConnection(UserAccount user, TCPPacketConnection connection)
         {
-            UserConnection userConnection = new UserConnection(clientConnection, user);
+            UserConnection userConnection = new UserConnection(connection, user);
+            user.SetUserConnection(userConnection);
             userConnection.OnDisconnect += OnUserDisconnect;
-            m_userConnections.Add(new UserConnection(clientConnection, user));
-            clientConnection.Logger.Log("User \"{0}\" logged in.", user.UserData.Username);
+            m_userConnections.Add(userConnection);
+            connection.Logger.Log("User \"{0}\" logged in.", user.UserData.Username);
         }
 
         private void OnUserDisconnect(object sender)

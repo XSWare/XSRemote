@@ -31,7 +31,7 @@ namespace RemoteServer.Device
 
             m_connection.Logger.Log("Sending to device: {0}", command);
 
-            m_connection.SendCommand(targetModule.TranslateCommand(command));
+            m_connection.Send(targetModule.TranslateCommand(command));
         }
 
         private void HandleCommandReceived(object sender, string command)

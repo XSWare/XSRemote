@@ -43,7 +43,7 @@ namespace RemoteShutdown
 
         public void SendReply(string reply)
         {
-            m_serverConnection.Send(TransmissionConverter.ConvertStringToByte(reply));
+            m_serverConnection.Send(m_crypto.Encrypt(TransmissionConverter.ConvertStringToByte(reply)));
         }
 
         public void ManualCommand(string command)
@@ -72,6 +72,7 @@ namespace RemoteShutdown
         {
             string command = GetCommandoFromBytes(data);
             Console.Out.WriteLine("Received command \"{0}\"", command);
+            SendReply("Received: " + command);
             m_commandExecutionActor.SendMessage(command);
         }
 

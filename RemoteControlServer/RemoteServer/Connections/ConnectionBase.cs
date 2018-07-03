@@ -24,7 +24,7 @@ namespace RemoteServer.Connections
             m_connection.InitializeReceiving();
         }
 
-        public virtual void SendCommand(string command)
+        public virtual void Send(string command)
         {
             m_connection.Send(TransmissionConverter.ConvertStringToByte(command));
         }
