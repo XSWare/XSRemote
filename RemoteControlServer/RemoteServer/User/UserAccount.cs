@@ -35,6 +35,7 @@ namespace RemoteServer.User
             if (m_userConnection == null)
                 return;
 
+            Log.Log("User disconnected from account \"{0}\".", UserData.Username);
             m_userConnection.OnDisconnect -= RemoveUserConnection;
             m_userConnection = null;
         }
