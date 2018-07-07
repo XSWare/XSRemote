@@ -5,25 +5,27 @@ using Android.OS;
 using Android.Support.Design.Widget;
 using Android.Support.V7.App;
 using Android.Views;
+using System.Net;
+using System.Net.Sockets;
+using XSLibrary.Network.Connections;
+using RemoteShutdownLibrary;
 
 namespace RemoteControlAndroid
 {
 	[Activity(Label = "@string/app_name", Theme = "@style/AppTheme.NoActionBar", MainLauncher = true)]
 	public class MainActivity : AppCompatActivity
 	{
+        private Socket socket;
 
-		protected override void OnCreate(Bundle savedInstanceState)
+        protected override void OnCreate(Bundle savedInstanceState)
 		{
 			base.OnCreate(savedInstanceState);
 
 			SetContentView(Resource.Layout.activity_main);
 
-			Android.Support.V7.Widget.Toolbar toolbar = FindViewById<Android.Support.V7.Widget.Toolbar>(Resource.Id.toolbar);
-            SetSupportActionBar(toolbar);
-
-			FloatingActionButton fab = FindViewById<FloatingActionButton>(Resource.Id.fab);
-            fab.Click += FabOnClick;
-		}
+            Button buttonConnect = FindViewById<Button>(Resource.Id.buttonConnect);
+            buttonConnect.Click += Connect;
+        }
 
 		public override bool OnCreateOptionsMenu(IMenu menu)
         {
@@ -31,23 +33,26 @@ namespace RemoteControlAndroid
             return true;
         }
 
-        public override bool OnOptionsItemSelected(IMenuItem item)
+        private void Connect(object sender, EventArgs eventArgs)
         {
-            int id = item.ItemId;
-            if (id == Resource.Id.action_settings)
-            {
-                return true;
-            }
+            EditText editIP = FindViewById<EditText>(Resource.Id.editIP);
 
-            return base.OnOptionsItemSelected(item);
-        }
+            if (!IPAddress.TryParse(editIP.Text, out IPAddress ip))
+                return;
 
-        private void FabOnClick(object sender, EventArgs eventArgs)
-        {
-            View view = (View) sender;
-            Snackbar.Make(view, "Replace with your own action", Snackbar.LengthLong)
-                .SetAction("Action", (Android.Views.View.IOnClickListener)null).Show();
+            socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            try { socket.Connect(ip, 22223); }
+            catch { return; }
+
+            TCPPacketConnection connection = new TCPPacketConnection(socket);
+
+            connection.Send(TransmissionConverter.ConvertStringToByte("volume up"));
+            connection.Send(TransmissionConverter.ConvertStringToByte("volume down"));
+            connection.Disconnect();
+            //ECDsaOpenSsl ssl = new ECDsaOpenSsl(NamedCurves.nistP521);
+
+            //ECDsaCng ECDSA = new ECDsaCng(CngKey.Create(CngAlgorithm.ECDiffieHellmanP521));
         }
-	}
+    }
 }
 
