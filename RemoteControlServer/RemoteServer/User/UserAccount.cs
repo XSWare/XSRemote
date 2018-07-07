@@ -25,6 +25,8 @@ namespace RemoteServer.User
 
         public void SetUserConnection(UserConnection connection)
         {
+            Log.Log("User connected to account \"{0}\".", UserData.Username);
+
             RemoveUserConnection(m_userConnection);
             connection.OnDisconnect += RemoveUserConnection;
             m_userConnection = connection;
