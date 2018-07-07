@@ -20,7 +20,7 @@ namespace RemoteServer.Connections
 
             m_connection = connection;
             m_connection.DataReceivedEvent += ReceiveData;
-            m_connection.ReceiveErrorEvent += OnConnectionLoss;
+            m_connection.OnDisconnect += OnConnectionLoss;
             m_connection.InitializeReceiving();
         }
 
@@ -38,9 +38,7 @@ namespace RemoteServer.Connections
 
         protected void OnConnectionLoss(object sender, IPEndPoint endPoint)
         {
-            ClientDisconnectHandler handler = OnDisconnect;
-            if (handler != null)
-                handler.Invoke(this);
+            OnDisconnect?.Invoke(this);
         }
 
     }
