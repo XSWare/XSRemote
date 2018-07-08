@@ -5,6 +5,7 @@ using System.Net;
 using System.Threading;
 using XSLibrary.Network.Connections;
 using RemoteShutdownLibrary;
+using XSLibrary.Network.ConnectionCryptos;
 
 namespace RemoteShutdown
 {
@@ -34,7 +35,7 @@ namespace RemoteShutdown
 
             m_serverConnection.DataReceivedEvent += OnConnectionReceive;
             m_serverConnection.OnReceiveError += OnServerDisconnect;
-            m_serverConnection.InitializeReceiving();
+            m_serverConnection.InitializeReceiving(new ECCrypto(true));
 
             Thread keepAliveThread = new Thread(KeepAliveLoop);
             keepAliveThread.Name = "Keep alive";

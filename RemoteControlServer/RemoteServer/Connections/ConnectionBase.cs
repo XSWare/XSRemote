@@ -1,5 +1,6 @@
 ﻿using RemoteShutdownLibrary;
 using System.Net;
+using XSLibrary.Network.ConnectionCryptos;
 using XSLibrary.Network.Connections;
 using XSLibrary.Utility;
 
@@ -21,7 +22,7 @@ namespace RemoteServer.Connections
             m_connection = connection;
             m_connection.DataReceivedEvent += ReceiveData;
             m_connection.OnDisconnect += OnConnectionLoss;
-            m_connection.InitializeReceiving();
+            m_connection.InitializeReceiving(new ECCrypto(false));
         }
 
         public virtual void Send(string command)
