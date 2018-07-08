@@ -68,7 +68,7 @@ namespace RemoteShutdown
             }
         }
 
-        private void OnConnectionReceive(object sender, byte[] data)
+        private void OnConnectionReceive(object sender, byte[] data, IPEndPoint source)
         {
             string command = GetCommandoFromBytes(data);
             Console.Out.WriteLine("Received command \"{0}\"", command);

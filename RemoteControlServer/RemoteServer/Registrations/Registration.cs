@@ -38,7 +38,6 @@ namespace RemoteServer.Registrations
                 return;
 
             TCPPacketConnection connection = new TCPPacketConnection(acceptedSocket);
-            //connection.Logger = new LoggerConsole();
             HandleVerifiedConnection(user, connection);
         }
 

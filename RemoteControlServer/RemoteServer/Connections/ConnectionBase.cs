@@ -31,7 +31,7 @@ namespace RemoteServer.Connections
 
         protected abstract void ReceiveCommand(string command);
 
-        private void ReceiveData(object sender, byte[] data)
+        private void ReceiveData(object sender, byte[] data, IPEndPoint source)
         {
             ReceiveCommand(TransmissionConverter.ConvertByteToString(data));
         }
