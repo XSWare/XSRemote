@@ -21,6 +21,8 @@ namespace RemoteShutdown
         public DataReceiver(TCPPacketConnection serverConnection)
         {
             m_serverConnection = serverConnection;
+            if (!m_serverConnection.InitializeCrypto(new ECCrypto(true)))
+                throw new Exception("Crypto init failed!");
 
             List<CommandResolver> commandResolvers = new List<CommandResolver>()
             {
@@ -35,7 +37,7 @@ namespace RemoteShutdown
 
             m_serverConnection.DataReceivedEvent += OnConnectionReceive;
             m_serverConnection.OnReceiveError += OnServerDisconnect;
-            m_serverConnection.InitializeReceiving(new ECCrypto(true));
+            m_serverConnection.InitializeReceiving();
 
             Thread keepAliveThread = new Thread(KeepAliveLoop);
             keepAliveThread.Name = "Keep alive";

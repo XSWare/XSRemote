@@ -42,12 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Authentications\Authentication.cs" />
-    <Compile Include="Authentications\DeviceAuthentication.cs" />
-    <Compile Include="Authentications\DummyAuthentication.cs" />
     <Compile Include="Connections\ConnectionBase.cs" />
-    <Compile Include="KeyExchanges\DummyKeyExchange.cs" />
-    <Compile Include="KeyExchanges\KeyExchange.cs" />
     <Compile Include="Registrations\UserRegistration.cs" />
     <Compile Include="User\DataBase.cs" />
     <Compile Include="Connections\DeviceConnection.cs" />

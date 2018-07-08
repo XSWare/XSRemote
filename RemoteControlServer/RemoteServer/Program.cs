@@ -1,6 +1,4 @@
-﻿using RemoteServer.Authentications;
-using RemoteServer.Connections;
-using RemoteServer.Registrations;
+﻿using RemoteServer.Registrations;
 using RemoteServer.User;
 using System;
 using XSLibrary.Network.Accepters;
@@ -11,15 +9,8 @@ namespace RemoteServer
     {
         static void Main(string[] args)
         {
-            DeviceRegistration deviceRegistration = new DeviceRegistration(
-                new TCPAccepter(22222, 1000),
-                new KeyExchanges.DummyKeyExchange(),
-                new DummyAuthentication());
-
-            UserRegistration userRegistration = new UserRegistration(
-                new TCPAccepter(22223, 1000),
-                new KeyExchanges.DummyKeyExchange(),
-                new DummyAuthentication());
+            DeviceRegistration deviceRegistration = new DeviceRegistration(new TCPAccepter(22222, 1000));
+            UserRegistration userRegistration = new UserRegistration(new TCPAccepter(22223, 1000));
 
             string cmd;
             while ((cmd = Console.In.ReadLine()) != "exit")

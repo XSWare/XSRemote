@@ -1,9 +1,7 @@
-﻿using RemoteServer.Authentications;
-using XSLibrary.Network.Accepters;
+﻿using XSLibrary.Network.Accepters;
 using XSLibrary.Network.Connections;
 using RemoteServer.User;
 using RemoteServer.Device;
-using RemoteServer.KeyExchanges;
 using RemoteServer.Connections;
 
 namespace RemoteServer.Registrations
@@ -12,8 +10,8 @@ namespace RemoteServer.Registrations
     {
         int m_currentDeviceID;
 
-        public DeviceRegistration(TCPAccepter accepter, KeyExchange keyExchange, Authentication authentication)
-            : base(accepter, keyExchange, authentication)
+        public DeviceRegistration(TCPAccepter accepter)
+            : base(accepter)
         {
             m_currentDeviceID = 0;
         }

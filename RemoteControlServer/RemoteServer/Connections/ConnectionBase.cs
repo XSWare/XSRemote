@@ -20,9 +20,10 @@ namespace RemoteServer.Connections
             Logger = new LoggerConsole();
 
             m_connection = connection;
+
             m_connection.DataReceivedEvent += ReceiveData;
             m_connection.OnDisconnect += OnConnectionLoss;
-            m_connection.InitializeReceiving(new ECCrypto(false));
+            m_connection.InitializeReceiving();
         }
 
         public virtual void Send(string command)

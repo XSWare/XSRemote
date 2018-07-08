@@ -1,8 +1,6 @@
 ﻿using RemoteServer.User;
 using XSLibrary.Network.Connections;
 using XSLibrary.Network.Accepters;
-using RemoteServer.KeyExchanges;
-using RemoteServer.Authentications;
 using RemoteServer.Connections;
 using XSLibrary.ThreadSafety.Containers;
 
@@ -14,8 +12,8 @@ namespace RemoteServer.Registrations
 
         public UserConnection[] UserConnections { get { return m_userConnections.Entries; } }
 
-        public UserRegistration(TCPAccepter accepter, KeyExchange keyExchange, Authentication authentication)
-            : base(accepter, keyExchange, authentication)
+        public UserRegistration(TCPAccepter accepter)
+            : base(accepter)
         {
             m_userConnections = new SafeList<UserConnection>();
         }
