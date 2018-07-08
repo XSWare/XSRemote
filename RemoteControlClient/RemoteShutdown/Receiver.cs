@@ -33,7 +33,7 @@ namespace RemoteShutdown
             m_crypto = new CryptoModule();
 
             m_serverConnection.DataReceivedEvent += OnConnectionReceive;
-            m_serverConnection.ReceiveErrorEvent += OnServerDisconnect;
+            m_serverConnection.OnReceiveError += OnServerDisconnect;
             m_serverConnection.InitializeReceiving();
 
             Thread keepAliveThread = new Thread(KeepAliveLoop);
