@@ -1,6 +1,5 @@
 ﻿using RemoteServer.User;
 using System.Net.Sockets;
-using XSLibrary.Cryptography.ConnectionCryptos;
 using XSLibrary.Network.Accepters;
 using XSLibrary.Network.Connections;
 using XSLibrary.Utility;
@@ -27,11 +26,7 @@ namespace RemoteServer.Registrations
         void OnClientConnected(object sender, Socket acceptedSocket)
         {
             TCPPacketConnection connection = new TCPPacketConnection(acceptedSocket);
-
             connection.Logger = Logger;
-            if (!connection.InitializeCrypto(new ECCrypto(false)))
-                return;
-
             HandleVerifiedConnection(DummyDataBase.Instance.GetAccount("dummy"), connection);
         }
 

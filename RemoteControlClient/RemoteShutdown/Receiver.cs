@@ -21,6 +21,7 @@ namespace RemoteShutdown
         public DataReceiver(TCPPacketConnection serverConnection)
         {
             m_serverConnection = serverConnection;
+
             if (!m_serverConnection.InitializeCrypto(new ECCrypto(true)))
                 throw new Exception("Crypto init failed!");
 

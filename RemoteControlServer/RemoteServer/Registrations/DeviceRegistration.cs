@@ -3,6 +3,7 @@ using XSLibrary.Network.Connections;
 using RemoteServer.User;
 using RemoteServer.Device;
 using RemoteServer.Connections;
+using XSLibrary.Cryptography.ConnectionCryptos;
 
 namespace RemoteServer.Registrations
 {
@@ -18,6 +19,9 @@ namespace RemoteServer.Registrations
 
         protected override void HandleVerifiedConnection(UserAccount user, TCPPacketConnection connection)
         {
+            if (!connection.InitializeCrypto(new ECCrypto(false)))
+                return;
+
             DeviceConnection deviceConnection = new DeviceConnection(connection);
             ControllableDevice device = new ControllableDevice(deviceConnection, m_currentDeviceID++);
             user.AddDevice(device);
