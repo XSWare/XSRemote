@@ -5,7 +5,7 @@ using System.Net;
 using System.Threading;
 using XSLibrary.Network.Connections;
 using RemoteShutdownLibrary;
-using XSLibrary.Network.ConnectionCryptos;
+using XSLibrary.Cryptography.ConnectionCryptos;
 
 namespace RemoteShutdown
 {

@@ -1,6 +1,5 @@
 ﻿using RemoteShutdownLibrary;
 using System.Net;
-using XSLibrary.Network.ConnectionCryptos;
 using XSLibrary.Network.Connections;
 using XSLibrary.Utility;
 

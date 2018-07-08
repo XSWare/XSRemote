@@ -1,7 +1,7 @@
 ﻿using RemoteServer.User;
 using System.Net.Sockets;
+using XSLibrary.Cryptography.ConnectionCryptos;
 using XSLibrary.Network.Accepters;
-using XSLibrary.Network.ConnectionCryptos;
 using XSLibrary.Network.Connections;
 using XSLibrary.Utility;
 

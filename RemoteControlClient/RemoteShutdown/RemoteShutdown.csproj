@@ -64,6 +64,10 @@
       <Project>{1ad910b7-df57-42f2-b520-9af8c63b8cf4}</Project>
       <Name>RemoteShutdownLibrary</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\XSLibrary\XSLibrary\XSCryptography\XSCryptography.csproj">
+      <Project>{1b219104-b11e-49e4-861f-5200520fb9e9}</Project>
+      <Name>XSCryptography</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\XSLibrary\XSLibrary\XSMultithreadingPatterns\XSMultithreadingPatterns.csproj">
       <Project>{983f5871-11ee-4879-b80e-4529816f0f38}</Project>
       <Name>XSMultithreadingPatterns</Name>

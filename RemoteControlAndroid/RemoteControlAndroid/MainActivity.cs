@@ -9,6 +9,7 @@ using System.Net;
 using System.Net.Sockets;
 using XSLibrary.Network.Connections;
 using RemoteShutdownLibrary;
+using XSLibrary.Network.ConnectionCryptos;
 
 namespace RemoteControlAndroid
 {
@@ -45,6 +46,8 @@ namespace RemoteControlAndroid
             catch { return; }
 
             TCPPacketConnection connection = new TCPPacketConnection(socket);
+            connection.InitializeCrypto(new ECCrypto(true));
+            connection.InitializeReceiving();
 
             connection.Send(TransmissionConverter.ConvertStringToByte("volume up"));
             connection.Send(TransmissionConverter.ConvertStringToByte("volume down"));
