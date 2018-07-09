@@ -22,7 +22,7 @@ namespace RemoteShutdown
         {
             m_serverConnection = serverConnection;
 
-            if (!m_serverConnection.InitializeCrypto(new ECCrypto(true)))
+            if (!m_serverConnection.InitializeCrypto(new ECOpenSSLCrypto(true)))
                 throw new Exception("Crypto init failed!");
 
             List<CommandResolver> commandResolvers = new List<CommandResolver>()

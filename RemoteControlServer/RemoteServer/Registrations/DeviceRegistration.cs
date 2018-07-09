@@ -19,7 +19,7 @@ namespace RemoteServer.Registrations
 
         protected override void HandleVerifiedConnection(UserAccount user, TCPPacketConnection connection)
         {
-            if (!connection.InitializeCrypto(new ECCrypto(false)))
+            if (!connection.InitializeCrypto(new ECOpenSSLCrypto(false)))
                 return;
 
             DeviceConnection deviceConnection = new DeviceConnection(connection);
