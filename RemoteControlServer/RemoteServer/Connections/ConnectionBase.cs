@@ -27,7 +27,10 @@ namespace RemoteServer.Connections
 
         public void Initialize()
         {
-            if(m_connection.InitializeCrypto(new ECCrypto(false)))
+            m_connection.MaxReceiveSize = 2048;
+            m_connection.MaxPackageReceiveSize = 1024 * 1024 * 1024;
+
+            if (m_connection.InitializeCrypto(new ECCrypto(false)))
                 m_connection.InitializeReceiving();
         }
 
