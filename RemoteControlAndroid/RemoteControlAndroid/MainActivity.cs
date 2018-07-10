@@ -8,8 +8,8 @@ using Android.Views;
 using System.Net;
 using System.Net.Sockets;
 using XSLibrary.Network.Connections;
+using XSLibrary.Cryptography.ConnectionCryptos;
 using RemoteShutdownLibrary;
-using XSLibrary.Network.ConnectionCryptos;
 
 namespace RemoteControlAndroid
 {
