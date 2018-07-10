@@ -25,6 +25,7 @@ namespace RemoteServer.Registrations
             userConnection.OnDisconnect += OnUserDisconnect;
             m_userConnections.Add(userConnection);
             connection.Logger.Log("User \"{0}\" logged in.", user.UserData.Username);
+            userConnection.Initialize();
         }
 
         private void OnUserDisconnect(object sender)

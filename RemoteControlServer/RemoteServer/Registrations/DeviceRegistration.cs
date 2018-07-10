@@ -19,14 +19,12 @@ namespace RemoteServer.Registrations
 
         protected override void HandleVerifiedConnection(UserAccount user, TCPPacketConnection connection)
         {
-            if (!connection.InitializeCrypto(new ECOpenSSLCrypto(false)))
-                return;
-
             DeviceConnection deviceConnection = new DeviceConnection(connection);
             ControllableDevice device = new ControllableDevice(deviceConnection, m_currentDeviceID++);
             user.AddDevice(device);
 
             Logger.Log("Added device {0} to user \"{1}\".", device.DeviceID, user.UserData.Username);
+            deviceConnection.Initialize();
         }
     }
 }
