@@ -17,7 +17,7 @@ namespace RemoteServer.Registrations
             m_currentDeviceID = 0;
         }
 
-        protected override void HandleVerifiedConnection(UserAccount user, TCPPacketConnection connection)
+        protected override void HandleVerifiedConnection(UserAccount user, ConnectionInterface connection)
         {
             DeviceConnection deviceConnection = new DeviceConnection(connection);
             ControllableDevice device = new ControllableDevice(deviceConnection, m_currentDeviceID++);

@@ -30,6 +30,6 @@ namespace RemoteServer.Registrations
             HandleVerifiedConnection(DummyDataBase.Instance.GetAccount("dummy"), connection);
         }
 
-        protected abstract void HandleVerifiedConnection(UserAccount user, TCPPacketConnection clientConnection);
+        protected abstract void HandleVerifiedConnection(UserAccount user, ConnectionInterface clientConnection);
     }
 }

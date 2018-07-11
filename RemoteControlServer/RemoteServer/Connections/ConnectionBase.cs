@@ -11,11 +11,11 @@ namespace RemoteServer.Connections
         public delegate void ClientDisconnectHandler(object sender);
         public event ClientDisconnectHandler OnDisconnect;
 
-        protected TCPPacketConnection m_connection;
+        protected ConnectionInterface m_connection;
 
         public Logger Logger { get; set; }
 
-        public ConnectionBase(TCPPacketConnection connection)
+        public ConnectionBase(ConnectionInterface connection)
         {
             Logger = new LoggerConsole();
 
@@ -27,9 +27,6 @@ namespace RemoteServer.Connections
 
         public void Initialize()
         {
-            m_connection.MaxReceiveSize = 2048;
-            m_connection.MaxPackageReceiveSize = 1024 * 1024 * 1024;
-
             if (m_connection.InitializeCrypto(new ECCrypto(false)))
                 m_connection.InitializeReceiving();
         }

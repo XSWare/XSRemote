@@ -8,7 +8,7 @@ namespace RemoteServer.Connections
     {
         UserAccount m_userAccount;
 
-        public UserConnection(TCPPacketConnection connection, UserAccount userAccount) : base(connection)
+        public UserConnection(ConnectionInterface connection, UserAccount userAccount) : base(connection)
         {
             m_userAccount = userAccount;
         }
