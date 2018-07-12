@@ -9,7 +9,7 @@ namespace RemoteServer.Connections
         public delegate void CommandReceivedHandler(object sender, string command);
         public event CommandReceivedHandler OnCommandReceived;
 
-        public DeviceConnection(ConnectionInterface connection) : base (connection)
+        public DeviceConnection(IConnection connection) : base (connection)
         {
         }
 

@@ -8,7 +8,7 @@ namespace RemoteServer.Connections
     {
         UserAccount m_userAccount;
 
-        public UserConnection(ConnectionInterface connection, UserAccount userAccount) : base(connection)
+        public UserConnection(IConnection connection, UserAccount userAccount) : base(connection)
         {
             m_userAccount = userAccount;
         }

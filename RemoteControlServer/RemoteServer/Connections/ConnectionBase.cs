@@ -11,11 +11,11 @@ namespace RemoteServer.Connections
         public delegate void ClientDisconnectHandler(object sender);
         public event ClientDisconnectHandler OnDisconnect;
 
-        protected ConnectionInterface m_connection;
+        protected IConnection m_connection;
 
         public Logger Logger { get; set; }
 
-        public ConnectionBase(ConnectionInterface connection)
+        public ConnectionBase(IConnection connection)
         {
             Logger = new LoggerConsole();
 
@@ -38,12 +38,12 @@ namespace RemoteServer.Connections
 
         protected abstract void ReceiveCommand(string command);
 
-        private void ReceiveData(object sender, byte[] data, IPEndPoint source)
+        private void ReceiveData(object sender, byte[] data, EndPoint source)
         {
             ReceiveCommand(TransmissionConverter.ConvertByteToString(data));
         }
 
-        protected void OnConnectionLoss(object sender, IPEndPoint endPoint)
+        protected void OnConnectionLoss(object sender, EndPoint endPoint)
         {
             OnDisconnect?.Invoke(this);
         }

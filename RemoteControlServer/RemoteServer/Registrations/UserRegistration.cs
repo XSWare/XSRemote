@@ -18,7 +18,7 @@ namespace RemoteServer.Registrations
             m_userConnections = new SafeList<UserConnection>();
         }
 
-        protected override void HandleVerifiedConnection(UserAccount user, ConnectionInterface connection)
+        protected override void HandleVerifiedConnection(UserAccount user, IConnection connection)
         {
             UserConnection userConnection = new UserConnection(connection, user);
             user.SetUserConnection(userConnection);
