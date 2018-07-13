@@ -46,7 +46,7 @@ namespace RemoteControlAndroid
             catch { return; }
 
             TCPPacketConnection connection = new TCPPacketConnection(socket);
-            connection.InitializeCrypto(new ECCrypto(true));
+            connection.InitializeCrypto(new RSACrypto(true));
             connection.InitializeReceiving();
 
             connection.Send(TransmissionConverter.ConvertStringToByte("volume up"));

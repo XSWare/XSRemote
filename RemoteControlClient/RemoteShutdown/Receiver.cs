@@ -6,6 +6,7 @@ using System.Threading;
 using XSLibrary.Network.Connections;
 using RemoteShutdownLibrary;
 using XSLibrary.Cryptography.ConnectionCryptos;
+using XSLibrary.Utility;
 
 namespace RemoteShutdown
 {
@@ -21,8 +22,9 @@ namespace RemoteShutdown
         public DataReceiver(TCPPacketConnection serverConnection)
         {
             m_serverConnection = serverConnection;
+            m_serverConnection.Logger = new LoggerConsole();
 
-            if (!m_serverConnection.InitializeCrypto(new ECOpenSSLCrypto(true)))
+            if (!m_serverConnection.InitializeCrypto(new RSACrypto(true)))
                 throw new Exception("Crypto init failed!");
 
             List<CommandResolver> commandResolvers = new List<CommandResolver>()
@@ -55,7 +57,7 @@ namespace RemoteShutdown
             m_commandExecutionActor.SendMessage(command);
         }
 
-        private void OnServerDisconnect(object sender, IPEndPoint endpoint)
+        private void OnServerDisconnect(object sender, EndPoint endpoint)
         {
             TCPConnection connection = sender as TCPConnection;
             connection.Disconnect();
@@ -72,7 +74,7 @@ namespace RemoteShutdown
             }
         }
 
-        private void OnConnectionReceive(object sender, byte[] data, IPEndPoint source)
+        private void OnConnectionReceive(object sender, byte[] data, EndPoint source)
         {
             string command = GetCommandoFromBytes(data);
             Console.Out.WriteLine("Received command \"{0}\"", command);

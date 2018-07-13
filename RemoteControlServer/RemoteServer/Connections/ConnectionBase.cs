@@ -27,7 +27,7 @@ namespace RemoteServer.Connections
 
         public void Initialize()
         {
-            if (m_connection.InitializeCrypto(new ECCrypto(false)))
+            if (m_connection.InitializeCrypto(new RSACrypto(false)))
                 m_connection.InitializeReceiving();
         }
 
