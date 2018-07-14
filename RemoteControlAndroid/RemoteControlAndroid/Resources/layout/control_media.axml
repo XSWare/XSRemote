@@ -16,17 +16,17 @@
         android:layout_height="60.0dp">
         <Button
             android:text="Prev"
-            android:layout_width="120.0dp"
+            android:layout_width="100.0dp"
             android:layout_height="match_parent"
             android:id="@+id/buttonPrevious" />
         <Button
             android:text="Play"
-            android:layout_width="120.0dp"
+            android:layout_width="100.0dp"
             android:layout_height="match_parent"
             android:id="@+id/buttonPlay" />
         <Button
             android:text="Next"
-            android:layout_width="120.0dp"
+            android:layout_width="100.0dp"
             android:layout_height="match_parent"
             android:id="@+id/buttonNext" />
     </LinearLayout>
