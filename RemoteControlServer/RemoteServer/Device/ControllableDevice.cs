@@ -1,14 +1,15 @@
 ﻿using System.Collections.Generic;
 using RemoteServer.Device.Modules;
 using RemoteServer.Connections;
-using System;
+using System.Net;
+using XSLibrary.Network.Connections;
 
 namespace RemoteServer.Device
 {
     class ControllableDevice
     {
-        public event EventHandler OnDeviceDisconnect;
-        public event DeviceConnection.CommandReceivedHandler OnCommandReceived;
+        public event IConnection.CommunicationErrorHandler OnDeviceDisconnect;
+        public event ConnectionBase.DataReceivedHandler OnCommandReceived;
 
         public int DeviceID { get; private set; }
         DeviceConnection m_connection;
@@ -19,7 +20,7 @@ namespace RemoteServer.Device
             DeviceID = deviceID;
             m_connection = connection;
             m_connection.OnDisconnect += HandleDisconnect;
-            m_connection.OnCommandReceived += HandleCommandReceived;
+            m_connection.OnDataReceived += HandleCommandReceived;
             m_modules = m_connection.RequestModules();
         }
 
@@ -39,9 +40,9 @@ namespace RemoteServer.Device
             OnCommandReceived?.Invoke(this, command);
         }
 
-        private void HandleDisconnect(object sender)
+        private void HandleDisconnect(object sender, EndPoint remote)
         {
-            OnDeviceDisconnect.Invoke(this, new EventArgs());
+            OnDeviceDisconnect.Invoke(this, remote);
         }
 
         private DeviceModule GetTargetModule(string command)

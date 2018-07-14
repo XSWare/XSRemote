@@ -11,6 +11,7 @@ namespace RemoteServer.Connections
         public UserConnection(IConnection connection, UserAccount userAccount) : base(connection)
         {
             m_userAccount = userAccount;
+            OnDataReceived += ReceiveCommand;
         }
 
         public override void Send(string data)
@@ -19,17 +20,17 @@ namespace RemoteServer.Connections
             Logger.Log("Send \"{0}\" to user: {1}", data, m_userAccount.UserData.Username);
         }
 
-        protected override void ReceiveCommand(string command)
+        void ReceiveCommand(object sender, string data)
         {
-            Logger.Log("Received from user: {0}", command);
+            Logger.Log("Received from user: {0}", data);
 
-            if (WantsDeviceList(command))
+            if (WantsDeviceList(data))
             {
                 string deviceList = m_userAccount.GetDeviceList();
                 Send(deviceList);
             }
             else
-                m_userAccount.BroadCastCommand(command);
+                m_userAccount.BroadCastCommand(data);
         }
 
         bool WantsDeviceList(string command)

@@ -3,6 +3,7 @@ using XSLibrary.Network.Connections;
 using XSLibrary.Network.Accepters;
 using RemoteServer.Connections;
 using XSLibrary.ThreadSafety.Containers;
+using System.Net;
 
 namespace RemoteServer.Registrations
 {
@@ -29,7 +30,7 @@ namespace RemoteServer.Registrations
             m_userConnections.Add(userConnection);
         }
 
-        private void OnUserDisconnect(object sender)
+        private void OnUserDisconnect(object sender, EndPoint remote)
         {
             m_userConnections.Remove(sender as UserConnection);
         }

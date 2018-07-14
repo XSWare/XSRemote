@@ -1,6 +1,7 @@
 ﻿using RemoteServer.Connections;
 using RemoteServer.Device;
 using System;
+using System.Net;
 using XSLibrary.ThreadSafety.Containers;
 using XSLibrary.Utility;
 
@@ -27,18 +28,23 @@ namespace RemoteServer.User
         {
             Log.Log("User connected to account \"{0}\".", UserData.Username);
 
-            RemoveUserConnection(m_userConnection);
-            connection.OnDisconnect += RemoveUserConnection;
+            RemoveUserConnection();
+            connection.OnDisconnect += HandleUserDisconnect;
             m_userConnection = connection;
         }
 
-        private void RemoveUserConnection(object sender)
+        private void HandleUserDisconnect(object sender, EndPoint remote)
         {
             if (m_userConnection == null)
                 return;
 
             Log.Log("User disconnected from account \"{0}\".", UserData.Username);
-            m_userConnection.OnDisconnect -= RemoveUserConnection;
+            RemoveUserConnection();
+        }
+
+        private void RemoveUserConnection()
+        {
+            m_userConnection.OnDisconnect -= HandleUserDisconnect;
             m_userConnection = null;
         }
 
@@ -96,7 +102,7 @@ namespace RemoteServer.User
                 m_userConnection.Send(string.Format("Device {0} - {1}", device.DeviceID, reply));
         }
 
-        private void DeviceDisconnecting(object sender, EventArgs e)
+        private void DeviceDisconnecting(object sender, EndPoint remote)
         {
             ControllableDevice device = sender as ControllableDevice;
             RemoveDevice(device);

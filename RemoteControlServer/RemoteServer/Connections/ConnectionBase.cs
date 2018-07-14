@@ -8,8 +8,10 @@ namespace RemoteServer.Connections
 {
     abstract class ConnectionBase
     {
-        public delegate void ClientDisconnectHandler(object sender);
-        public event ClientDisconnectHandler OnDisconnect;
+        public event IConnection.CommunicationErrorHandler OnDisconnect;
+        public event DataReceivedHandler OnDataReceived;
+
+        public delegate void DataReceivedHandler(object sender, string data);
 
         protected IConnection m_connection;
 
@@ -39,16 +41,14 @@ namespace RemoteServer.Connections
             m_connection.Send(TransmissionConverter.ConvertStringToByte(command));
         }
 
-        protected abstract void ReceiveCommand(string command);
-
         private void ReceiveData(object sender, byte[] data, EndPoint source)
         {
-            ReceiveCommand(TransmissionConverter.ConvertByteToString(data));
+            OnDataReceived(this, TransmissionConverter.ConvertByteToString(data));
         }
 
-        protected void OnConnectionLoss(object sender, EndPoint endPoint)
+        protected void OnConnectionLoss(object sender, EndPoint remote)
         {
-            OnDisconnect?.Invoke(this);
+            OnDisconnect?.Invoke(this, remote);
         }
 
     }

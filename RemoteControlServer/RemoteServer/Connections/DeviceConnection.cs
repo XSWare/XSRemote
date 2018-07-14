@@ -6,16 +6,8 @@ namespace RemoteServer.Connections
 {
     class DeviceConnection : ConnectionBase
     {
-        public delegate void CommandReceivedHandler(object sender, string command);
-        public event CommandReceivedHandler OnCommandReceived;
-
         public DeviceConnection(IConnection connection) : base (connection)
         {
-        }
-
-        protected override void ReceiveCommand(string command)
-        {
-            OnCommandReceived?.Invoke(this, command);
         }
 
         public List<DeviceModule> RequestModules()
