@@ -24,6 +24,8 @@ namespace RemoteShutdown
         {
             m_serverConnection = serverConnection;
             m_serverConnection.Logger = new LoggerConsole();
+            m_serverConnection.DataReceivedEvent += OnConnectionReceive;
+            m_serverConnection.OnReceiveError += OnServerDisconnect;
 
             if (!m_serverConnection.InitializeCrypto(new RSALegacyCrypto(true)))
                 throw new Exception("Crypto init failed!");
@@ -41,8 +43,6 @@ namespace RemoteShutdown
 
             m_crypto = new CryptoModule();
 
-            m_serverConnection.DataReceivedEvent += OnConnectionReceive;
-            m_serverConnection.OnReceiveError += OnServerDisconnect;
             m_serverConnection.InitializeReceiving();
 
             Thread keepAliveThread = new Thread(KeepAliveLoop);

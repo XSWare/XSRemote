@@ -3,6 +3,7 @@ using RemoteShutdownLibrary;
 using System;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
 using System.Threading;
 using XSLibrary.Cryptography.ConnectionCryptos;
 using XSLibrary.Network.Connections;
@@ -50,6 +51,7 @@ namespace RemoteControlAndroid
 
             m_connection.OnDisconnect += HandleDisconnect;
             m_connection.InitializeReceiving();
+            m_connection.Send(Encoding.ASCII.GetBytes("dave gina2000"));
             callback();
         }
 

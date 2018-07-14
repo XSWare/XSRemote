@@ -16,7 +16,7 @@ namespace RemoteServer.Registrations
     {
         TCPAccepter m_accepter;
         protected Logger Logger { get; private set; }
-        static protected FileUserBase DataBase { get; private set; } = new FileUserBase(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\RemoteControl\\", "acounts.txt");
+        static protected FileUserBase DataBase { get; private set; } = new FileUserBase(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\RemoteControl\\", "accounts.txt");
         static public SafeList<UserAccount> Accounts { get; private set; } = new SafeList<UserAccount>();
 
         public Registration(TCPAccepter accepter)
