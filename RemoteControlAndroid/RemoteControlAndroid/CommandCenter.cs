@@ -1,7 +1,9 @@
 ﻿using RemoteShutdowLibrary;
 using RemoteShutdownLibrary;
+using System;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading;
 using XSLibrary.Cryptography.ConnectionCryptos;
 using XSLibrary.Network.Connections;
 
@@ -15,18 +17,25 @@ namespace RemoteControlAndroid
 
         public static bool Connected { get { return Instance.m_connection != null && Instance.m_connection.Connected; } }
         public string LastError { get; private set; } = "";
+        public int KeepAliveInterval { get; private set; } = 10000;
 
         TCPPacketConnection m_connection = null;
 
         private CommandCenter()
         {
+            new Thread(KeepAliveLoop).Start();
         }
 
-        async public void Connect(EndPoint remote)
+        public void Connect(EndPoint remote, Action callback)
         {
             Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             try { socket.Connect(remote); }
-            catch { LastError = "Failed to connect."; }
+            catch
+            {
+                LastError = "Failed to connect.";
+                callback();
+                return;
+            }
 
             if (m_connection != null)
                 m_connection.OnDisconnect -= HandleDisconnect;
@@ -35,11 +44,13 @@ namespace RemoteControlAndroid
             if (!m_connection.InitializeCrypto(new RSALegacyCrypto(true)))
             {
                 LastError = "Handshake failed.";
+                callback();
                 return;
             }
 
             m_connection.OnDisconnect += HandleDisconnect;
             m_connection.InitializeReceiving();
+            callback();
         }
 
         public static void SendControlCommand(string cmd)
@@ -69,6 +80,17 @@ namespace RemoteControlAndroid
         {
             if (Connected)
                 Instance.m_connection.Disconnect();
+        }
+
+        private void KeepAliveLoop()
+        {
+            while (true)
+            {
+                Thread.Sleep(KeepAliveInterval);
+
+                if(Connected)
+                    Instance.m_connection.SendKeepAlive();
+            }
         }
 
         private void HandleDisconnect(object sender, EndPoint remote)

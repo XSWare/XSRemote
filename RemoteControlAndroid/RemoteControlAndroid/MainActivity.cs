@@ -3,15 +3,8 @@ using Android.App;
 using Android.Widget;
 using Android.OS;
 using Android.Support.V7.App;
-using Android.Views;
 using System.Net;
-using System.Net.Sockets;
-using XSLibrary.Network.Connections;
-using XSLibrary.Cryptography.ConnectionCryptos;
-using RemoteShutdownLibrary;
-using System.Threading.Tasks;
-using Android.Runtime;
-using Android.Content;
+using System.Threading;
 
 namespace RemoteControlAndroid
 {
@@ -25,6 +18,8 @@ namespace RemoteControlAndroid
 			base.OnCreate(savedInstanceState);
 
 			SetContentView(Resource.Layout.activity_main);
+
+            RequestedOrientation = Android.Content.PM.ScreenOrientation.Portrait;
 
             Button buttonConnect = FindViewById<Button>(Resource.Id.buttonConnect);
             buttonConnect.Click += OnButtonConnect;
@@ -60,10 +55,16 @@ namespace RemoteControlAndroid
 
             SetStatus("Connecting...");
 
-            Task.Run(() => CommandCenter.Instance.Connect(new IPEndPoint(ip, 22223))).Wait();
+            new Thread(() => CommandCenter.Instance.Connect(new IPEndPoint(ip, 22223), () => RunOnUiThread(ConnectCallback))).Start();
+        }
 
-            if(CommandCenter.Connected)
+        private void ConnectCallback()
+        {
+            if (CommandCenter.Connected)
+            {
                 StartActivity(typeof(ControlActivity));
+                SetStatus("Disconnected.");
+            }
             else
                 SetStatus(CommandCenter.Instance.LastError);
 

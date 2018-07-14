@@ -13,11 +13,17 @@ namespace RemoteControlAndroid
     [Activity(Label = "@string/app_name", Theme = "@style/AppTheme.NoActionBar", MainLauncher = false)]
     public class ControlActivity : AppCompatActivity
     {
+        EditText textDelay;
+
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
 
             SetContentView(Resource.Layout.activity_control);
+
+            RequestedOrientation = Android.Content.PM.ScreenOrientation.Portrait;
+
+            textDelay = FindViewById<EditText>(Resource.Id.editDelay);
 
             FindViewById<Button>(Resource.Id.buttonShutdown).Click += OnButtonShutdown;
             FindViewById<Button>(Resource.Id.buttonRestart).Click += OnButtonRestart;
@@ -29,6 +35,12 @@ namespace RemoteControlAndroid
             FindViewById<Button>(Resource.Id.buttonDisconnect).Click += OnButtonDisconnect;
 
             CommandCenter.OnDisconnect += HandleDisconnect;
+        }
+
+        protected override void OnStart()
+        {
+            textDelay.SetSelection(textDelay.SelectionEnd);
+            base.OnStart();
         }
 
         private void OnButtonShutdown(object sender, EventArgs eventArgs)
@@ -54,8 +66,7 @@ namespace RemoteControlAndroid
 
         private bool GetDelay(out int delay)
         {
-            string strDelay = FindViewById<EditText>(Resource.Id.editDelay).Text;
-            return int.TryParse(strDelay, out delay);
+            return int.TryParse(textDelay.Text, out delay);
         }
 
         private void OnButtonPlay(object sender, EventArgs eventArgs)
@@ -100,7 +111,7 @@ namespace RemoteControlAndroid
 
         private void HandleDisconnect(object sender, System.Net.EndPoint remote)
         {
-            OnBackPressed();
+            RunOnUiThread(() => OnBackPressed());
         }
 
         public override void OnBackPressed()
