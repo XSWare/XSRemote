@@ -28,14 +28,12 @@ namespace RemoteControlAndroid
 
             Button buttonConnect = FindViewById<Button>(Resource.Id.buttonConnect);
             buttonConnect.Click += OnButtonConnect;
-
-            ResetStatus();
         }
 
-		public override bool OnCreateOptionsMenu(IMenu menu)
+        protected override void OnStart()
         {
-            MenuInflater.Inflate(Resource.Menu.menu_main, menu);
-            return true;
+            ResetStatus();
+            base.OnStart();
         }
 
         private void OnButtonConnect(object sender, EventArgs eventArgs)
@@ -62,7 +60,7 @@ namespace RemoteControlAndroid
 
             SetStatus("Connecting...");
 
-            Task.Run(() => CommandCenter.Instance.Connect(new IPEndPoint(ip, 22223)));
+            Task.Run(() => CommandCenter.Instance.Connect(new IPEndPoint(ip, 22223))).Wait();
 
             if(CommandCenter.Connected)
                 StartActivity(typeof(ControlActivity));

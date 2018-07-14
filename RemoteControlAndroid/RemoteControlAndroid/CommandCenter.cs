@@ -9,6 +9,8 @@ namespace RemoteControlAndroid
 {
     class CommandCenter
     {
+        public static event IConnection.CommunicationErrorHandler OnDisconnect;
+
         public static CommandCenter Instance { get; private set; } = new CommandCenter();
 
         public static bool Connected { get { return Instance.m_connection != null && Instance.m_connection.Connected; } }
@@ -20,11 +22,14 @@ namespace RemoteControlAndroid
         {
         }
 
-        public void Connect(EndPoint remote)
+        async public void Connect(EndPoint remote)
         {
             Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             try { socket.Connect(remote); }
             catch { LastError = "Failed to connect."; }
+
+            if (m_connection != null)
+                m_connection.OnDisconnect -= HandleDisconnect;
 
             m_connection = new TCPPacketConnection(socket);
             if (!m_connection.InitializeCrypto(new RSALegacyCrypto(true)))
@@ -33,6 +38,7 @@ namespace RemoteControlAndroid
                 return;
             }
 
+            m_connection.OnDisconnect += HandleDisconnect;
             m_connection.InitializeReceiving();
         }
 
@@ -63,6 +69,11 @@ namespace RemoteControlAndroid
         {
             if (Connected)
                 Instance.m_connection.Disconnect();
+        }
+
+        private void HandleDisconnect(object sender, EndPoint remote)
+        {
+            OnDisconnect?.Invoke(this, remote);
         }
     }
 }

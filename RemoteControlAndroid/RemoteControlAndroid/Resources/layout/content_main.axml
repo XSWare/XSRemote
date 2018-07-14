@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:gravity="center_horizontal">
     <TextView
-        android:text="das ist ein test"
+        android:text=""
         android:textAlignment="center"
         android:layout_width="150.0dp"
         android:layout_height="wrap_content"
@@ -25,9 +25,4 @@
         android:layout_width="120.0dp"
         android:layout_height="wrap_content"
         android:text="Connect" />
-    <Button
-        android:id="@+id/buttonDisconnect"
-        android:layout_width="120.0dp"
-        android:layout_height="wrap_content"
-        android:text="Disconnect" />
 </LinearLayout>
