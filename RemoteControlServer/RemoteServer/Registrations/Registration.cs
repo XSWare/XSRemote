@@ -38,6 +38,7 @@ namespace RemoteServer.Registrations
             connection.InitializeCrypto(new RSALegacyCrypto(false));
             if(!Authenticate(out UserAccount user, connection))
             {
+                Logger.Log("Authentication failed. Invalid user data.");
                 connection.Disconnect();
                 return;
             }
