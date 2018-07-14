@@ -18,6 +18,7 @@ namespace RemoteServer.Registrations
         protected Logger Logger { get; private set; }
         static protected FileUserBase DataBase { get; private set; } = new FileUserBase(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\RemoteControl\\", "accounts.txt");
         static public SafeList<UserAccount> Accounts { get; private set; } = new SafeList<UserAccount>();
+        public int AuthenticationTimeout { get; set; } = 30000;
 
         public Registration(TCPAccepter accepter)
         {
@@ -38,7 +39,7 @@ namespace RemoteServer.Registrations
             connection.InitializeCrypto(new RSALegacyCrypto(false));
             if(!Authenticate(out UserAccount user, connection))
             {
-                Logger.Log("Authentication failed. Invalid user data.");
+                Logger.Log("Authentication failed.");
                 connection.Disconnect();
                 return;
             }
@@ -52,8 +53,12 @@ namespace RemoteServer.Registrations
 
             try
             {
+                int timeoutBuffer = connection.ReceiveTimeout;
+                connection.ReceiveTimeout = AuthenticationTimeout;
                 if (!connection.Receive(out byte[] userData, out EndPoint source))
                     return false;
+
+                connection.ReceiveTimeout = timeoutBuffer;
 
                 string userString = Encoding.ASCII.GetString(userData);
                 string[] userSplit = userString.Split(' ');
