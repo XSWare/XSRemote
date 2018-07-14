@@ -17,7 +17,7 @@ namespace RemoteServer.Connections
         public override void Send(string data)
         {
             m_connection.Send(TransmissionConverter.ConvertStringToByte(data));
-            Logger.Log("Send \"{0}\" to user: {1}", data, m_userAccount.UserData.Username);
+            Logger.Log("Send \"{0}\" to user: {1}", data, m_userAccount.Username);
         }
 
         void ReceiveCommand(object sender, string data)

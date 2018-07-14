@@ -1,7 +1,7 @@
 ﻿using RemoteServer.Connections;
 using RemoteServer.Device;
-using System;
 using System.Net;
+using XSLibrary.Cryptography.AccountManagement;
 using XSLibrary.ThreadSafety.Containers;
 using XSLibrary.Utility;
 
@@ -10,7 +10,7 @@ namespace RemoteServer.User
     class UserAccount
     {
         public Logger Log { get; set; }
-        public UserData UserData { get; private set; }
+        public string Username { get; private set; }
         SafeList<ControllableDevice> m_devices;
         UserConnection m_userConnection;
 
@@ -18,7 +18,7 @@ namespace RemoteServer.User
 
         public UserAccount(UserData userData)
         {
-            UserData = userData;
+            Username = userData.Username;
 
             Log = new LoggerConsole();
             m_devices = new SafeList<ControllableDevice>();
@@ -26,7 +26,7 @@ namespace RemoteServer.User
 
         public void SetUserConnection(UserConnection connection)
         {
-            Log.Log("User connected to account \"{0}\".", UserData.Username);
+            Log.Log("User connected to account \"{0}\".", Username);
 
             RemoveUserConnection();
             connection.OnDisconnect += HandleUserDisconnect;
@@ -35,7 +35,7 @@ namespace RemoteServer.User
 
         private void HandleUserDisconnect(object sender, EndPoint remote)
         {
-            Log.Log("User disconnected from account \"{0}\".", UserData.Username);
+            Log.Log("User disconnected from account \"{0}\".", Username);
             RemoveUserConnection();
         }
 
@@ -96,7 +96,7 @@ namespace RemoteServer.User
         {
             ControllableDevice device = sender as ControllableDevice;
 
-            Log.Log("Received reply \"{0}\" from device {1} for user \"{2}\".", reply, device.DeviceID, UserData.Username);
+            Log.Log("Received reply \"{0}\" from device {1} for user \"{2}\".", reply, device.DeviceID, Username);
 
             if (UserConnected)
                 m_userConnection.Send(string.Format("Device {0} - {1}", device.DeviceID, reply));
@@ -107,21 +107,7 @@ namespace RemoteServer.User
             ControllableDevice device = sender as ControllableDevice;
             RemoveDevice(device);
 
-            Log.Log("Device {0} disconnected from user \"{1}\".", device.DeviceID, UserData.Username);
-        }
-    }
-
-    class UserData
-    {
-        public string Username { get; private set; }
-        public byte[] PasswordHash { get; private set; }
-        public byte[] Salt { get; private set; }
-
-        public UserData(string userName, byte[] passwordHash, byte[] salt)
-        {
-            Username = userName;
-            PasswordHash = passwordHash;
-            Salt = salt;
+            Log.Log("Device {0} disconnected from user \"{1}\".", device.DeviceID, Username);
         }
     }
 }

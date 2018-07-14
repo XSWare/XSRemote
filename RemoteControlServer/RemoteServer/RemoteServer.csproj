@@ -45,7 +45,6 @@
   <ItemGroup>
     <Compile Include="Connections\ConnectionBase.cs" />
     <Compile Include="Registrations\UserRegistration.cs" />
-    <Compile Include="User\DataBase.cs" />
     <Compile Include="Connections\DeviceConnection.cs" />
     <Compile Include="Device\Modules\DeviceModule.cs" />
     <Compile Include="Device\Modules\RepeaterModule.cs" />

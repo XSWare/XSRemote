@@ -27,15 +27,6 @@ namespace RemoteServer.Connections
             m_connection.OnDisconnect += OnConnectionLoss;
         }
 
-        public bool Initialize()
-        {
-            if (!m_connection.InitializeCrypto(new RSALegacyCrypto(false)))
-                return false;
-
-            m_connection.InitializeReceiving();
-            return true;
-        }
-
         public virtual void Send(string command)
         {
             m_connection.Send(TransmissionConverter.ConvertStringToByte(command));
