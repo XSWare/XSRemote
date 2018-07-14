@@ -7,6 +7,7 @@ using XSLibrary.Network.Connections;
 using RemoteShutdownLibrary;
 using XSLibrary.Cryptography.ConnectionCryptos;
 using XSLibrary.Utility;
+using System.Text;
 
 namespace RemoteShutdown
 {
@@ -26,6 +27,8 @@ namespace RemoteShutdown
 
             if (!m_serverConnection.InitializeCrypto(new RSALegacyCrypto(true)))
                 throw new Exception("Crypto init failed!");
+
+            m_serverConnection.Send(Encoding.ASCII.GetBytes("dave gina2000"));
 
             List<CommandResolver> commandResolvers = new List<CommandResolver>()
             {

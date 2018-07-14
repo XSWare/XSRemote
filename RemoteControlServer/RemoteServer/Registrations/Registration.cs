@@ -7,6 +7,7 @@ using XSLibrary.Cryptography.AccountManagement;
 using XSLibrary.Cryptography.ConnectionCryptos;
 using XSLibrary.Network.Accepters;
 using XSLibrary.Network.Connections;
+using XSLibrary.ThreadSafety.Containers;
 using XSLibrary.Utility;
 
 namespace RemoteServer.Registrations
@@ -16,6 +17,7 @@ namespace RemoteServer.Registrations
         TCPAccepter m_accepter;
         protected Logger Logger { get; private set; }
         static protected FileUserBase DataBase { get; private set; } = new FileUserBase(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\RemoteControl\\", "acounts.txt");
+        static public SafeList<UserAccount> Accounts { get; private set; } = new SafeList<UserAccount>();
 
         public Registration(TCPAccepter accepter)
         {
@@ -34,16 +36,16 @@ namespace RemoteServer.Registrations
             TCPPacketConnection connection = new TCPPacketConnection(acceptedSocket);
             connection.Logger = Logger;
             connection.InitializeCrypto(new RSALegacyCrypto(false));
-            if(!Authenticate(out UserData user, connection))
+            if(!Authenticate(out UserAccount user, connection))
             {
                 connection.Disconnect();
                 return;
             }
 
-            HandleVerifiedConnection(new UserAccount(user), connection); // DataBase.Instance.GetAccount("dummy")
+            HandleVerifiedConnection(user, connection); // DataBase.Instance.GetAccount("dummy")
         }
 
-        bool Authenticate(out UserData user, IConnection connection)
+        bool Authenticate(out UserAccount user, IConnection connection)
         {
             user = null;
 
@@ -58,12 +60,32 @@ namespace RemoteServer.Registrations
                 if (userSplit.Length != 2)
                     return false;
 
-                return DataBase.Validate(userSplit[0], HexStringConverter.ToBytes(userSplit[1]));
+                string username = userSplit[0];
+
+                if (!DataBase.Validate(username, Encoding.ASCII.GetBytes(userSplit[1])))
+                    return false;
+
+                user = GetUserAccount(username);
+                return true;
             }
             catch (Exception ex)
             {
                 return false;
             }
+        }
+
+        public UserAccount GetUserAccount(string username)
+        {
+            foreach (UserAccount account in Accounts.Entries)
+            {
+                if (account.Username == username)
+                    return account;
+            }
+
+            UserAccount user = new UserAccount(username);
+            Accounts.Add(user);
+
+            return user;
         }
 
         protected abstract void HandleVerifiedConnection(UserAccount user, IConnection clientConnection);

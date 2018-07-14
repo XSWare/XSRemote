@@ -7,30 +7,30 @@ namespace RemoteServer
 {
     class Program
     {
+        static DeviceRegistration deviceRegistration = new DeviceRegistration(new TCPAccepter(22222, 1000));
+        static UserRegistration userRegistration = new UserRegistration(new TCPAccepter(22223, 1000));
+
         static void Main(string[] args)
         {
-            DeviceRegistration deviceRegistration = new DeviceRegistration(new TCPAccepter(22222, 1000));
-            UserRegistration userRegistration = new UserRegistration(new TCPAccepter(22223, 1000));
-
             string cmd;
             while ((cmd = Console.In.ReadLine()) != "exit")
             {
                 if (cmd == "backlog")
                     Console.Out.WriteLine("Current backlog count: {0}", deviceRegistration);
                 else if (cmd.Substring(0, 7) == "adduser")
-                    AddUser(cmd, userRegistration);
+                    AddUser(cmd);
                 else
                     ManualCommand(cmd);
             }
         }
 
-        private static void AddUser(string cmd, UserRegistration registration)
+        private static void AddUser(string cmd)
         {
             string[] cmdSplit = cmd.Split(' ');
             if (cmdSplit.Length != 3)
                 return;
 
-            registration.AddUser(cmdSplit[1], cmdSplit[2]);
+            userRegistration.AddUser(cmdSplit[1], cmdSplit[2]);
         }
 
         static void ManualCommand(string command)
@@ -40,7 +40,7 @@ namespace RemoteServer
             if (cmdSplit.Length < 3)
                 return;
 
-            UserAccount user = DataBase.Instance.GetAccount(cmdSplit[0]);
+            UserAccount user = userRegistration.GetUserAccount(cmdSplit[0]);
 
             string deviceCommand = cmdSplit[2];
             for (int i = 3; i < cmdSplit.Length; i++)

@@ -16,9 +16,9 @@ namespace RemoteServer.User
 
         public bool UserConnected { get { return m_userConnection != null; } }
 
-        public UserAccount(UserData userData)
+        public UserAccount(string username)
         {
-            Username = userData.Username;
+            Username = username;
 
             Log = new LoggerConsole();
             m_devices = new SafeList<ControllableDevice>();
