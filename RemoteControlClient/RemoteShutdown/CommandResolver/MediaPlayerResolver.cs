@@ -1,22 +1,24 @@
-﻿namespace RemoteShutdown.CommandResolving
+﻿using RemoteShutdowLibrary;
+
+namespace RemoteShutdown.CommandResolving
 {
     class MediaPlayerResolver : CommandResolver
     {
         MediaPlayerHandler MediaHandler { get; set; } = new MediaPlayerHandler();
 
-        public override string KeyPhrase { get { return "media"; } }
+        public override string KeyPhrase { get { return Commands.MEDIA; } }
 
         protected override bool Execute(string option, string argument)
         {
             switch (option)
             {
-                case "play":
+                case Commands.MEDIA_PLAY:
                     MediaHandler.StartStop();
                     return true;
-                case "previous":
+                case Commands.MEDIA_PREVIOUS:
                     MediaHandler.Previous();
                     return true;
-                case "next":
+                case Commands.MEDIA_NEXT:
                     MediaHandler.Next();
                     return true;
             }

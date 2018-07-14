@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RemoteShutdowLibrary;
+using System;
 
 namespace RemoteShutdown.CommandResolving
 {
@@ -11,7 +12,7 @@ namespace RemoteShutdown.CommandResolving
             m_shutdownHandler = shutdownHandler;
         }
 
-        public override string KeyPhrase { get { return "control"; } }
+        public override string KeyPhrase { get { return Commands.CONTROL; } }
 
         protected override bool Execute(string option, string argument)
         {
@@ -22,15 +23,15 @@ namespace RemoteShutdown.CommandResolving
 
             switch (option)
             {
-                case "shutdown":
+                case Commands.CONTROL_SHUTDOWN:
                     m_shutdownHandler.Shutdown(delay);
                     return true;
 
-                case "restart":
+                case Commands.CONTROL_RESTART:
                     m_shutdownHandler.Restart(delay);
                     return true;
 
-                case "abort":
+                case Commands.CONTROL_ABORT:
                     m_shutdownHandler.AbortShutdown();
                     return true;
             }

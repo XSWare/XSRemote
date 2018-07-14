@@ -1,10 +1,11 @@
-﻿using System;
+﻿using RemoteShutdowLibrary;
+using System;
 
 namespace RemoteShutdown.CommandResolving
 {
     class VolumeCommandResolver : CommandResolver
     {
-        public override string KeyPhrase { get { return "volume"; } }
+        public override string KeyPhrase { get { return Commands.VOLUME; } }
 
         VolumeHandler m_volumeHandler;
 
@@ -17,15 +18,15 @@ namespace RemoteShutdown.CommandResolving
         {
             switch (option)
             {
-                case "up":
+                case Commands.VOLUME_UP:
                     m_volumeHandler.VolUp();
                     return true;
 
-                case "down":
+                case Commands.VOLUME_DOWN:
                     m_volumeHandler.VolDown();
                     return true;
 
-                case "mute":
+                case Commands.VOLUME_MUTE:
                     m_volumeHandler.Mute();
                     return true;
             }
