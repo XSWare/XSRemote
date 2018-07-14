@@ -11,13 +11,13 @@ using XSLibrary.Cryptography.ConnectionCryptos;
 using RemoteShutdownLibrary;
 using System.Threading.Tasks;
 using Android.Runtime;
+using Android.Content;
 
 namespace RemoteControlAndroid
 {
     [Activity(Label = "@string/app_name", Theme = "@style/AppTheme.NoActionBar", MainLauncher = true)]
 	public class MainActivity : AppCompatActivity
 	{
-        private TCPPacketConnection connection;
         volatile bool connecting = false;
 
         protected override void OnCreate(Bundle savedInstanceState)
@@ -28,9 +28,6 @@ namespace RemoteControlAndroid
 
             Button buttonConnect = FindViewById<Button>(Resource.Id.buttonConnect);
             buttonConnect.Click += OnButtonConnect;
-
-            Button buttonDisonnect = FindViewById<Button>(Resource.Id.buttonDisconnect);
-            buttonDisonnect.Click += OnButtonDisconnect;
 
             ResetStatus();
         }
@@ -43,7 +40,13 @@ namespace RemoteControlAndroid
 
         private void OnButtonConnect(object sender, EventArgs eventArgs)
         {
-            if (connecting || connection != null)
+            if(CommandCenter.Connected)
+            {
+                StartActivity(typeof(ControlActivity));
+                return;
+            }
+
+            if (connecting)
                 return;
 
             connecting = true;
@@ -59,47 +62,14 @@ namespace RemoteControlAndroid
 
             SetStatus("Connecting...");
 
-            Task.Run(() => SetStatus(Connect(new IPEndPoint(ip, 22223))));
-        }
+            Task.Run(() => CommandCenter.Instance.Connect(new IPEndPoint(ip, 22223)));
 
-        private string Connect(EndPoint remote)
-        {
-            try
-            {
-                Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                try { socket.Connect(remote); }
-                catch { return "Failed to connect."; }
+            if(CommandCenter.Connected)
+                StartActivity(typeof(ControlActivity));
+            else
+                SetStatus(CommandCenter.Instance.LastError);
 
-                connection = new TCPPacketConnection(socket);
-                if (!connection.InitializeCrypto(new RSALegacyCrypto(true)))
-                {
-                    connection = null;
-                    return "Handshake failed.";
-                }
-
-                connection.InitializeReceiving();
-
-                connection.Send(TransmissionConverter.ConvertStringToByte("volume up"));
-                connection.Send(TransmissionConverter.ConvertStringToByte("volume down"));
-
-                return "Connected.";
-            }
-            finally
-            {
-                connecting = false;
-            }
-
-            return "Failure!";
-        }
-
-        private void OnButtonDisconnect(object sender, EventArgs eventArgs)
-        {
-            if (connection != null)
-            {
-                connection.Disconnect();
-                connection = null;
-                SetStatus("Disconnected.");
-            }
+            connecting = false;
         }
 
         private void SetStatus(string status)
@@ -111,34 +81,6 @@ namespace RemoteControlAndroid
         private void ResetStatus()
         {
             SetStatus("");
-        }
-
-        public override bool OnKeyDown([GeneratedEnum] Keycode keyCode, KeyEvent e)
-        {
-            switch (keyCode)
-            {
-                case Keycode.VolumeDown:
-                    SendVolumeCommand("down");
-                    return true;
-                case Keycode.VolumeUp:
-                    SendVolumeCommand("up");
-                    return true;
-            }
-
-            return base.OnKeyDown(keyCode, e);
-        }
-
-        private void SendVolumeCommand(string cmd)
-        {
-            SendCommand("volume " + cmd);
-        }
-
-        private void SendCommand(string cmd)
-        {
-            if (connection == null)
-                return;
-
-            connection.Send(TransmissionConverter.ConvertStringToByte(cmd));
         }
     }
 }
