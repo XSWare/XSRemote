@@ -36,8 +36,11 @@ namespace RemoteServer.Registrations
         {
             TCPPacketConnection connection = new TCPPacketConnection(acceptedSocket);
             connection.Logger = Logger;
-            connection.InitializeCrypto(new RSALegacyCrypto(false));
-            if(!Authenticate(out UserAccount user, connection))
+
+            if(!connection.InitializeCrypto(new RSALegacyCrypto(false)))
+                return;
+            
+            if (!Authenticate(out UserAccount user, connection))
             {
                 Logger.Log("Authentication failed.");
                 connection.Disconnect();

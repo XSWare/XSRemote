@@ -17,7 +17,7 @@ namespace RemoteServer
             {
                 if (cmd == "backlog")
                     Console.Out.WriteLine("Current backlog count: {0}", deviceRegistration);
-                else if (cmd.Substring(0, 7) == "adduser")
+                else if (cmd.Length > 7 && cmd.Substring(0, 7) == "adduser")
                     AddUser(cmd);
                 else
                     ManualCommand(cmd);
