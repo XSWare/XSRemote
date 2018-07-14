@@ -15,7 +15,6 @@ namespace RemoteServer.Connections
 
         protected override void ReceiveCommand(string command)
         {
-            Logger.Log("Received data from device.");
             OnCommandReceived?.Invoke(this, command);
         }
 
