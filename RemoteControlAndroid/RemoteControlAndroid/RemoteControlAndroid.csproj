@@ -3,6 +3,8 @@
   <PropertyGroup>
     <UseShortFileNames>True</UseShortFileNames>
     <IntermediateOutputPath>C:\Projects\Android</IntermediateOutputPath>
+    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
+    <AndroidUseLatestPlatformSdk>false</AndroidUseLatestPlatformSdk>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>

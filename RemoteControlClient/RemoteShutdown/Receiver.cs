@@ -24,7 +24,7 @@ namespace RemoteShutdown
             m_serverConnection = serverConnection;
             m_serverConnection.Logger = new LoggerConsole();
 
-            if (!m_serverConnection.InitializeCrypto(new RSACrypto(true)))
+            if (!m_serverConnection.InitializeCrypto(new RSALegacyCrypto(true)))
                 throw new Exception("Crypto init failed!");
 
             List<CommandResolver> commandResolvers = new List<CommandResolver>()

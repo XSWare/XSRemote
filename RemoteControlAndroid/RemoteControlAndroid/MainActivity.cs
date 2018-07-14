@@ -10,6 +10,7 @@ using System.Net.Sockets;
 using XSLibrary.Network.Connections;
 using XSLibrary.Cryptography.ConnectionCryptos;
 using RemoteShutdownLibrary;
+using System.Security.Cryptography;
 
 namespace RemoteControlAndroid
 {
@@ -42,11 +43,12 @@ namespace RemoteControlAndroid
                 return;
 
             socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            
             try { socket.Connect(ip, 22223); }
             catch { return; }
 
             TCPPacketConnection connection = new TCPPacketConnection(socket);
-            connection.InitializeCrypto(new RSACrypto(true));
+            connection.InitializeCrypto(new RSALegacyCrypto(true));
             connection.InitializeReceiving();
 
             connection.Send(TransmissionConverter.ConvertStringToByte("volume up"));
