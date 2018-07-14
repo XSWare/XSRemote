@@ -35,15 +35,15 @@ namespace RemoteServer.User
 
         private void HandleUserDisconnect(object sender, EndPoint remote)
         {
-            if (m_userConnection == null)
-                return;
-
             Log.Log("User disconnected from account \"{0}\".", UserData.Username);
             RemoveUserConnection();
         }
 
         private void RemoveUserConnection()
         {
+            if (m_userConnection == null)
+                return;
+
             m_userConnection.OnDisconnect -= HandleUserDisconnect;
             m_userConnection = null;
         }
