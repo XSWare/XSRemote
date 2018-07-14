@@ -21,11 +21,12 @@ namespace RemoteServer.Registrations
         protected override void HandleVerifiedConnection(UserAccount user, IConnection connection)
         {
             UserConnection userConnection = new UserConnection(connection, user);
+            if (!userConnection.Initialize())
+                return;
+
             user.SetUserConnection(userConnection);
             userConnection.OnDisconnect += OnUserDisconnect;
             m_userConnections.Add(userConnection);
-            connection.Logger.Log("User \"{0}\" logged in.", user.UserData.Username);
-            userConnection.Initialize();
         }
 
         private void OnUserDisconnect(object sender)
