@@ -7,8 +7,8 @@ namespace RemoteServer
 {
     class Program
     {
-        static DeviceRegistration deviceRegistration = new DeviceRegistration(new TCPAccepter(22222, 1000));
-        static UserRegistration userRegistration = new UserRegistration(new TCPAccepter(22223, 1000));
+        static DeviceRegistration deviceRegistration = new DeviceRegistration(new GuardedAccepter(22222, 1000));
+        static UserRegistration userRegistration = new UserRegistration(new GuardedAccepter(22223, 1000));
 
         static void Main(string[] args)
         {
