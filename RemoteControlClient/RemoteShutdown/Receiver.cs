@@ -18,8 +18,6 @@ namespace RemoteShutdown
         TCPPacketConnection m_serverConnection;
         CommandoExecutionActor m_commandExecutionActor;
 
-        CryptoModule m_crypto;
-
         public DataReceiver(TCPPacketConnection serverConnection)
         {
             m_serverConnection = serverConnection;
@@ -41,8 +39,6 @@ namespace RemoteShutdown
 
             m_commandExecutionActor = new CommandoExecutionActor(commandResolvers);
 
-            m_crypto = new CryptoModule();
-
             m_serverConnection.InitializeReceiving();
 
             Thread keepAliveThread = new Thread(KeepAliveLoop);
@@ -52,7 +48,7 @@ namespace RemoteShutdown
 
         public void SendReply(string reply)
         {
-            m_serverConnection.Send(m_crypto.Encrypt(TransmissionConverter.ConvertStringToByte(reply)));
+            m_serverConnection.Send(TransmissionConverter.ConvertStringToByte(reply));
         }
 
         public void ManualCommand(string command)
@@ -87,8 +83,7 @@ namespace RemoteShutdown
 
         private string GetCommandoFromBytes(byte[] data)
         {
-            byte[] decryptedData = m_crypto.Decrypt(data);
-            return TransmissionConverter.ConvertByteToString(decryptedData).Trim();
+            return TransmissionConverter.ConvertByteToString(data).Trim();
         }
 
         public void Dispose()
