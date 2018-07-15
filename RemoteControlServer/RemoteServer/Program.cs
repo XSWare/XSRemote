@@ -34,7 +34,7 @@ namespace RemoteServer
 
             if (selection == "add" && cmdSplit.Length == 4)
                 userRegistration.AddUser(cmdSplit[2], cmdSplit[3]);
-            else if (selection == "delete" && cmdSplit.Length == 3)
+            else if (selection == "remove" && cmdSplit.Length == 3)
                 userRegistration.DeleteUser(cmdSplit[2]);
             else if (selection == "changepw" && cmdSplit.Length == 5)
                 userRegistration.ChangePassword(cmdSplit[2], cmdSplit[3], cmdSplit[4]);
