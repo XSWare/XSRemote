@@ -30,7 +30,7 @@ namespace RemoteServer.Device
             if (targetModule == null)
                 return;
 
-            m_connection.Logger.Log("Sending to device: {0}", command);
+            m_connection.Logger.Log("Sending to device {0}: {1}", DeviceID, command);
 
             m_connection.Send(targetModule.TranslateCommand(command));
         }

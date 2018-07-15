@@ -41,7 +41,9 @@ namespace RemoteServer.Registrations
         void OnClientConnected(object sender, Socket acceptedSocket)
         {
             TCPPacketConnection connection = new TCPPacketConnection(acceptedSocket);
+#if DEBUG
             connection.Logger = Logger;
+#endif
 
             connection.HandshakeTimeout = 30000;
             if(!connection.InitializeCrypto(new RSALegacyCrypto(false)))

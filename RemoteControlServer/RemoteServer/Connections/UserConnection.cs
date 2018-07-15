@@ -22,7 +22,7 @@ namespace RemoteServer.Connections
 
         void ReceiveCommand(object sender, string data)
         {
-            Logger.Log("Received from user: {0}", data);
+            Logger.Log("Received from user \"{0}\": {1}", m_userAccount.Username, data);
 
             if (WantsDeviceList(data))
             {

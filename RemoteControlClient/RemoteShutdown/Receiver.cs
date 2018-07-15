@@ -21,7 +21,9 @@ namespace RemoteShutdown
         public DataReceiver(TCPPacketConnection serverConnection)
         {
             m_serverConnection = serverConnection;
+#if DEBUG
             m_serverConnection.Logger = new LoggerConsole();
+#endif
             m_serverConnection.DataReceivedEvent += OnConnectionReceive;
             m_serverConnection.OnReceiveError += OnServerDisconnect;
 
