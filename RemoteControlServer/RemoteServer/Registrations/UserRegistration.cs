@@ -22,19 +22,19 @@ namespace RemoteServer.Registrations
 
         public void AddUser(string username, string password)
         {
-            if (DataBase.AddAccount(username, Encoding.ASCII.GetBytes(password)))
+            if (DataBaseLock.Execute(() => DataBase.AddAccount(username, Encoding.ASCII.GetBytes(password))))
                 Logger.Log("Added user \"{0}\" to database.", username);
         }
 
         public void DeleteUser(string username)
         {
-            if(DataBase.EraseAccount(username))
+            if(DataBaseLock.Execute(() => DataBase.EraseAccount(username)))
                 Logger.Log("Removed user \"{0}\" from database.", username);
         }
 
         public void ChangePassword(string username, string oldPassword, string newPassword)
         {
-            if(DataBase.ChangePassword(username, Encoding.ASCII.GetBytes(oldPassword), Encoding.ASCII.GetBytes(newPassword)))
+            if(DataBaseLock.Execute(() => DataBase.ChangePassword(username, Encoding.ASCII.GetBytes(oldPassword), Encoding.ASCII.GetBytes(newPassword))))
                 Logger.Log("Changed password for user \"{0}\".", username);
         }
 

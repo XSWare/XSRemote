@@ -8,6 +8,7 @@ using XSLibrary.Cryptography.ConnectionCryptos;
 using XSLibrary.Network.Accepters;
 using XSLibrary.Network.Connections;
 using XSLibrary.ThreadSafety.Containers;
+using XSLibrary.ThreadSafety.Executors;
 using XSLibrary.Utility;
 
 namespace RemoteServer.Registrations
@@ -22,6 +23,8 @@ namespace RemoteServer.Registrations
         static protected FileUserBase DataBase { get; private set; } = new FileUserBase(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\RemoteControl\\", "accounts.txt");
         static public SafeList<UserAccount> Accounts { get; private set; } = new SafeList<UserAccount>();
         public int AuthenticationTimeout { get; set; } = 30000;
+
+        protected SafeExecutor DataBaseLock { get; private set; } = new SingleThreadExecutor();
 
         public Registration(TCPAccepter accepter)
         {
@@ -76,7 +79,7 @@ namespace RemoteServer.Registrations
 
                 string username = userSplit[0];
 
-                if (!DataBase.Validate(username, Encoding.ASCII.GetBytes(userSplit[1])))
+                if (!DataBaseLock.Execute(() => DataBase.Validate(username, Encoding.ASCII.GetBytes(userSplit[1]))))
                     return false;
 
                 user = GetUserAccount(username);
