@@ -7,6 +7,7 @@ using Android.Views;
 using Android.Widget;
 using RemoteShutdowLibrary;
 using System;
+using System.Threading;
 
 namespace RemoteControlAndroid
 {
@@ -14,7 +15,12 @@ namespace RemoteControlAndroid
     public class ControlActivity : AppCompatActivity
     {
         EditText textDelay;
-        bool disconnected;
+        TextView labelStatus;
+        Timer timer;
+
+        const int TimerDuration = 1000;
+        const int IntervalSteps = 25;
+        int intervallCount = 0;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -25,6 +31,7 @@ namespace RemoteControlAndroid
             RequestedOrientation = Android.Content.PM.ScreenOrientation.Portrait;
 
             textDelay = FindViewById<EditText>(Resource.Id.editDelay);
+            labelStatus = FindViewById<TextView>(Resource.Id.labelStatus);
 
             FindViewById<Button>(Resource.Id.buttonShutdown).Click += OnButtonShutdown;
             FindViewById<Button>(Resource.Id.buttonRestart).Click += OnButtonRestart;
@@ -36,13 +43,39 @@ namespace RemoteControlAndroid
             FindViewById<Button>(Resource.Id.buttonDisconnect).Click += OnButtonDisconnect;
 
             CommandCenter.OnDisconnect += HandleDisconnect;
+            CommandCenter.OnDataReceived += HandleDataReceived;
         }
 
         protected override void OnStart()
         {
             textDelay.SetSelection(textDelay.SelectionEnd);
-            disconnected = false;
             base.OnStart();
+        }
+
+        private void SetStatus(string status)
+        {
+            if(timer != null)
+                timer.Dispose();
+
+            labelStatus.Alpha = 1F;
+            labelStatus.Text = status;
+            intervallCount = IntervalSteps;
+            timer = new Timer((state) => RunOnUiThread(() => FadeOutStatus()), null, TimerDuration, TimerDuration / IntervalSteps);
+        }
+
+        private void FadeOutStatus()
+        {
+            intervallCount--;
+            if (intervallCount <= 0)
+            {
+                timer.Dispose();
+                timer = null;
+                labelStatus.Text = "";
+            }
+            else
+            {
+                labelStatus.Alpha = (float)intervallCount / IntervalSteps;
+            }
         }
 
         private void OnButtonShutdown(object sender, EventArgs eventArgs)
@@ -111,6 +144,11 @@ namespace RemoteControlAndroid
             OnBackPressed();
         }
 
+        private void HandleDataReceived(object sender, byte[] data, System.Net.EndPoint source)
+        {
+            RunOnUiThread(() => SetStatus("Device received command"));
+        }
+
         private void HandleDisconnect(object sender, System.Net.EndPoint remote)
         {
             RunOnUiThread(() => OnBackPressed());
@@ -118,11 +156,9 @@ namespace RemoteControlAndroid
 
         public override void OnBackPressed()
         {
-            if (disconnected)
-                return;
-
+            CommandCenter.OnDisconnect -= HandleDisconnect;
+            CommandCenter.OnDataReceived -= HandleDataReceived;
             CommandCenter.Disconnect();
-            disconnected = true;
             base.OnBackPressed();
         }
     }

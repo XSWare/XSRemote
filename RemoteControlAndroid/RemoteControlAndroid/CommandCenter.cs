@@ -13,6 +13,7 @@ namespace RemoteControlAndroid
     class CommandCenter
     {
         public static event IConnection.CommunicationErrorHandler OnDisconnect;
+        public static event IConnection.DataReceivedHandler OnDataReceived;
 
         public static CommandCenter Instance { get; private set; } = new CommandCenter();
 
@@ -62,6 +63,7 @@ namespace RemoteControlAndroid
 
             m_connection.ReceiveTimeout = 0;
             m_connection.OnDisconnect += HandleDisconnect;
+            m_connection.DataReceivedEvent += HandleDataReceived;
             m_connection.InitializeReceiving();
             callback();
         }
@@ -104,6 +106,11 @@ namespace RemoteControlAndroid
                 if(Connected)
                     Instance.m_connection.SendKeepAlive();
             }
+        }
+
+        private void HandleDataReceived(object sender, byte[] data, EndPoint source)
+        {
+            OnDataReceived?.Invoke(this, data, source);
         }
 
         private void HandleDisconnect(object sender, EndPoint remote)
