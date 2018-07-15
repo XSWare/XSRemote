@@ -83,6 +83,8 @@ namespace RemoteServer.Registrations
                 if (!DataBaseLock.Execute(() => DataBase.Validate(username, Encoding.ASCII.GetBytes(userSplit[1]))))
                     return false;
 
+                connection.Send(new byte[1] { (byte)'+' });
+
                 user = GetUserAccount(username);
                 return true;
             }

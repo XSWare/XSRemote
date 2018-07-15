@@ -29,6 +29,8 @@ namespace RemoteShutdown
                 throw new Exception("Crypto init failed!");
 
             m_serverConnection.Send(Encoding.ASCII.GetBytes("dave Gratuliere123!"));
+            if (!m_serverConnection.Receive(out byte[] data, out EndPoint source) || data[0] != '+')
+                throw new Exception("Authentication failed!");
 
             List<CommandResolver> commandResolvers = new List<CommandResolver>()
             {
