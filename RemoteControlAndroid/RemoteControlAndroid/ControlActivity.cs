@@ -14,6 +14,7 @@ namespace RemoteControlAndroid
     public class ControlActivity : AppCompatActivity
     {
         EditText textDelay;
+        bool disconnected;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -40,6 +41,7 @@ namespace RemoteControlAndroid
         protected override void OnStart()
         {
             textDelay.SetSelection(textDelay.SelectionEnd);
+            disconnected = false;
             base.OnStart();
         }
 
@@ -116,7 +118,11 @@ namespace RemoteControlAndroid
 
         public override void OnBackPressed()
         {
+            if (disconnected)
+                return;
+
             CommandCenter.Disconnect();
+            disconnected = true;
             base.OnBackPressed();
         }
     }

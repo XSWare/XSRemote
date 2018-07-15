@@ -49,9 +49,20 @@ namespace RemoteControlAndroid
                 return;
             }
 
+            m_connection.Send(Encoding.ASCII.GetBytes("dave Gratuliere123!"));
+            m_connection.ReceiveTimeout = 5000;
+            if(!m_connection.Receive(out byte[] data, out EndPoint source) || data[0] != '+')
+            {
+                LastError = "Authentication failed.";
+                bool connected = Connected;
+                m_connection.Disconnect();
+                callback();
+                return;
+            }
+
+            m_connection.ReceiveTimeout = 0;
             m_connection.OnDisconnect += HandleDisconnect;
             m_connection.InitializeReceiving();
-            m_connection.Send(Encoding.ASCII.GetBytes("dave gina2000"));
             callback();
         }
 

@@ -23,11 +23,12 @@ namespace RemoteControlAndroid
 
             Button buttonConnect = FindViewById<Button>(Resource.Id.buttonConnect);
             buttonConnect.Click += OnButtonConnect;
+
+            ResetStatus();
         }
 
         protected override void OnStart()
         {
-            ResetStatus();
             base.OnStart();
         }
 
