@@ -22,6 +22,9 @@ namespace RemoteServer
                 else
                     ManualCommand(cmd);
             }
+
+            deviceRegistration.Dispose();
+            userRegistration.Dispose();
         }
 
         private static void AccountCommand(string cmd)

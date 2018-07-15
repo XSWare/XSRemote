@@ -12,8 +12,11 @@ using XSLibrary.Utility;
 
 namespace RemoteServer.Registrations
 {
-    abstract class Registration
+    abstract class Registration : IDisposable
     {
+        delegate void DisposeHandler();
+        event DisposeHandler OnDispose;
+
         TCPAccepter m_accepter;
         protected Logger Logger { get; private set; }
         static protected FileUserBase DataBase { get; private set; } = new FileUserBase(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\RemoteControl\\", "accounts.txt");
@@ -47,6 +50,8 @@ namespace RemoteServer.Registrations
                 return;
             }
 
+            OnDispose += connection.Dispose;
+            connection.OnDisconnect += DisconnectHandler;
             HandleVerifiedConnection(user, connection); // DataBase.Instance.GetAccount("dummy")
         }
 
@@ -98,5 +103,18 @@ namespace RemoteServer.Registrations
         }
 
         protected abstract void HandleVerifiedConnection(UserAccount user, IConnection clientConnection);
+
+        private void DisconnectHandler(object sender, EndPoint remote)
+        {
+            IConnection connection = sender as IConnection;
+            if (connection != null)
+                OnDispose -= connection.Dispose;
+        }
+
+        public void Dispose()
+        {
+            m_accepter.Dispose();
+            OnDispose?.Invoke();
+        }
     }
 }
