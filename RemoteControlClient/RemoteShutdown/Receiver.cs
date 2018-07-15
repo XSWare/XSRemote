@@ -28,7 +28,7 @@ namespace RemoteShutdown
             if (!m_serverConnection.InitializeCrypto(new RSALegacyCrypto(true)))
                 throw new Exception("Crypto init failed!");
 
-            m_serverConnection.Send(Encoding.ASCII.GetBytes("dave gina2000"));
+            m_serverConnection.Send(Encoding.ASCII.GetBytes("dave Gratuliere123!"));
 
             List<CommandResolver> commandResolvers = new List<CommandResolver>()
             {
