@@ -17,20 +17,27 @@ namespace RemoteServer
             {
                 if (cmd == "backlog")
                     Console.Out.WriteLine("Current backlog count: {0}", deviceRegistration);
-                else if (cmd.Length > 7 && cmd.Substring(0, 7) == "adduser")
-                    AddUser(cmd);
+                else if (cmd.Length > 7 && cmd.Substring(0, 7) == "account")
+                    AccountCommand(cmd);
                 else
                     ManualCommand(cmd);
             }
         }
 
-        private static void AddUser(string cmd)
+        private static void AccountCommand(string cmd)
         {
             string[] cmdSplit = cmd.Split(' ');
-            if (cmdSplit.Length != 3)
+            if (cmdSplit.Length < 2)
                 return;
 
-            userRegistration.AddUser(cmdSplit[1], cmdSplit[2]);
+            string selection = cmdSplit[1];
+
+            if (selection == "add" && cmdSplit.Length == 4)
+                userRegistration.AddUser(cmdSplit[2], cmdSplit[3]);
+            else if (selection == "delete" && cmdSplit.Length == 3)
+                userRegistration.DeleteUser(cmdSplit[2]);
+            else if (selection == "changepw" && cmdSplit.Length == 5)
+                userRegistration.ChangePassword(cmdSplit[2], cmdSplit[3], cmdSplit[4]);
         }
 
         static void ManualCommand(string command)

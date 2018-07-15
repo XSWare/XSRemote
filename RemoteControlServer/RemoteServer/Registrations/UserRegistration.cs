@@ -20,9 +20,19 @@ namespace RemoteServer.Registrations
             m_userConnections = new SafeList<UserConnection>();
         }
 
-        public void AddUser(string userName, string password)
+        public void AddUser(string username, string password)
         {
-            DataBase.AddAccount(userName, Encoding.ASCII.GetBytes(password));
+            DataBase.AddAccount(username, Encoding.ASCII.GetBytes(password));
+        }
+
+        public void DeleteUser(string username)
+        {
+            DataBase.EraseAccount(username);
+        }
+
+        public void ChangePassword(string username, string oldPassword, string newPassword)
+        {
+            DataBase.ChangePassword(username, Encoding.ASCII.GetBytes(oldPassword), Encoding.ASCII.GetBytes(newPassword));
         }
 
         protected override void HandleVerifiedConnection(UserAccount user, IConnection connection)
