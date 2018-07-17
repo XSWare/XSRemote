@@ -5,9 +5,7 @@ using System.Net;
 using System.Threading;
 using XSLibrary.Network.Connections;
 using RemoteShutdownLibrary;
-using XSLibrary.Cryptography.ConnectionCryptos;
 using XSLibrary.Utility;
-using System.Text;
 
 namespace RemoteShutdown
 {
@@ -15,25 +13,25 @@ namespace RemoteShutdown
     {
         public event EventHandler ServerDisconnect;
 
-        TCPPacketConnection m_serverConnection;
+        TCPPacketConnection Connection { get; set; }
         CommandoExecutionActor m_commandExecutionActor;
+        Thread m_keepAliveThread;
 
-        public DataReceiver(TCPPacketConnection serverConnection)
+        public int KeepAliveInterval { get; set; } = 10000;
+        int ShutdownCheckInterval { get; set; } = 100;
+
+        public DataReceiver(TCPPacketConnection connection)
         {
-            m_serverConnection = serverConnection;
+            Connection = connection;
 #if DEBUG
-            m_serverConnection.Logger = new LoggerConsole();
+            Connection.Logger = new LoggerConsole();
 #endif
-            m_serverConnection.DataReceivedEvent += OnConnectionReceive;
-            m_serverConnection.OnReceiveError += OnServerDisconnect;
+            Connection.DataReceivedEvent += OnConnectionReceive;
+            Connection.OnReceiveError += OnServerDisconnect;
+        }
 
-            if (!m_serverConnection.InitializeCrypto(new RSALegacyCrypto(true)))
-                throw new Exception("Crypto init failed!");
-
-            m_serverConnection.Send(Encoding.ASCII.GetBytes("dave Gratuliere123!"));
-            if (!m_serverConnection.Receive(out byte[] data, out EndPoint source) || data[0] != '+')
-                throw new Exception("Authentication failed!");
-
+        public void Run()
+        {
             List<CommandResolver> commandResolvers = new List<CommandResolver>()
             {
                 new ShutdownCommandResolve(new ShutdownHandler()),
@@ -43,16 +41,16 @@ namespace RemoteShutdown
 
             m_commandExecutionActor = new CommandoExecutionActor(commandResolvers);
 
-            m_serverConnection.InitializeReceiving();
+            Connection.InitializeReceiving();
 
-            Thread keepAliveThread = new Thread(KeepAliveLoop);
-            keepAliveThread.Name = "Keep alive";
-            keepAliveThread.Start();
+            m_keepAliveThread = new Thread(KeepAliveLoop);
+            m_keepAliveThread.Name = "Keep alive";
+            m_keepAliveThread.Start();
         }
 
         public void SendReply(string reply)
         {
-            m_serverConnection.Send(TransmissionConverter.ConvertStringToByte(reply));
+            Connection.Send(TransmissionConverter.ConvertStringToByte(reply));
         }
 
         public void ManualCommand(string command)
@@ -70,10 +68,17 @@ namespace RemoteShutdown
 
         private void KeepAliveLoop()
         {
-            while (m_serverConnection.Connected)
+            int interval = 0;
+            while (Connection.Connected)
             {
-                Thread.Sleep(10000);
-                m_serverConnection.SendKeepAlive();
+                Thread.Sleep(ShutdownCheckInterval);
+
+                interval += ShutdownCheckInterval;
+                if (interval >= KeepAliveInterval)
+                {
+                    interval = 0;
+                    Connection.SendKeepAlive();
+                }
             }
         }
 
@@ -92,8 +97,13 @@ namespace RemoteShutdown
 
         public void Dispose()
         {
-            m_commandExecutionActor.Stop();
-            m_serverConnection.Disconnect();
+            if(m_commandExecutionActor != null)
+                m_commandExecutionActor.Stop();
+
+            Connection.Disconnect();
+
+            if (m_keepAliveThread != null && m_keepAliveThread.ThreadState != ThreadState.Unstarted)
+                m_keepAliveThread.Join();
         }
     }
 }
