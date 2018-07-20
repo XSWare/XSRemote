@@ -123,6 +123,10 @@
       <Project>{36a1d62e-ea81-4b77-ab0b-6753a7f394ed}</Project>
       <Name>XSNetwork</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\XSLibrary\XSLibrary\XSThreadSafety\XSThreadSafety.csproj">
+      <Project>{1364168D-0353-49F5-9DAC-2A501FD8055A}</Project>
+      <Name>XSThreadSafety</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\activity_control.axml">

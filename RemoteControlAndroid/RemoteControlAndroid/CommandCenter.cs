@@ -12,7 +12,7 @@ namespace RemoteControlAndroid
 {
     class CommandCenter
     {
-        public static event IConnection.CommunicationErrorHandler OnDisconnect;
+        public static event OnDisconnectEvent.EventHandle OnDisconnect;
         public static event IConnection.DataReceivedHandler OnDataReceived;
 
         public static CommandCenter Instance { get; private set; } = new CommandCenter();
