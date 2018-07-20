@@ -27,7 +27,7 @@ namespace RemoteShutdown
             Connection.Logger = new LoggerConsole();
 #endif
             Connection.DataReceivedEvent += OnConnectionReceive;
-            Connection.OnReceiveError += OnServerDisconnect;
+            Connection.OnDisconnect += OnServerDisconnect;
         }
 
         public void Run()
@@ -60,8 +60,6 @@ namespace RemoteShutdown
 
         private void OnServerDisconnect(object sender, EndPoint endpoint)
         {
-            TCPConnection connection = sender as TCPConnection;
-            connection.Disconnect();
             Console.Out.WriteLine("Disconnected from server.");
             ServerDisconnect?.Invoke(this, new EventArgs());
         }
