@@ -36,14 +36,14 @@ namespace RemoteControlAndroid
 
         private void OnButtonConnect(object sender, EventArgs eventArgs)
         {
-            if(CommandCenter.Connected)
+            if (connecting)
+                return;
+
+            if (CommandCenter.Connected)
             {
                 StartActivity(typeof(ControlActivity));
                 return;
             }
-
-            if (connecting)
-                return;
 
             connecting = true;
 
