@@ -58,6 +58,14 @@ namespace RemoteControlAndroid
             base.OnStart();
         }
 
+        protected override void OnResume()
+        {
+            if (!CommandCenter.Connected)
+                OnBackPressed();
+
+            base.OnResume();
+        }
+
         private void SetStatus(string status)
         {
             if(timer != null)
@@ -162,12 +170,23 @@ namespace RemoteControlAndroid
 
         public override void OnBackPressed()
         {
+            Disconnect();
+            base.OnBackPressed();
+        }
+
+        protected override void OnDestroy()
+        {
+            Disconnect();
+            base.OnDestroy();
+        }
+
+        private void Disconnect()
+        {
             StopService(keepAliveService);
 
             CommandCenter.OnDisconnect -= HandleDisconnect;
             CommandCenter.OnDataReceived -= HandleDataReceived;
             CommandCenter.Disconnect();
-            base.OnBackPressed();
         }
     }
 }
