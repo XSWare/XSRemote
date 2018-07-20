@@ -1,5 +1,6 @@
 ﻿
 using Android.App;
+using Android.Content;
 using Android.OS;
 using Android.Runtime;
 using Android.Support.V7.App;
@@ -44,6 +45,8 @@ namespace RemoteControlAndroid
 
             CommandCenter.OnDisconnect += HandleDisconnect;
             CommandCenter.OnDataReceived += HandleDataReceived;
+
+            StartService(new Intent(this, typeof(KeepAliveService)));
         }
 
         protected override void OnStart()

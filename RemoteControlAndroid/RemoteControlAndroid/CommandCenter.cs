@@ -25,7 +25,6 @@ namespace RemoteControlAndroid
 
         private CommandCenter()
         {
-            new Thread(KeepAliveLoop).Start();
         }
 
         public void Connect(EndPoint remote, Action callback)
@@ -97,15 +96,10 @@ namespace RemoteControlAndroid
                 Instance.m_connection.Disconnect();
         }
 
-        private void KeepAliveLoop()
+        public static void SendKeepAlive()
         {
-            while (true)
-            {
-                Thread.Sleep(KeepAliveInterval);
-
-                if(Connected)
-                    Instance.m_connection.SendKeepAlive();
-            }
+            if (Connected)
+                Instance.m_connection.SendKeepAlive();
         }
 
         private void HandleDataReceived(object sender, byte[] data, EndPoint source)
