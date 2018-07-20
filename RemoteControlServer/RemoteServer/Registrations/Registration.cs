@@ -56,9 +56,7 @@ namespace RemoteServer.Registrations
 #if DEBUG
             connection.Logger = Logger;
 #endif
-
-            connection.HandshakeTimeout = 30000;
-            if(!connection.InitializeCrypto(new RSALegacyCrypto(false)))
+            if(!connection.InitializeCrypto(new RSALegacyCrypto(false), 30000))
                 return;
             
             if (!Authenticate(out UserAccount user, connection))
@@ -103,7 +101,7 @@ namespace RemoteServer.Registrations
                 if (!DataBaseLock.Execute(() => DataBase.Validate(username, Encoding.ASCII.GetBytes(userSplit[1]))))
                     return false;
 
-                connection.Send(new byte[1] { (byte)'+' }, 30);
+                connection.Send(new byte[1] { (byte)'+' }, 30000);
 
                 user = GetUserAccount(username);
                 return true;
