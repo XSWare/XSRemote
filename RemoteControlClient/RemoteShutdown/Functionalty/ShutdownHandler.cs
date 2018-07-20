@@ -5,21 +5,11 @@ namespace RemoteShutdown
 {
     class ShutdownHandler
     {
-        public void Shutdown()
-        {
-            Shutdown(0);
-        }
-        
         public void Shutdown(int seconds)
         {
             Console.Out.WriteLine(GenerateInfo("Shutting down", seconds));
             string commandString = string.Format("/s /t {0}", seconds);
             StartShutdownProcess(commandString);
-        }
-
-        public void Restart()
-        {
-            Restart(0);
         }
 
         public void Restart(int seconds)
