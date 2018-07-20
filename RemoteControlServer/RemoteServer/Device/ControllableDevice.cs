@@ -3,6 +3,7 @@ using RemoteServer.Device.Modules;
 using RemoteServer.Connections;
 using System.Net;
 using XSLibrary.Network.Connections;
+using XSLibrary.Utility;
 
 namespace RemoteServer.Device
 {
@@ -30,7 +31,7 @@ namespace RemoteServer.Device
             if (targetModule == null)
                 return;
 
-            m_connection.Logger.Log("Sending to device {0}: {1}", DeviceID, command);
+            m_connection.Logger.Log(LogLevel.Information, "Sending to device {0}: {1}", DeviceID, command);
 
             m_connection.Send(targetModule.TranslateCommand(command));
         }

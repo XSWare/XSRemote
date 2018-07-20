@@ -8,7 +8,7 @@ namespace RemoteServer.User
 {
     class UserAccount
     {
-        public Logger Log { get; set; }
+        public Logger Logger { get; set; } = Logger.NoLog;
         public string Username { get; private set; }
         SafeList<ControllableDevice> m_devices;
         UserConnection m_userConnection;
@@ -19,13 +19,12 @@ namespace RemoteServer.User
         {
             Username = username;
 
-            Log = new LoggerConsole();
             m_devices = new SafeList<ControllableDevice>();
         }
 
         public void SetUserConnection(UserConnection connection)
         {
-            Log.Log("User connected to account \"{0}\".", Username);
+            Logger.Log(LogLevel.Warning, "User connected to account \"{0}\".", Username);
 
             RemoveUserConnection();
             connection.OnDisconnect += HandleUserDisconnect;
@@ -34,7 +33,7 @@ namespace RemoteServer.User
 
         private void HandleUserDisconnect(object sender, EndPoint remote)
         {
-            Log.Log("User disconnected from account \"{0}\".", Username);
+            Logger.Log(LogLevel.Warning, "User disconnected from account \"{0}\".", Username);
             RemoveUserConnection();
         }
 
@@ -52,6 +51,7 @@ namespace RemoteServer.User
             device.OnDeviceDisconnect += DeviceDisconnecting;
             device.OnCommandReceived += HandleDeviceReply;
             m_devices.Add(device);
+            Logger.Log(LogLevel.Warning, "Added device {0} to user \"{1}\".", device.DeviceID, Username);
         }
 
         public void RemoveDevice(ControllableDevice device)
@@ -95,7 +95,7 @@ namespace RemoteServer.User
         {
             ControllableDevice device = sender as ControllableDevice;
 
-            Log.Log("Received reply \"{0}\" from device {1} for user \"{2}\".", reply, device.DeviceID, Username);
+            Logger.Log(LogLevel.Information, "Received reply \"{0}\" from device {1} for user \"{2}\".", reply, device.DeviceID, Username);
 
             if (UserConnected)
                 m_userConnection.Send(string.Format("Device {0} - {1}", device.DeviceID, reply));
@@ -106,7 +106,7 @@ namespace RemoteServer.User
             ControllableDevice device = sender as ControllableDevice;
             RemoveDevice(device);
 
-            Log.Log("Device {0} disconnected from user \"{1}\".", device.DeviceID, Username);
+            Logger.Log(LogLevel.Warning, "Device {0} disconnected from user \"{1}\".", device.DeviceID, Username);
         }
     }
 }

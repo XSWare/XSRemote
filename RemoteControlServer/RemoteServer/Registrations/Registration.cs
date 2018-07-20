@@ -18,8 +18,18 @@ namespace RemoteServer.Registrations
         delegate void DisposeHandler();
         event DisposeHandler OnDispose;
 
+        private Logger logger = Logger.NoLog;
+        public Logger Logger
+        {
+            get { return logger; }
+            set
+            {
+                logger = value;
+                m_accepter.Logger = value;
+            }
+        }
+
         TCPAccepter m_accepter;
-        protected Logger Logger { get; private set; }
         static protected FileUserBase DataBase { get; private set; } = new FileUserBase(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\RemoteControl\\", "accounts.txt");
         static public SafeList<UserAccount> Accounts { get; private set; } = new SafeList<UserAccount>();
         public int AuthenticationTimeout { get; set; } = 30000;
@@ -29,13 +39,14 @@ namespace RemoteServer.Registrations
         public Registration(TCPAccepter accepter)
         {
             m_accepter = accepter;
+        }
 
-            Logger = new LoggerConsole();
-            m_accepter.Logger = Logger;
+        public void Run()
+        {
             m_accepter.ClientConnected += OnClientConnected;
             m_accepter.Run();
 
-            Logger.Log("Registration is now accepting connections on port " + m_accepter.Port);
+            Logger.Log(LogLevel.Warning, "Registration is now accepting connections on port {0}.", m_accepter.Port);
         }
 
         void OnClientConnected(object sender, Socket acceptedSocket)
@@ -51,7 +62,7 @@ namespace RemoteServer.Registrations
             
             if (!Authenticate(out UserAccount user, connection))
             {
-                Logger.Log("Authentication failed.");
+                Logger.Log(LogLevel.Error, "Authentication failed.");
                 connection.Disconnect();
                 return;
             }
@@ -106,6 +117,7 @@ namespace RemoteServer.Registrations
 
             UserAccount user = new UserAccount(username);
             Accounts.Add(user);
+            user.Logger = Logger;
 
             return user;
         }
