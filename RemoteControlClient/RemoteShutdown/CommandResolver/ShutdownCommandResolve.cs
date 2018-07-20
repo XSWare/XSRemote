@@ -18,7 +18,7 @@ namespace RemoteShutdown.CommandResolving
         {
             int delay = 60;
 
-            try { delay = ParseDelay(argument); }
+            try { delay = ParseDelay(argument) * 60; }
             catch { delay = 60; }
 
             switch (option)

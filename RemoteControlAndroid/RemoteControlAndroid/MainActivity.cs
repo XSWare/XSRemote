@@ -56,7 +56,7 @@ namespace RemoteControlAndroid
 
             SetStatus("Connecting...");
 
-            new Thread(() => CommandCenter.Instance.Connect(new IPEndPoint(ip, 22223), () => RunOnUiThread(ConnectCallback))).Start();
+            new Thread(() => CommandCenter.Instance.Connect(new IPEndPoint(ip, 443), () => RunOnUiThread(ConnectCallback))).Start();
         }
 
         private void ConnectCallback()
