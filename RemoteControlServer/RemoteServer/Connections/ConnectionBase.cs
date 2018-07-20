@@ -1,6 +1,5 @@
 ﻿using RemoteShutdownLibrary;
 using System.Net;
-using XSLibrary.Cryptography.ConnectionCryptos;
 using XSLibrary.Network.Connections;
 using XSLibrary.Utility;
 
@@ -8,7 +7,7 @@ namespace RemoteServer.Connections
 {
     abstract class ConnectionBase
     {
-        public event IConnection.CommunicationErrorHandler OnDisconnect;
+        public event OnDisconnectEvent.EventHandle OnDisconnect;
         public event DataReceivedHandler OnDataReceived;
 
         public delegate void DataReceivedHandler(object sender, string data);

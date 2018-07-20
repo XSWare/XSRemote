@@ -8,7 +8,7 @@ namespace RemoteServer.Device
 {
     class ControllableDevice
     {
-        public event IConnection.CommunicationErrorHandler OnDeviceDisconnect;
+        public event OnDisconnectEvent.EventHandle OnDeviceDisconnect;
         public event ConnectionBase.DataReceivedHandler OnCommandReceived;
 
         public int DeviceID { get; private set; }
