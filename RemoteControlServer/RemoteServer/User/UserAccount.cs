@@ -8,6 +8,9 @@ namespace RemoteServer.User
 {
     class UserAccount
     {
+        public delegate void ConnectionRemovedHandler(object sender);
+
+        public event ConnectionRemovedHandler OnConnectionRemoval;
         public Logger Logger { get; set; } = Logger.NoLog;
         public string Username { get; private set; }
         SafeList<ControllableDevice> m_devices;
@@ -27,8 +30,8 @@ namespace RemoteServer.User
             Logger.Log(LogLevel.Warning, "User connected to account \"{0}\".", Username);
 
             RemoveUserConnection();
-            connection.OnDisconnect += HandleUserDisconnect;
             m_userConnection = connection;
+            connection.OnDisconnect += HandleUserDisconnect;
         }
 
         private void HandleUserDisconnect(object sender, EndPoint remote)
@@ -44,6 +47,8 @@ namespace RemoteServer.User
 
             m_userConnection.OnDisconnect -= HandleUserDisconnect;
             m_userConnection = null;
+
+            OnConnectionRemoval?.Invoke(this);
         }
 
         public void AddDevice(ControllableDevice device)
@@ -59,6 +64,12 @@ namespace RemoteServer.User
             m_devices.Remove(device);
             device.OnCommandReceived -= HandleDeviceReply;
             device.OnDeviceDisconnect -= DeviceDisconnecting;
+            OnConnectionRemoval?.Invoke(this);
+        }
+
+        public bool StillInUse()
+        {
+            return m_devices.Count > 0 || m_userConnection != null;
         }
 
         public void SendCommand(int deviceID, string command)

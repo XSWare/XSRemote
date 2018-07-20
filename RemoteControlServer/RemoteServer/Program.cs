@@ -15,7 +15,7 @@ namespace RemoteServer
         static void Main(string[] args)
         {
 #if DEBUG
-            Logger.DefaultLogLevel = LogLevel.Information;
+            Logger.DefaultLogLevel = LogLevel.Detail;
 #endif
             logger = new LoggerConsole();
 

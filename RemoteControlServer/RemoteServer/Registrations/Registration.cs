@@ -35,6 +35,7 @@ namespace RemoteServer.Registrations
         public int AuthenticationTimeout { get; set; } = 30000;
 
         protected SafeExecutor DataBaseLock { get; private set; } = new SingleThreadExecutor();
+        SafeExecutor m_memoryLock = new SingleThreadExecutor();
 
         public Registration(TCPAccepter accepter)
         {
@@ -69,7 +70,13 @@ namespace RemoteServer.Registrations
 
             OnDispose += connection.Dispose;
             connection.OnDisconnect += DisconnectHandler;
-            HandleVerifiedConnection(user, connection); // DataBase.Instance.GetAccount("dummy")
+
+            m_memoryLock.Execute(() =>
+            {
+                if (!Accounts.Contains(user))
+                    Accounts.Add(user);
+                HandleVerifiedConnection(user, connection);
+            });
         }
 
         bool Authenticate(out UserAccount user, IConnection connection)
@@ -96,7 +103,7 @@ namespace RemoteServer.Registrations
                 if (!DataBaseLock.Execute(() => DataBase.Validate(username, Encoding.ASCII.GetBytes(userSplit[1]))))
                     return false;
 
-                connection.Send(new byte[1] { (byte)'+' });
+                connection.Send(new byte[1] { (byte)'+' }, 30);
 
                 user = GetUserAccount(username);
                 return true;
@@ -116,10 +123,25 @@ namespace RemoteServer.Registrations
             }
 
             UserAccount user = new UserAccount(username);
-            Accounts.Add(user);
             user.Logger = Logger;
+            user.OnConnectionRemoval += HandleConnectionRemoval;
+
+            Logger.Log(LogLevel.Detail, "Allocated memory for account \"{0}\".", user.Username);
 
             return user;
+        }
+
+        private void HandleConnectionRemoval(object sender)
+        {
+            m_memoryLock.Execute(() =>
+            {
+                UserAccount user = sender as UserAccount;
+                if (!user.StillInUse())
+                {
+                    Accounts.Remove(user);
+                    Logger.Log(LogLevel.Detail, "Memory of account \"{0}\" released.", user.Username);
+                }
+            });
         }
 
         protected abstract void HandleVerifiedConnection(UserAccount user, IConnection clientConnection);
