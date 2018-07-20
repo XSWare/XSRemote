@@ -25,6 +25,8 @@ namespace RemoteControlAndroid
             buttonConnect.Click += OnButtonConnect;
 
             ResetStatus();
+
+            OnButtonConnect(this, new EventArgs());
         }
 
         protected override void OnStart()
