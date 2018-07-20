@@ -4,7 +4,6 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading;
 using XSLibrary.Cryptography.ConnectionCryptos;
 using XSLibrary.Network.Connections;
 
@@ -22,6 +21,7 @@ namespace RemoteControlAndroid
         public int KeepAliveInterval { get; private set; } = 10000;
 
         TCPPacketConnection m_connection = null;
+        EndPoint m_lastLogin = null;
 
         private CommandCenter()
         {
@@ -29,6 +29,7 @@ namespace RemoteControlAndroid
 
         public void Connect(EndPoint remote, Action callback)
         {
+            m_lastLogin = null;
             Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             try { socket.Connect(remote); }
             catch
@@ -42,25 +43,25 @@ namespace RemoteControlAndroid
                 m_connection.OnDisconnect -= HandleDisconnect;
 
             m_connection = new TCPPacketConnection(socket);
-            if (!m_connection.InitializeCrypto(new RSALegacyCrypto(true)))
+            if (!m_connection.InitializeCrypto(new RSALegacyCrypto(true), 30000))
             {
                 LastError = "Handshake failed.";
                 callback();
                 return;
             }
 
+            m_connection.SendTimeout = 5000;
             m_connection.Send(Encoding.ASCII.GetBytes("dave Gratuliere123!"));
-            m_connection.ReceiveTimeout = 5000;
-            if(!m_connection.Receive(out byte[] data, out EndPoint source) || data[0] != '+')
+            if(!m_connection.Receive(out byte[] data, out EndPoint source, 5000) || data[0] != '+')
             {
                 LastError = "Authentication failed.";
-                bool connected = Connected;
                 m_connection.Disconnect();
                 callback();
                 return;
             }
 
-            m_connection.ReceiveTimeout = 0;
+            m_lastLogin = remote;
+
             m_connection.OnDisconnect += HandleDisconnect;
             m_connection.DataReceivedEvent += HandleDataReceived;
             m_connection.InitializeReceiving();
@@ -93,7 +94,10 @@ namespace RemoteControlAndroid
         public static void Disconnect()
         {
             if (Connected)
+            {
+                Instance.m_lastLogin = null;
                 Instance.m_connection.Disconnect();
+            }
         }
 
         public static void SendKeepAlive()
@@ -109,7 +113,17 @@ namespace RemoteControlAndroid
 
         private void HandleDisconnect(object sender, EndPoint remote)
         {
-            OnDisconnect?.Invoke(this, remote);
+            //if(!Reconnect())
+                OnDisconnect?.Invoke(this, remote);
+        }
+
+        private bool Reconnect()
+        {
+            if (m_lastLogin == null)
+                return false;
+
+            Connect(m_lastLogin, () => { });
+            return Connected;
         }
     }
 }
