@@ -5,13 +5,16 @@ using Android.OS;
 using Android.Support.V7.App;
 using System.Net;
 using System.Threading;
+using XSLibrary.Network.Connectors;
+using XSLibrary.Cryptography.ConnectionCryptos;
+using XSLibrary.Network.Connections;
 
 namespace RemoteControlAndroid
 {
     [Activity(Label = "@string/app_name", Theme = "@style/AppTheme.NoActionBar", MainLauncher = true)]
 	public class MainActivity : AppCompatActivity
 	{
-        volatile bool connecting = false;
+        AccountConnector m_connector;
 
         protected override void OnCreate(Bundle savedInstanceState)
 		{
@@ -20,6 +23,8 @@ namespace RemoteControlAndroid
 			SetContentView(Resource.Layout.activity_main);
 
             RequestedOrientation = Android.Content.PM.ScreenOrientation.Portrait;
+
+            m_connector = CreateConnector();
 
             Button buttonConnect = FindViewById<Button>(Resource.Id.buttonConnect);
             buttonConnect.Click += OnButtonConnect;
@@ -34,9 +39,18 @@ namespace RemoteControlAndroid
             base.OnStart();
         }
 
+        private AccountConnector CreateConnector()
+        {
+            AccountConnector connector = new AccountConnector();
+            connector.Crypto = CryptoType.RSALegacy;
+            connector.TimeoutCryptoHandshake = 30000;
+
+            return connector;
+        }
+
         private void OnButtonConnect(object sender, EventArgs eventArgs)
         {
-            if (connecting)
+            if (m_connector.CurrentlyConnecting)
                 return;
 
             if (CommandCenter.Connected)
@@ -44,34 +58,37 @@ namespace RemoteControlAndroid
                 StartActivity(typeof(ControlActivity));
                 return;
             }
-
-            connecting = true;
 
             EditText editIP = FindViewById<EditText>(Resource.Id.editIP);
 
             if (!IPAddress.TryParse(editIP.Text, out IPAddress ip))
             {
                 SetStatus("Invalid IP format.");
-                connecting = false;
                 return;
             }
 
             SetStatus("Connecting...");
 
-            new Thread(() => CommandCenter.Instance.Connect(new IPEndPoint(ip, 443), () => RunOnUiThread(ConnectCallback))).Start();
+            m_connector.Connect(
+                new IPEndPoint(ip, 443), 
+                (connection) => RunOnUiThread(() => ConnectSuccess(connection)), 
+                (error) => RunOnUiThread(() => ConnectFailure(error)));
         }
 
-        private void ConnectCallback()
+        private void ConnectSuccess(TCPPacketConnection connection)
         {
+            CommandCenter.SetConnection(connection);
+
             if (CommandCenter.Connected)
             {
                 StartActivity(typeof(ControlActivity));
                 SetStatus("Disconnected.");
             }
-            else
-                SetStatus(CommandCenter.Instance.LastError);
+        }
 
-            connecting = false;
+        private void ConnectFailure(string error)
+        {
+            SetStatus(error);
         }
 
         private void SetStatus(string status)
