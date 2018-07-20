@@ -5,23 +5,35 @@ using System.Text;
 using System.Threading;
 using XSLibrary.Cryptography.ConnectionCryptos;
 using XSLibrary.Network.Connections;
+using XSLibrary.Network.Connectors;
 
 namespace RemoteShutdown
 {
-    class Connector
+    class RepeatConnector
     {
-        string login = "";
+        AccountConnector m_connector;
 
         public bool ConnectLoop(out TCPPacketConnection connection, int retries = 10)
         {
             connection = null;
 
+            m_connector = CreateConnector();
+
             int tryCount = 0;
             int retryPause = 1000;
 
-            while (tryCount < retries && !Connect(out connection))
+            while (tryCount < retries)
             {
-                Console.WriteLine("Connect try {0} out of {1} failed.", tryCount + 1, retries);
+                if (Connect(out connection, out string message))
+                {
+                    Console.WriteLine(message);
+                    break;
+                }
+
+                if (message == AccountConnector.AUTHENTICATION_FAILED)
+                    m_connector.Login = "";
+
+                Console.WriteLine("Connect try {0} out of {1} failed: {2}", tryCount + 1, retries, message);
                 Thread.Sleep(retryPause);
                 tryCount++;
             }
@@ -29,14 +41,23 @@ namespace RemoteShutdown
             return connection != null && connection.Connected;
         }
 
-        public bool Connect(out TCPPacketConnection connection)
+        private AccountConnector CreateConnector()
+        {
+            AccountConnector connector = new AccountConnector();
+            connector.Crypto = CryptoType.RSALegacy;
+
+            return connector;
+        }
+
+        public bool Connect(out TCPPacketConnection connection, out string message)
         {
             connection = null;
+            message = "";
 
-            if (login.Length <= 0)
+            if (m_connector.Login.Length <= 0)
             {
                 Console.WriteLine("Enter login:");
-                login = Console.ReadLine();
+                m_connector.Login = Console.ReadLine();
             }
 
             string ipAdress = "80.109.174.197";
@@ -47,35 +68,9 @@ namespace RemoteShutdown
                 return false;
             }
 
-            Socket conSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             Console.Out.WriteLine("Connecting to {0}:{1}", ipAdress, port.ToString());
-            try
-            {
-                conSocket.Connect(new IPEndPoint(IP, port));
-                connection = new TCPPacketConnection(conSocket);
-                Handshake(connection);
-                Console.Out.WriteLine("Connected.");
-                return true;
-            }
-            catch (Exception e)
-            {
-                Console.Out.WriteLine("Failed to connect: {0}", e.Message);
-                return false;
-            }
 
-        }
-
-        void Handshake(TCPPacketConnection connection)
-        {
-            if (!connection.InitializeCrypto(new RSALegacyCrypto(true)))
-                throw new ConnectionException("Crypto init failed!");
-
-            connection.Send(Encoding.ASCII.GetBytes(login));
-            if (!connection.Receive(out byte[] data, out EndPoint source) || data[0] != '+')
-            {
-                login = "";
-                throw new ConnectionException("Authentication failed!");
-            }
+            return m_connector.Connect(new IPEndPoint(IP, port), out connection, out message);
         }
     }
 }

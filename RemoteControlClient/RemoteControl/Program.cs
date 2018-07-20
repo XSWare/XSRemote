@@ -10,7 +10,7 @@ namespace RemoteShutdown
         {
             Logger logger = new LoggerConsole();
 
-            Connector connector = new Connector();
+            RepeatConnector connector = new RepeatConnector();
 
             bool reconnect = true;
 
