@@ -69,7 +69,7 @@ namespace RemoteControlAndroid
 
             SetStatus("Connecting...");
 
-            m_connector.Connect(
+            m_connector.ConnectAsync(
                 new IPEndPoint(ip, 443), 
                 (connection) => RunOnUiThread(() => ConnectSuccess(connection)), 
                 (error) => RunOnUiThread(() => ConnectFailure(error)));
