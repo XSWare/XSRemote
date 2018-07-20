@@ -24,6 +24,9 @@ namespace RemoteControlAndroid
         public static void SetConnection(TCPPacketConnection connection)
         {
             Instance.m_connection = connection;
+            connection.DataReceivedEvent += Instance.HandleDataReceived;
+            connection.InitializeReceiving();
+            connection.OnDisconnect += Instance.HandleDisconnect;
         }
 
         public static void SendControlCommand(string cmd)
