@@ -15,6 +15,8 @@ namespace RemoteControlAndroid
     [Activity(Label = "@string/app_name", Theme = "@style/AppTheme.NoActionBar", MainLauncher = false)]
     public class ControlActivity : AppCompatActivity
     {
+        Intent keepAliveService;
+
         EditText textDelay;
         TextView labelStatus;
         Timer timer;
@@ -46,7 +48,8 @@ namespace RemoteControlAndroid
             CommandCenter.OnDisconnect += HandleDisconnect;
             CommandCenter.OnDataReceived += HandleDataReceived;
 
-            StartService(new Intent(this, typeof(KeepAliveService)));
+            keepAliveService = new Intent(this, typeof(KeepAliveService));
+            StartService(keepAliveService);
         }
 
         protected override void OnStart()
@@ -159,6 +162,8 @@ namespace RemoteControlAndroid
 
         public override void OnBackPressed()
         {
+            StopService(keepAliveService);
+
             CommandCenter.OnDisconnect -= HandleDisconnect;
             CommandCenter.OnDataReceived -= HandleDataReceived;
             CommandCenter.Disconnect();

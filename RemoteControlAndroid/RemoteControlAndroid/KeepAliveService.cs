@@ -5,7 +5,7 @@ using Android.OS;
 
 namespace RemoteControlAndroid
 {
-    [Service(Name = "KeepAliveService")]
+    [Service(Name = "com.xsware.KeepAliveService", Enabled = true)]
     class KeepAliveService : Service
     {
         const int TimerWait = 10000;
