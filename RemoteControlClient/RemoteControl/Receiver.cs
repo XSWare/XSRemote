@@ -6,6 +6,7 @@ using System.Threading;
 using XSLibrary.Network.Connections;
 using RemoteShutdownLibrary;
 using XSLibrary.Utility;
+using RemoteShutdown.Functionalty;
 
 namespace RemoteShutdown
 {

@@ -1,5 +1,6 @@
 ﻿using System;
 using XSLibrary.Network.Connections;
+using XSLibrary.Utility;
 
 namespace RemoteShutdown
 {
@@ -7,6 +8,8 @@ namespace RemoteShutdown
     {
         static void Main(string[] args)
         {
+            Logger logger = new LoggerConsole();
+
             Connector connector = new Connector();
 
             bool reconnect = true;
@@ -32,9 +35,15 @@ namespace RemoteShutdown
                         break;
 
                     if (command.StartsWith("send ") && command.Length > 5)
+                    {
+                        logger.Log(LogLevel.Priority, "Sending to server: {0}", command.Substring(5));
                         dataReceiver.SendReply(command.Substring(5));
+                    }
                     else
+                    {
+                        logger.Log(LogLevel.Priority, "Executing on device: {0}", command);
                         dataReceiver.ManualCommand(command);
+                    }
                 }
 
                 dataReceiver.Dispose();

@@ -1,20 +1,20 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
+using XSLibrary.Utility;
 
-namespace RemoteShutdown
+namespace RemoteShutdown.Functionalty
 {
-    class ShutdownHandler
+    class ShutdownHandler : CommandHandler
     {
         public void Shutdown(int seconds)
         {
-            Console.Out.WriteLine(GenerateInfo("Shutting down", seconds));
+            Logger.Log(LogLevel.Priority, GenerateInfo("Shutting down", seconds));
             string commandString = string.Format("/s /t {0}", seconds);
             StartShutdownProcess(commandString);
         }
 
         public void Restart(int seconds)
         {
-            Console.Out.WriteLine(GenerateInfo("Restarting", seconds));
+            Logger.Log(LogLevel.Priority, GenerateInfo("Restarting", seconds));
             string commandString = string.Format("/r /t {0}", seconds);
             StartShutdownProcess(commandString);
         }
@@ -26,7 +26,7 @@ namespace RemoteShutdown
 
         public void AbortShutdown()
         {
-            Console.Out.WriteLine("Shutdown aborted.");
+            Logger.Log(LogLevel.Priority, "Shutdown aborted.");
             string commandString = string.Format("/a");
             StartShutdownProcess(commandString);
         }

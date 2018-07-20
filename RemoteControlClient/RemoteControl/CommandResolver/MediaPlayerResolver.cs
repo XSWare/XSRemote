@@ -1,4 +1,5 @@
 ﻿using RemoteShutdowLibrary;
+using RemoteShutdown.Functionalty;
 
 namespace RemoteShutdown.CommandResolving
 {

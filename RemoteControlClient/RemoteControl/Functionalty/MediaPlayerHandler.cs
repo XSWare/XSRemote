@@ -1,8 +1,9 @@
 ﻿using System;
+using XSLibrary.Utility;
 
-namespace RemoteShutdown
+namespace RemoteShutdown.Functionalty
 {
-    class MediaPlayerHandler
+    class MediaPlayerHandler : CommandHandler
     {
         private const int MESSAGE_PLAY = 0x00004978;
         private const int MESSAGE_NEXT = 0x0000497B;
@@ -11,16 +12,19 @@ namespace RemoteShutdown
 
         public void StartStop()
         {
+            Logger.Log(LogLevel.Priority, "Resuming/pausing song.");
             SendMediaMessage(MESSAGE_PLAY);
         }
 
         public void Next()
         {
+            Logger.Log(LogLevel.Priority, "Playing next song.");
             SendMediaMessage(MESSAGE_NEXT);
         }
 
         public void Previous()
         {
+            Logger.Log(LogLevel.Priority, "Playing previous song.");
             SendMediaMessage(MESSAGE_PREVIOUS);
         }
 
