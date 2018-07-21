@@ -115,9 +115,8 @@ namespace RemoteServer.User
         private void DeviceDisconnecting(object sender, EndPoint remote)
         {
             ControllableDevice device = sender as ControllableDevice;
-            RemoveDevice(device);
-
             Logger.Log(LogLevel.Warning, "Device {0} disconnected from user \"{1}\".", device.DeviceID, Username);
+            RemoveDevice(device);
         }
     }
 }
