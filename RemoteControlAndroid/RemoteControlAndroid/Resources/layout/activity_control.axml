@@ -29,11 +29,4 @@
         android:layout_height="60.0dp"
         android:text="Mute"
         android:layout_gravity="center_horizontal" />
-    <Button
-        android:id="@+id/buttonDisconnect"
-        android:layout_height="wrap_content"
-        android:layout_width="160.0dp"
-        android:layout_gravity="center_horizontal"
-        android:text="Disconnect"
-        android:layout_row="4" />
 </GridLayout>

@@ -50,7 +50,6 @@ namespace RemoteControlAndroid
             FindViewById<Button>(Resource.Id.buttonPrevious).Click += OnButtonPrevious;
             FindViewById<Button>(Resource.Id.buttonNext).Click += OnButtonNext;
             FindViewById<Button>(Resource.Id.buttonMute).Click += OnButtonMute;
-            FindViewById<Button>(Resource.Id.buttonDisconnect).Click += OnButtonDisconnect;
 
             CommandCenter.OnDisconnect += HandleDisconnect;
             CommandCenter.OnDataReceived += HandleDataReceived;
@@ -162,11 +161,6 @@ namespace RemoteControlAndroid
         private void OnButtonMute(object sender, EventArgs eventArgs)
         {
             CommandCenter.SendVolumeCommand(Commands.VOLUME_MUTE);
-        }
-
-        private void OnButtonDisconnect(object sender, EventArgs eventArgs)
-        {
-            OnBackPressed();
         }
 
         private void HandleDataReceived(object sender, byte[] data, EndPoint source)
