@@ -8,12 +8,13 @@ namespace RemoteShutdown
     {
         static void Main(string[] args)
         {
-#if DEBUG
-            Logger.DefaultLogLevel = LogLevel.Information;
-#else
-            Logger.DefaultLogLevel = LogLevel.Warning;
-#endif
             Logger logger = new LoggerConsole();
+#if DEBUG
+            logger.LogLevel = LogLevel.Detail;
+#else
+            logger.LogLevel = LogLevel.Warning;
+#endif
+
 
             LoopingConnector connector = new LoopingConnector();
             connector.Logger = logger;
@@ -25,7 +26,12 @@ namespace RemoteShutdown
                 if (!connector.ConnectLoop(out TCPPacketConnection connection))
                     break;
 
+#if !DEBUG
+                logger.LogLevel = LogLevel.Error;
+#endif
+
                 DataReceiver dataReceiver = new DataReceiver(connection);
+                dataReceiver.Logger = logger;
                 dataReceiver.Run();
 
                 string command = "";

@@ -40,7 +40,7 @@ namespace RemoteShutdown
                 if (Connect(out connection))
                     break;
 
-                Console.WriteLine("Connect try {0} out of {1} failed.", tryCount + 1, retries);
+                Logger.Log(LogLevel.Error, "Connect try {0} out of {1} failed.", tryCount + 1, retries);
                 Thread.Sleep(retryPause);
                 tryCount++;
             }
@@ -71,11 +71,9 @@ namespace RemoteShutdown
             int port = 80;
             if (!IPAddress.TryParse(ipAdress, out IPAddress IP))
             {
-                Console.Out.WriteLine("Invalid IP format \"{0}\".", ipAdress);
+                Logger.Log(LogLevel.Error, "Invalid IP format \"{0}\".", ipAdress);
                 return false;
             }
-
-            Console.Out.WriteLine("Connecting to {0}:{1}", ipAdress, port.ToString());
 
             return m_connector.Connect(new IPEndPoint(IP, port), out connection);
         }

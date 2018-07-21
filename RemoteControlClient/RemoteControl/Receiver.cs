@@ -18,15 +18,23 @@ namespace RemoteShutdown
         CommandoExecutionActor m_commandExecutionActor;
         Thread m_keepAliveThread;
 
+        Logger m_logger = Logger.NoLog;
+        public Logger Logger
+        {
+            get { return m_logger; }
+            set
+            {
+                m_logger = value;
+                Connection.Logger = m_logger;
+            }
+        }
+
         public int KeepAliveInterval { get; set; } = 10000;
         int ShutdownCheckInterval { get; set; } = 100;
 
         public DataReceiver(TCPPacketConnection connection)
         {
             Connection = connection;
-#if DEBUG
-            Connection.Logger = new LoggerConsole();
-#endif
             Connection.DataReceivedEvent += OnConnectionReceive;
             Connection.OnDisconnect += OnServerDisconnect;
         }
@@ -42,6 +50,7 @@ namespace RemoteShutdown
 
             m_commandExecutionActor = new CommandoExecutionActor(commandResolvers);
 
+            Connection.Logger = Logger;
             Connection.InitializeReceiving();
 
             m_keepAliveThread = new Thread(KeepAliveLoop);
@@ -61,7 +70,7 @@ namespace RemoteShutdown
 
         private void OnServerDisconnect(object sender, EndPoint endpoint)
         {
-            Console.Out.WriteLine("Disconnected from server.");
+            Logger.Log(LogLevel.Priority, "Disconnected from server.");
             ServerDisconnect?.Invoke(this, new EventArgs());
         }
 
@@ -84,7 +93,7 @@ namespace RemoteShutdown
         private void OnConnectionReceive(object sender, byte[] data, EndPoint source)
         {
             string command = GetCommandoFromBytes(data);
-            Console.Out.WriteLine("Received command \"{0}\"", command);
+            Logger.Log(LogLevel.Information, "Received command \"{0}\"", command);
             SendReply("Received: " + command);
             m_commandExecutionActor.SendMessage(command);
         }
