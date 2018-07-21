@@ -6,7 +6,6 @@ using Android.Support.V7.App;
 using System.Net;
 using XSLibrary.Utility.Logging;
 using XSLibrary.Utility;
-using XSLibrary.Network.Connectors;
 
 namespace RemoteControlAndroid
 {
@@ -14,6 +13,9 @@ namespace RemoteControlAndroid
 	public class MainActivity : AppCompatActivity
 	{
         Logger logger;
+
+        const string CONNECTING = "Connecting...";
+        const string DISCONNECTED = "Disconnected.";
 
         protected override void OnCreate(Bundle savedInstanceState)
 		{
@@ -40,14 +42,14 @@ namespace RemoteControlAndroid
             CommandCenter.ActiveLogger = logger;
 
             if (CommandCenter.CurrentlyConnecting)
-                SetStatus(AccountConnector.MessageConnecting);
+                SetStatus(CONNECTING);
 
             base.OnStart();
         }
 
         protected override void OnRestart()
         {
-            logger.Log(LogLevel.Warning, "Disconnected.");
+            logger.Log(LogLevel.Warning, DISCONNECTED);
             base.OnRestart();
         }
 
