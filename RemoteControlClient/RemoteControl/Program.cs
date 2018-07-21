@@ -8,9 +8,15 @@ namespace RemoteShutdown
     {
         static void Main(string[] args)
         {
+#if DEBUG
+            Logger.DefaultLogLevel = LogLevel.Information;
+#else
+            Logger.DefaultLogLevel = LogLevel.Warning;
+#endif
             Logger logger = new LoggerConsole();
 
-            RepeatConnector connector = new RepeatConnector();
+            LoopingConnector connector = new LoopingConnector();
+            connector.Logger = logger;
 
             bool reconnect = true;
 

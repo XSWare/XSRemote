@@ -1,39 +1,46 @@
 ﻿using System;
 using System.Net;
-using System.Net.Sockets;
-using System.Text;
 using System.Threading;
 using XSLibrary.Cryptography.ConnectionCryptos;
 using XSLibrary.Network.Connections;
 using XSLibrary.Network.Connectors;
+using XSLibrary.Utility;
 
 namespace RemoteShutdown
 {
-    class RepeatConnector
+    class LoopingConnector
     {
         AccountConnector m_connector;
+
+        Logger m_logger = Logger.NoLog;
+        public Logger Logger
+        {
+            get { return m_logger; }
+            set
+            {
+                m_logger = value;
+                m_connector.Logger = m_logger;
+            }
+        }
+
+        public LoopingConnector()
+        {
+            m_connector = CreateConnector();
+        }
 
         public bool ConnectLoop(out TCPPacketConnection connection, int retries = 10)
         {
             connection = null;
-
-            m_connector = CreateConnector();
 
             int tryCount = 0;
             int retryPause = 1000;
 
             while (tryCount < retries)
             {
-                if (Connect(out connection, out string message))
-                {
-                    Console.WriteLine(message);
+                if (Connect(out connection))
                     break;
-                }
 
-                if (message == AccountConnector.AUTHENTICATION_FAILED)
-                    m_connector.Login = "";
-
-                Console.WriteLine("Connect try {0} out of {1} failed: {2}", tryCount + 1, retries, message);
+                Console.WriteLine("Connect try {0} out of {1} failed.", tryCount + 1, retries);
                 Thread.Sleep(retryPause);
                 tryCount++;
             }
@@ -45,14 +52,14 @@ namespace RemoteShutdown
         {
             AccountConnector connector = new AccountConnector();
             connector.Crypto = CryptoType.RSALegacy;
+            connector.Login = "dave Gratuliere123!";
 
             return connector;
         }
 
-        public bool Connect(out TCPPacketConnection connection, out string message)
+        public bool Connect(out TCPPacketConnection connection)
         {
             connection = null;
-            message = "";
 
             if (m_connector.Login.Length <= 0)
             {
@@ -70,7 +77,7 @@ namespace RemoteShutdown
 
             Console.Out.WriteLine("Connecting to {0}:{1}", ipAdress, port.ToString());
 
-            return m_connector.Connect(new IPEndPoint(IP, port), out connection, out message);
+            return m_connector.Connect(new IPEndPoint(IP, port), out connection);
         }
     }
 }

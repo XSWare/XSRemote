@@ -47,7 +47,7 @@
     <Compile Include="CommandResolver\CommandResolver.cs" />
     <Compile Include="CommandResolver\MediaPlayerResolver.cs" />
     <Compile Include="CommandResolver\VolumeCommandResolver.cs" />
-    <Compile Include="Connector.cs" />
+    <Compile Include="LoopingConnector.cs" />
     <Compile Include="Functionalty\CommandHandler.cs" />
     <Compile Include="Functionalty\MediaPlayerHandler.cs" />
     <Compile Include="Functionalty\ShutdownHandler.cs" />
