@@ -31,7 +31,7 @@ namespace RemoteControlAndroid
             set
             {
                 Instance.m_logger = value;
-                Instance.m_connector.Logger = value;
+                Instance.m_connector.Logger = Instance.m_logger;
             }
         }
 
@@ -131,11 +131,8 @@ namespace RemoteControlAndroid
         {
             Instance.m_disconnectedGracefully = false;
 
-            if (!m_connector.Reconnect(out TCPPacketConnection connection, out string message))
-            {
-                ActiveLogger.Log(LogLevel.Error, message);
+            if (!m_connector.Reconnect(out TCPPacketConnection connection))
                 return false;
-            }
 
             SetConnection(connection);
             OnConnect?.Invoke();

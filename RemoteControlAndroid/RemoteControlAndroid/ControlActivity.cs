@@ -92,7 +92,9 @@ namespace RemoteControlAndroid
             intervallCount--;
             if (intervallCount <= 0)
             {
-                timer.Dispose();
+                if(timer != null)
+                    timer.Dispose();
+
                 timer = null;
                 labelStatus.Text = "";
             }
