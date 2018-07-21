@@ -4,27 +4,28 @@ using Android.Widget;
 using Android.OS;
 using Android.Support.V7.App;
 using System.Net;
-using System.Threading;
+using XSLibrary.Utility.Logging;
+using XSLibrary.Utility;
 using XSLibrary.Network.Connectors;
-using XSLibrary.Cryptography.ConnectionCryptos;
-using XSLibrary.Network.Connections;
 
 namespace RemoteControlAndroid
 {
     [Activity(Label = "@string/app_name", Theme = "@style/AppTheme.NoActionBar", MainLauncher = true)]
 	public class MainActivity : AppCompatActivity
 	{
-        AccountConnector m_connector;
+        Logger logger;
 
         protected override void OnCreate(Bundle savedInstanceState)
 		{
-			base.OnCreate(savedInstanceState);
+            logger = new LambdaLogger((text) => RunOnUiThread(() => SetStatus(text))) { LogLevel = LogLevel.Information };
+
+            base.OnCreate(savedInstanceState);
 
 			SetContentView(Resource.Layout.activity_main);
 
             RequestedOrientation = Android.Content.PM.ScreenOrientation.Portrait;
 
-            m_connector = CreateConnector();
+            CommandCenter.OnConnect += ConnectSuccess;
 
             Button buttonConnect = FindViewById<Button>(Resource.Id.buttonConnect);
             buttonConnect.Click += OnButtonConnect;
@@ -36,21 +37,23 @@ namespace RemoteControlAndroid
 
         protected override void OnStart()
         {
+            CommandCenter.ActiveLogger = logger;
+
+            if (CommandCenter.CurrentlyConnecting)
+                SetStatus(AccountConnector.MessageConnecting);
+
             base.OnStart();
         }
 
-        private AccountConnector CreateConnector()
+        protected override void OnRestart()
         {
-            AccountConnector connector = new AccountConnector();
-            connector.Crypto = CryptoType.RSALegacy;
-            connector.TimeoutCryptoHandshake = 30000;
-
-            return connector;
+            logger.Log(LogLevel.Warning, "Disconnected.");
+            base.OnRestart();
         }
 
         private void OnButtonConnect(object sender, EventArgs eventArgs)
         {
-            if (m_connector.CurrentlyConnecting)
+            if (CommandCenter.CurrentlyConnecting)
                 return;
 
             if (CommandCenter.Connected)
@@ -67,28 +70,16 @@ namespace RemoteControlAndroid
                 return;
             }
 
-            SetStatus("Connecting...");
-
-            m_connector.ConnectAsync(
-                new IPEndPoint(ip, 443), 
-                (connection) => RunOnUiThread(() => ConnectSuccess(connection)), 
-                (error) => RunOnUiThread(() => ConnectFailure(error)));
+            CommandCenter.Connect(new IPEndPoint(ip, 443));
         }
 
-        private void ConnectSuccess(TCPPacketConnection connection)
+        private void ConnectSuccess()
         {
-            CommandCenter.SetConnection(connection);
-
-            if (CommandCenter.Connected)
+            RunOnUiThread(() =>
             {
-                StartActivity(typeof(ControlActivity));
-                SetStatus("Disconnected.");
-            }
-        }
-
-        private void ConnectFailure(string error)
-        {
-            SetStatus(error);
+                if (CommandCenter.Connected)
+                    StartActivity(typeof(ControlActivity));
+            });
         }
 
         private void SetStatus(string status)

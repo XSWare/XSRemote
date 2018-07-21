@@ -73,7 +73,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
-    <None Include="Properties\AndroidManifest.xml" />
+    <None Include="Properties\AndroidManifest.xml">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Assets\AboutAssets.txt" />
   </ItemGroup>
   <ItemGroup>
@@ -126,6 +128,10 @@
     <ProjectReference Include="..\..\XSLibrary\XSLibrary\XSThreadSafety\XSThreadSafety.csproj">
       <Project>{1364168D-0353-49F5-9DAC-2A501FD8055A}</Project>
       <Name>XSThreadSafety</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\XSLibrary\XSLibrary\XSUtility\XSUtility.csproj">
+      <Project>{A37C8BF1-08E7-46BB-8F9E-536A82365FED}</Project>
+      <Name>XSUtility</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

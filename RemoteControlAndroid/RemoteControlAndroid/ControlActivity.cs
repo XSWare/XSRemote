@@ -8,13 +8,18 @@ using Android.Views;
 using Android.Widget;
 using RemoteShutdowLibrary;
 using System;
+using System.Net;
 using System.Threading;
+using XSLibrary.Utility;
+using XSLibrary.Utility.Logging;
 
 namespace RemoteControlAndroid
 {
     [Activity(Label = "@string/app_name", Theme = "@style/AppTheme.NoActionBar", MainLauncher = false)]
     public class ControlActivity : AppCompatActivity
     {
+        Logger logger;
+
         Intent keepAliveService;
 
         EditText textDelay;
@@ -27,6 +32,8 @@ namespace RemoteControlAndroid
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
+            logger = new LambdaLogger((text) => RunOnUiThread(() => SetStatus(text))) { LogLevel = LogLevel.Information };
+
             base.OnCreate(savedInstanceState);
 
             SetContentView(Resource.Layout.activity_control);
@@ -54,6 +61,7 @@ namespace RemoteControlAndroid
 
         protected override void OnStart()
         {
+            CommandCenter.ActiveLogger = logger;
             textDelay.SetSelection(textDelay.SelectionEnd);
             base.OnStart();
         }
@@ -61,7 +69,10 @@ namespace RemoteControlAndroid
         protected override void OnResume()
         {
             if (!CommandCenter.Connected)
-                OnBackPressed();
+            {
+                CleanUpConnection();
+                base.OnBackPressed();
+            }
 
             base.OnResume();
         }
@@ -158,14 +169,18 @@ namespace RemoteControlAndroid
             OnBackPressed();
         }
 
-        private void HandleDataReceived(object sender, byte[] data, System.Net.EndPoint source)
+        private void HandleDataReceived(object sender, byte[] data, EndPoint source)
         {
             RunOnUiThread(() => SetStatus("Device received command"));
         }
 
-        private void HandleDisconnect(object sender, System.Net.EndPoint remote)
+        private void HandleDisconnect(object sender, EndPoint remote)
         {
-            RunOnUiThread(() => OnBackPressed());
+            RunOnUiThread(() =>
+            {
+                CleanUpConnection();
+                base.OnBackPressed();
+            });
         }
 
         public override void OnBackPressed()
@@ -182,11 +197,16 @@ namespace RemoteControlAndroid
 
         private void Disconnect()
         {
+            CleanUpConnection();
             StopService(keepAliveService);
-
-            CommandCenter.OnDisconnect -= HandleDisconnect;
-            CommandCenter.OnDataReceived -= HandleDataReceived;
             CommandCenter.Disconnect();
         }
+
+        private void CleanUpConnection()
+        {
+            CommandCenter.OnDisconnect -= HandleDisconnect;
+            CommandCenter.OnDataReceived -= HandleDataReceived;
+        }
+
     }
 }

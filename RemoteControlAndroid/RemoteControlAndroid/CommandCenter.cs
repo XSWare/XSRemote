@@ -1,27 +1,74 @@
 ﻿using RemoteShutdowLibrary;
 using RemoteShutdownLibrary;
+using System;
 using System.Net;
+using XSLibrary.Cryptography.ConnectionCryptos;
 using XSLibrary.Network.Connections;
+using XSLibrary.Network.Connectors;
+using XSLibrary.Utility;
 
 namespace RemoteControlAndroid
 {
     class CommandCenter
     {
+        public delegate void ConnectHandle();
+
+        public static event ConnectHandle OnConnect;
         public static event OnDisconnectEvent.EventHandle OnDisconnect;
         public static event IConnection.DataReceivedHandler OnDataReceived;
 
         public static CommandCenter Instance { get; private set; } = new CommandCenter();
 
         public static bool Connected { get { return Instance.m_connection != null && Instance.m_connection.Connected; } }
+        public static bool CurrentlyConnecting { get { return Instance.m_connector.CurrentlyConnecting; } }
+        public static bool DisconnectedGracefully { get { return Instance.m_disconnectedGracefully; } }
         public int KeepAliveInterval { get; private set; } = 10000;
 
+        Logger m_logger = Logger.NoLog;
+        public static Logger ActiveLogger
+        {
+            get { return Instance.m_logger; }
+            set
+            {
+                Instance.m_logger = value;
+                Instance.m_connector.Logger = value;
+            }
+        }
+
+        AccountConnector m_connector;
         TCPPacketConnection m_connection = null;
+
+        bool m_disconnectedGracefully = false;
 
         private CommandCenter()
         {
+            m_connector = CreateConnector();
         }
 
-        public static void SetConnection(TCPPacketConnection connection)
+        private AccountConnector CreateConnector()
+        {
+            AccountConnector connector = new AccountConnector();
+            connector.Crypto = CryptoType.RSALegacy;
+            connector.TimeoutCryptoHandshake = 30000;
+            connector.Login = "dave Gratuliere123!";
+
+            return connector;
+        }
+
+        public static void Connect(EndPoint remote)
+        {
+            Instance.m_disconnectedGracefully = false;
+
+            Action<TCPPacketConnection> successCallback = ((connection) =>
+            {
+                Instance.SetConnection(connection);
+                OnConnect?.Invoke();
+            });
+
+            Instance.m_connector.ConnectAsync(remote, successCallback, () => { });
+        }
+
+        void SetConnection(TCPPacketConnection connection)
         {
             Instance.m_connection = connection;
             connection.DataReceivedEvent += Instance.HandleDataReceived;
@@ -54,6 +101,8 @@ namespace RemoteControlAndroid
 
         public static void Disconnect()
         {
+            Instance.m_disconnectedGracefully = true;
+
             if (Connected)
                 Instance.m_connection.Disconnect();
         }
