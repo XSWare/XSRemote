@@ -1,6 +1,7 @@
 ﻿using RemoteServer.Registrations;
 using RemoteServer.User;
 using System;
+using XSLibrary.Cryptography.AccountManagement;
 using XSLibrary.Network.Accepters;
 using XSLibrary.Utility;
 
@@ -9,8 +10,10 @@ namespace RemoteServer
     class Program
     {
         static Logger logger;
-        static DeviceRegistration deviceRegistration = new DeviceRegistration(new GuardedAccepter(22222, 1000));
-        static UserRegistration userRegistration = new UserRegistration(new GuardedAccepter(22223, 1000));
+        static FileUserBase dataBase = new FileUserBase(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\RemoteControl\\", "accounts.txt");
+        static AccountPool accounts = new AccountPool();
+        static DeviceRegistration deviceRegistration = new DeviceRegistration(new GuardedAccepter(22222, 1000), dataBase, accounts);
+        static UserRegistration userRegistration = new UserRegistration(new GuardedAccepter(22223, 1000), dataBase, accounts);
 
         static void Main(string[] args)
         {
@@ -63,7 +66,13 @@ namespace RemoteServer
             if (cmdSplit.Length < 3)
                 return;
 
-            UserAccount user = userRegistration.GetUserAccount(cmdSplit[0]);
+            UserAccount user = accounts.GetAccount(cmdSplit[0]);
+
+            if (!user.StillInUse())
+            {
+                accounts.DisposeAccount(user);
+                return;
+            }
 
             string deviceCommand = cmdSplit[2];
             for (int i = 3; i < cmdSplit.Length; i++)

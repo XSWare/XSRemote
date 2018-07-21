@@ -1,27 +1,23 @@
 ﻿using RemoteServer.Connections;
 using RemoteServer.Device;
 using System.Net;
+using XSLibrary.Network.Registrations;
 using XSLibrary.ThreadSafety.Containers;
 using XSLibrary.Utility;
 
 namespace RemoteServer.User
 {
-    class UserAccount
+    class UserAccount: IUserAccount
     {
-        public delegate void ConnectionRemovedHandler(object sender);
+        public override event MemoryReleaseHandler OnMemoryCleanUp;
 
-        public event ConnectionRemovedHandler OnConnectionRemoval;
-        public Logger Logger { get; set; } = Logger.NoLog;
-        public string Username { get; private set; }
         SafeList<ControllableDevice> m_devices;
         UserConnection m_userConnection;
 
         public bool UserConnected { get { return m_userConnection != null; } }
 
-        public UserAccount(string username)
+        public UserAccount(string username) : base(username)
         {
-            Username = username;
-
             m_devices = new SafeList<ControllableDevice>();
         }
 
@@ -48,7 +44,7 @@ namespace RemoteServer.User
             m_userConnection.OnDisconnect -= HandleUserDisconnect;
             m_userConnection = null;
 
-            OnConnectionRemoval?.Invoke(this);
+            OnMemoryCleanUp?.Invoke(this);
         }
 
         public void AddDevice(ControllableDevice device)
@@ -64,10 +60,10 @@ namespace RemoteServer.User
             m_devices.Remove(device);
             device.OnCommandReceived -= HandleDeviceReply;
             device.OnDeviceDisconnect -= DeviceDisconnecting;
-            OnConnectionRemoval?.Invoke(this);
+            OnMemoryCleanUp?.Invoke(this);
         }
 
-        public bool StillInUse()
+        public override bool StillInUse()
         {
             return m_devices.Count > 0 || m_userConnection != null;
         }
