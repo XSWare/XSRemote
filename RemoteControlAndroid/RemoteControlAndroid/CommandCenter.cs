@@ -120,17 +120,27 @@ namespace RemoteControlAndroid
 
         private void HandleDisconnect(object sender, EndPoint remote)
         {
-            //if(!Reconnect())
+            if (!DisconnectedGracefully && !Reconnect())
+            {
                 OnDisconnect?.Invoke(this, remote);
+                ActiveLogger.Log(LogLevel.Warning, "Disconnected.");
+            }
         }
 
-        //private bool Reconnect()
-        //{
-        //    if (m_lastLogin == null)
-        //        return false;
+        private bool Reconnect()
+        {
+            Instance.m_disconnectedGracefully = false;
 
-        //    Connect(m_lastLogin, () => { });
-        //    return Connected;
-        //}
+            if (!m_connector.Reconnect(out TCPPacketConnection connection, out string message))
+            {
+                ActiveLogger.Log(LogLevel.Error, message);
+                return false;
+            }
+
+            SetConnection(connection);
+            OnConnect?.Invoke();
+
+            return Connected;
+        }
     }
 }
