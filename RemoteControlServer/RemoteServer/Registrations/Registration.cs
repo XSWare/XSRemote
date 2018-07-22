@@ -20,7 +20,7 @@ namespace RemoteServer.Registrations
             : base(accepter, dataBase, accounts)
         {
             Crypto = CryptoType.RSALegacy;
-            AuthenticationTimeout = 30000;
+            CryptoHandshakeTimeout = 30000;
         }
 
         protected override TCPPacketConnection CreateConnection(Socket acceptedSocket)
