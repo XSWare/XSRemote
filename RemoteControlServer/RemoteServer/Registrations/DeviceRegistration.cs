@@ -1,10 +1,9 @@
-﻿using XSLibrary.Network.Accepters;
-using XSLibrary.Network.Connections;
+﻿using XSLibrary.Network.Connections;
 using RemoteServer.User;
 using RemoteServer.Device;
 using RemoteServer.Connections;
 using XSLibrary.Cryptography.AccountManagement;
-using System.Collections.Generic;
+using XSLibrary.Network.Acceptors;
 
 namespace RemoteServer.Registrations
 {
@@ -12,7 +11,7 @@ namespace RemoteServer.Registrations
     {
         int m_currentDeviceID;
 
-        public DeviceRegistration(TCPAccepter accepter, IUserDataBase dataBase, AccountPool accounts)
+        public DeviceRegistration(TCPAcceptor accepter, IUserDataBase dataBase, AccountPool accounts)
             : base(accepter, dataBase, accounts)
         {
             m_currentDeviceID = 0;

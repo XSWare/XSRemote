@@ -1,12 +1,11 @@
 ﻿using RemoteServer.User;
 using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using XSLibrary.Cryptography.AccountManagement;
 using XSLibrary.Cryptography.ConnectionCryptos;
-using XSLibrary.Network.Accepters;
+using XSLibrary.Network.Acceptors;
 using XSLibrary.Network.Connections;
 using XSLibrary.Network.Registrations;
 
@@ -17,7 +16,7 @@ namespace RemoteServer.Registrations
         delegate void DisposeHandler();
         event DisposeHandler OnDispose;
 
-        public Registration(TCPAccepter accepter, IUserDataBase dataBase, AccountPool accounts)
+        public Registration(TCPAcceptor accepter, IUserDataBase dataBase, AccountPool accounts)
             : base(accepter, dataBase, accounts)
         {
             Crypto = CryptoType.RSALegacy;

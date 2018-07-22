@@ -1,13 +1,12 @@
 ﻿using RemoteServer.User;
 using XSLibrary.Network.Connections;
-using XSLibrary.Network.Accepters;
 using RemoteServer.Connections;
 using XSLibrary.ThreadSafety.Containers;
 using System.Net;
 using System.Text;
 using XSLibrary.Utility;
 using XSLibrary.Cryptography.AccountManagement;
-using System.Collections.Generic;
+using XSLibrary.Network.Acceptors;
 
 namespace RemoteServer.Registrations
 {
@@ -17,7 +16,7 @@ namespace RemoteServer.Registrations
 
         public UserConnection[] UserConnections { get { return m_userConnections.Entries; } }
 
-        public UserRegistration(TCPAccepter accepter, IUserDataBase dataBase, AccountPool accounts)
+        public UserRegistration(TCPAcceptor accepter, IUserDataBase dataBase, AccountPool accounts)
             : base(accepter, dataBase, accounts)
         {
             m_userConnections = new SafeList<UserConnection>();

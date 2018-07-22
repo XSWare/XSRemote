@@ -2,7 +2,7 @@
 using RemoteServer.User;
 using System;
 using XSLibrary.Cryptography.AccountManagement;
-using XSLibrary.Network.Accepters;
+using XSLibrary.Network.Acceptors;
 using XSLibrary.Utility;
 
 namespace RemoteServer
@@ -12,8 +12,8 @@ namespace RemoteServer
         static Logger logger;
         static FileUserBase dataBase = new FileUserBase(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\RemoteControl\\", "accounts.txt");
         static AccountPool accounts = new AccountPool();
-        static DeviceRegistration deviceRegistration = new DeviceRegistration(new GuardedAccepter(22222, 1000), dataBase, accounts);
-        static UserRegistration userRegistration = new UserRegistration(new GuardedAccepter(22223, 1000), dataBase, accounts);
+        static DeviceRegistration deviceRegistration = new DeviceRegistration(new GuardedAcceptor(22222, 1000), dataBase, accounts);
+        static UserRegistration userRegistration = new UserRegistration(new GuardedAcceptor(22223, 1000), dataBase, accounts);
 
         static void Main(string[] args)
         {
