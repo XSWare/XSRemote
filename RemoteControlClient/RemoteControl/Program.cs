@@ -21,14 +21,12 @@ namespace RemoteShutdown
 #if DEBUG
                 logger.LogLevel = LogLevel.Detail;
 #else
-                logger.LogLevel = LogLevel.Warning;
+                logger.LogLevel = LogLevel.Error;
 #endif
                 if (!connector.ConnectLoop(out TCPPacketConnection connection))
                     break;
 
-#if !DEBUG
-                logger.LogLevel = LogLevel.Error;
-#endif
+                logger.Log(LogLevel.Priority, "Connected to server.");
 
                 DataReceiver dataReceiver = new DataReceiver(connection);
                 dataReceiver.Logger = logger;

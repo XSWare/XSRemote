@@ -23,7 +23,7 @@ namespace RemoteServer.User
 
         public void SetUserConnection(UserConnection connection)
         {
-            Logger.Log(LogLevel.Warning, "User connected to account \"{0}\".", Username);
+            Logger.Log(LogLevel.Priority, "User connected to account \"{0}\".", Username);
 
             RemoveUserConnection();
             m_userConnection = connection;
@@ -32,7 +32,7 @@ namespace RemoteServer.User
 
         private void HandleUserDisconnect(object sender, EndPoint remote)
         {
-            Logger.Log(LogLevel.Warning, "User disconnected from account \"{0}\".", Username);
+            Logger.Log(LogLevel.Priority, "User disconnected from account \"{0}\".", Username);
             RemoveUserConnection();
         }
 
@@ -52,7 +52,7 @@ namespace RemoteServer.User
             device.OnDeviceDisconnect += DeviceDisconnecting;
             device.OnCommandReceived += HandleDeviceReply;
             m_devices.Add(device);
-            Logger.Log(LogLevel.Warning, "Added device {0} to user \"{1}\".", device.DeviceID, Username);
+            Logger.Log(LogLevel.Priority, "Added device {0} to user \"{1}\".", device.DeviceID, Username);
         }
 
         public void RemoveDevice(ControllableDevice device)
@@ -111,7 +111,7 @@ namespace RemoteServer.User
         private void DeviceDisconnecting(object sender, EndPoint remote)
         {
             ControllableDevice device = sender as ControllableDevice;
-            Logger.Log(LogLevel.Warning, "Device {0} disconnected from user \"{1}\".", device.DeviceID, Username);
+            Logger.Log(LogLevel.Priority, "Device {0} disconnected from user \"{1}\".", device.DeviceID, Username);
             RemoveDevice(device);
         }
     }

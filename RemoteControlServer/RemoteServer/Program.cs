@@ -19,8 +19,12 @@ namespace RemoteServer
         {
 #if DEBUG
             Logger.DefaultLogLevel = LogLevel.Detail;
+#else
+            Logger.DefaultLogLevel = LogLevel.Warning;
 #endif
             logger = new LoggerConsole();
+
+            logger.Log(LogLevel.Priority, "Server started.");
 
             deviceRegistration.Logger = logger;
             deviceRegistration.Run();
@@ -39,8 +43,13 @@ namespace RemoteServer
                     ManualCommand(cmd);
             }
 
+            logger.Log(LogLevel.Priority, "Shutting down server...");
+
             deviceRegistration.Dispose();
             userRegistration.Dispose();
+
+            logger.Log(LogLevel.Priority, "Server shut down.");
+            Console.In.Read();
         }
 
         private static void AccountCommand(string cmd)
