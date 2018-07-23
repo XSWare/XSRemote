@@ -1187,44 +1187,44 @@ namespace RemoteControlAndroid
 		public partial class Color
 		{
 			
-			// aapt resource value: 0x7f0b004b
-			public const int abc_background_cache_hint_selector_material_dark = 2131427403;
-			
-			// aapt resource value: 0x7f0b004c
-			public const int abc_background_cache_hint_selector_material_light = 2131427404;
-			
 			// aapt resource value: 0x7f0b004d
-			public const int abc_btn_colored_borderless_text_material = 2131427405;
+			public const int abc_background_cache_hint_selector_material_dark = 2131427405;
 			
 			// aapt resource value: 0x7f0b004e
-			public const int abc_btn_colored_text_material = 2131427406;
+			public const int abc_background_cache_hint_selector_material_light = 2131427406;
 			
 			// aapt resource value: 0x7f0b004f
-			public const int abc_color_highlight_material = 2131427407;
+			public const int abc_btn_colored_borderless_text_material = 2131427407;
 			
 			// aapt resource value: 0x7f0b0050
-			public const int abc_hint_foreground_material_dark = 2131427408;
+			public const int abc_btn_colored_text_material = 2131427408;
 			
 			// aapt resource value: 0x7f0b0051
-			public const int abc_hint_foreground_material_light = 2131427409;
+			public const int abc_color_highlight_material = 2131427409;
+			
+			// aapt resource value: 0x7f0b0052
+			public const int abc_hint_foreground_material_dark = 2131427410;
+			
+			// aapt resource value: 0x7f0b0053
+			public const int abc_hint_foreground_material_light = 2131427411;
 			
 			// aapt resource value: 0x7f0b0000
 			public const int abc_input_method_navigation_guard = 2131427328;
 			
-			// aapt resource value: 0x7f0b0052
-			public const int abc_primary_text_disable_only_material_dark = 2131427410;
-			
-			// aapt resource value: 0x7f0b0053
-			public const int abc_primary_text_disable_only_material_light = 2131427411;
-			
 			// aapt resource value: 0x7f0b0054
-			public const int abc_primary_text_material_dark = 2131427412;
+			public const int abc_primary_text_disable_only_material_dark = 2131427412;
 			
 			// aapt resource value: 0x7f0b0055
-			public const int abc_primary_text_material_light = 2131427413;
+			public const int abc_primary_text_disable_only_material_light = 2131427413;
 			
 			// aapt resource value: 0x7f0b0056
-			public const int abc_search_url_text = 2131427414;
+			public const int abc_primary_text_material_dark = 2131427414;
+			
+			// aapt resource value: 0x7f0b0057
+			public const int abc_primary_text_material_light = 2131427415;
+			
+			// aapt resource value: 0x7f0b0058
+			public const int abc_search_url_text = 2131427416;
 			
 			// aapt resource value: 0x7f0b0001
 			public const int abc_search_url_text_normal = 2131427329;
@@ -1235,29 +1235,29 @@ namespace RemoteControlAndroid
 			// aapt resource value: 0x7f0b0003
 			public const int abc_search_url_text_selected = 2131427331;
 			
-			// aapt resource value: 0x7f0b0057
-			public const int abc_secondary_text_material_dark = 2131427415;
-			
-			// aapt resource value: 0x7f0b0058
-			public const int abc_secondary_text_material_light = 2131427416;
-			
 			// aapt resource value: 0x7f0b0059
-			public const int abc_tint_btn_checkable = 2131427417;
+			public const int abc_secondary_text_material_dark = 2131427417;
 			
 			// aapt resource value: 0x7f0b005a
-			public const int abc_tint_default = 2131427418;
+			public const int abc_secondary_text_material_light = 2131427418;
 			
 			// aapt resource value: 0x7f0b005b
-			public const int abc_tint_edittext = 2131427419;
+			public const int abc_tint_btn_checkable = 2131427419;
 			
 			// aapt resource value: 0x7f0b005c
-			public const int abc_tint_seek_thumb = 2131427420;
+			public const int abc_tint_default = 2131427420;
 			
 			// aapt resource value: 0x7f0b005d
-			public const int abc_tint_spinner = 2131427421;
+			public const int abc_tint_edittext = 2131427421;
 			
 			// aapt resource value: 0x7f0b005e
-			public const int abc_tint_switch_track = 2131427422;
+			public const int abc_tint_seek_thumb = 2131427422;
+			
+			// aapt resource value: 0x7f0b005f
+			public const int abc_tint_spinner = 2131427423;
+			
+			// aapt resource value: 0x7f0b0060
+			public const int abc_tint_switch_track = 2131427424;
 			
 			// aapt resource value: 0x7f0b0004
 			public const int accent_material_dark = 2131427332;
@@ -1304,6 +1304,12 @@ namespace RemoteControlAndroid
 			// aapt resource value: 0x7f0b0049
 			public const int colorAccent = 2131427401;
 			
+			// aapt resource value: 0x7f0b004a
+			public const int colorButtonBackground = 2131427402;
+			
+			// aapt resource value: 0x7f0b004b
+			public const int colorButtonText = 2131427403;
+			
 			// aapt resource value: 0x7f0b0047
 			public const int colorPrimary = 2131427399;
 			
@@ -1313,8 +1319,8 @@ namespace RemoteControlAndroid
 			// aapt resource value: 0x7f0b003c
 			public const int design_bottom_navigation_shadow_color = 2131427388;
 			
-			// aapt resource value: 0x7f0b005f
-			public const int design_error = 2131427423;
+			// aapt resource value: 0x7f0b0061
+			public const int design_error = 2131427425;
 			
 			// aapt resource value: 0x7f0b003d
 			public const int design_fab_shadow_end_color = 2131427389;
@@ -1340,8 +1346,8 @@ namespace RemoteControlAndroid
 			// aapt resource value: 0x7f0b0044
 			public const int design_snackbar_background_color = 2131427396;
 			
-			// aapt resource value: 0x7f0b0060
-			public const int design_tint_password_toggle = 2131427424;
+			// aapt resource value: 0x7f0b0062
+			public const int design_tint_password_toggle = 2131427426;
 			
 			// aapt resource value: 0x7f0b0012
 			public const int dim_foreground_disabled_material_dark = 2131427346;
@@ -1370,8 +1376,8 @@ namespace RemoteControlAndroid
 			// aapt resource value: 0x7f0b001a
 			public const int highlighted_text_material_light = 2131427354;
 			
-			// aapt resource value: 0x7f0b004a
-			public const int ic_launcher_background = 2131427402;
+			// aapt resource value: 0x7f0b004c
+			public const int ic_launcher_background = 2131427404;
 			
 			// aapt resource value: 0x7f0b001b
 			public const int material_blue_grey_800 = 2131427355;
@@ -1466,11 +1472,11 @@ namespace RemoteControlAndroid
 			// aapt resource value: 0x7f0b0036
 			public const int switch_thumb_disabled_material_light = 2131427382;
 			
-			// aapt resource value: 0x7f0b0061
-			public const int switch_thumb_material_dark = 2131427425;
+			// aapt resource value: 0x7f0b0063
+			public const int switch_thumb_material_dark = 2131427427;
 			
-			// aapt resource value: 0x7f0b0062
-			public const int switch_thumb_material_light = 2131427426;
+			// aapt resource value: 0x7f0b0064
+			public const int switch_thumb_material_light = 2131427428;
 			
 			// aapt resource value: 0x7f0b0037
 			public const int switch_thumb_normal_material_dark = 2131427383;
@@ -3083,64 +3089,67 @@ namespace RemoteControlAndroid
 			public const int design_text_input_password_icon = 2130903084;
 			
 			// aapt resource value: 0x7f03002d
-			public const int notification_action = 2130903085;
+			public const int divider = 2130903085;
 			
 			// aapt resource value: 0x7f03002e
-			public const int notification_action_tombstone = 2130903086;
+			public const int notification_action = 2130903086;
 			
 			// aapt resource value: 0x7f03002f
-			public const int notification_media_action = 2130903087;
+			public const int notification_action_tombstone = 2130903087;
 			
 			// aapt resource value: 0x7f030030
-			public const int notification_media_cancel_action = 2130903088;
+			public const int notification_media_action = 2130903088;
 			
 			// aapt resource value: 0x7f030031
-			public const int notification_template_big_media = 2130903089;
+			public const int notification_media_cancel_action = 2130903089;
 			
 			// aapt resource value: 0x7f030032
-			public const int notification_template_big_media_custom = 2130903090;
+			public const int notification_template_big_media = 2130903090;
 			
 			// aapt resource value: 0x7f030033
-			public const int notification_template_big_media_narrow = 2130903091;
+			public const int notification_template_big_media_custom = 2130903091;
 			
 			// aapt resource value: 0x7f030034
-			public const int notification_template_big_media_narrow_custom = 2130903092;
+			public const int notification_template_big_media_narrow = 2130903092;
 			
 			// aapt resource value: 0x7f030035
-			public const int notification_template_custom_big = 2130903093;
+			public const int notification_template_big_media_narrow_custom = 2130903093;
 			
 			// aapt resource value: 0x7f030036
-			public const int notification_template_icon_group = 2130903094;
+			public const int notification_template_custom_big = 2130903094;
 			
 			// aapt resource value: 0x7f030037
-			public const int notification_template_lines_media = 2130903095;
+			public const int notification_template_icon_group = 2130903095;
 			
 			// aapt resource value: 0x7f030038
-			public const int notification_template_media = 2130903096;
+			public const int notification_template_lines_media = 2130903096;
 			
 			// aapt resource value: 0x7f030039
-			public const int notification_template_media_custom = 2130903097;
+			public const int notification_template_media = 2130903097;
 			
 			// aapt resource value: 0x7f03003a
-			public const int notification_template_part_chronometer = 2130903098;
+			public const int notification_template_media_custom = 2130903098;
 			
 			// aapt resource value: 0x7f03003b
-			public const int notification_template_part_time = 2130903099;
+			public const int notification_template_part_chronometer = 2130903099;
 			
 			// aapt resource value: 0x7f03003c
-			public const int select_dialog_item_material = 2130903100;
+			public const int notification_template_part_time = 2130903100;
 			
 			// aapt resource value: 0x7f03003d
-			public const int select_dialog_multichoice_material = 2130903101;
+			public const int select_dialog_item_material = 2130903101;
 			
 			// aapt resource value: 0x7f03003e
-			public const int select_dialog_singlechoice_material = 2130903102;
+			public const int select_dialog_multichoice_material = 2130903102;
 			
 			// aapt resource value: 0x7f03003f
-			public const int support_simple_spinner_dropdown_item = 2130903103;
+			public const int select_dialog_singlechoice_material = 2130903103;
 			
 			// aapt resource value: 0x7f030040
-			public const int tooltip = 2130903104;
+			public const int support_simple_spinner_dropdown_item = 2130903104;
+			
+			// aapt resource value: 0x7f030041
+			public const int tooltip = 2130903105;
 			
 			static Layout()
 			{

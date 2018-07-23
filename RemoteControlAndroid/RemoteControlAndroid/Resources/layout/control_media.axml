@@ -18,16 +18,22 @@
             android:text="Prev"
             android:layout_width="100.0dp"
             android:layout_height="match_parent"
+            android:background="@color/colorButtonBackground"
+            android:textColor="@color/colorButtonText"
             android:id="@+id/buttonPrevious" />
         <Button
             android:text="Play"
             android:layout_width="100.0dp"
             android:layout_height="match_parent"
+            android:background="@color/colorButtonBackground"
+            android:textColor="@color/colorButtonText"
             android:id="@+id/buttonPlay" />
         <Button
             android:text="Next"
             android:layout_width="100.0dp"
             android:layout_height="match_parent"
+            android:background="@color/colorButtonBackground"
+            android:textColor="@color/colorButtonText"
             android:id="@+id/buttonNext" />
     </LinearLayout>
 </LinearLayout>

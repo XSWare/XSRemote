@@ -31,16 +31,22 @@
             android:text="Turn Off"
             android:layout_width="100.0dp"
             android:layout_height="match_parent"
+            android:background="@color/colorButtonBackground"
+            android:textColor="@color/colorButtonText"
             android:id="@+id/buttonShutdown" />
         <Button
             android:text="Restart"
             android:layout_width="100.0dp"
             android:layout_height="match_parent"
+            android:background="@color/colorButtonBackground"
+            android:textColor="@color/colorButtonText"
             android:id="@+id/buttonRestart" />
         <Button
             android:text="Cancel"
             android:layout_width="100.0dp"
             android:layout_height="match_parent"
+            android:background="@color/colorButtonBackground"
+            android:textColor="@color/colorButtonText"
             android:id="@+id/buttonCancel" />
     </LinearLayout>
 </LinearLayout>

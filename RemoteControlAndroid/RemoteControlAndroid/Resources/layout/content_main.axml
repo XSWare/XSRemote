@@ -24,5 +24,7 @@
         android:id="@+id/buttonConnect"
         android:layout_width="120.0dp"
         android:layout_height="wrap_content"
+        android:background="@color/colorButtonBackground"
+        android:textColor="@color/colorButtonText"
         android:text="Connect" />
 </LinearLayout>

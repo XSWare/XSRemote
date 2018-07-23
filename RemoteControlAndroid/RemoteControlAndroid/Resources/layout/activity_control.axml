@@ -28,5 +28,7 @@
         android:layout_width="100.0dp"
         android:layout_height="60.0dp"
         android:text="Mute"
+        android:background="@color/colorButtonBackground"
+        android:textColor="@color/colorButtonText"
         android:layout_gravity="center_horizontal" />
 </GridLayout>
