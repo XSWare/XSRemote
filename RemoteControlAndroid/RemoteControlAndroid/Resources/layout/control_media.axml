@@ -13,7 +13,7 @@
         android:orientation="horizontal"
         android:gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="60.0dp">
+        android:layout_height="45.0dp">
         <Button
             android:text="Prev"
             android:layout_width="100.0dp"
@@ -21,6 +21,8 @@
             android:background="@color/colorButtonBackground"
             android:textColor="@color/colorButtonText"
             android:id="@+id/buttonPrevious" />
+        <include
+            layout="@layout/divider" />
         <Button
             android:text="Play"
             android:layout_width="100.0dp"
@@ -28,6 +30,8 @@
             android:background="@color/colorButtonBackground"
             android:textColor="@color/colorButtonText"
             android:id="@+id/buttonPlay" />
+        <include
+            layout="@layout/divider" />
         <Button
             android:text="Next"
             android:layout_width="100.0dp"

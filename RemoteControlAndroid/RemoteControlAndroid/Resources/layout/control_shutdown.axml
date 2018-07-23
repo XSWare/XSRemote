@@ -34,6 +34,8 @@
             android:background="@color/colorButtonBackground"
             android:textColor="@color/colorButtonText"
             android:id="@+id/buttonShutdown" />
+        <include
+            layout="@layout/divider" />
         <Button
             android:text="Restart"
             android:layout_width="100.0dp"
@@ -41,6 +43,8 @@
             android:background="@color/colorButtonBackground"
             android:textColor="@color/colorButtonText"
             android:id="@+id/buttonRestart" />
+        <include
+            layout="@layout/divider" />
         <Button
             android:text="Cancel"
             android:layout_width="100.0dp"
