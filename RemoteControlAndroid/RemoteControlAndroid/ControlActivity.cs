@@ -15,7 +15,7 @@ using XSLibrary.Utility.Logging;
 
 namespace RemoteControlAndroid
 {
-    [Activity(Label = "@string/app_name", Theme = "@style/AppTheme.NoActionBar", MainLauncher = false)]
+    [Activity(Label = "@string/app_name", Theme = "@style/AppTheme.XSWare", MainLauncher = false)]
     public class ControlActivity : AppCompatActivity
     {
         Logger logger;

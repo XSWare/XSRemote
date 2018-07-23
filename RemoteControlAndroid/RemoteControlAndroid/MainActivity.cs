@@ -9,7 +9,7 @@ using XSLibrary.Utility;
 
 namespace RemoteControlAndroid
 {
-    [Activity(Label = "@string/app_name", Theme = "@style/AppTheme.NoActionBar", MainLauncher = true)]
+    [Activity(Label = "@string/app_name", Theme = "@style/AppTheme.XSWare", MainLauncher = true)]
 	public class MainActivity : AppCompatActivity
 	{
         Logger logger;

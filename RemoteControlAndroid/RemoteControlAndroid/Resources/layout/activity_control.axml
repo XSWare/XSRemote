@@ -13,7 +13,8 @@
         android:layout_height="40.0dp"
         android:id="@+id/labelStatus"
         android:textColor="@color/colorLabelText"
-        android:layout_marginBottom="50.0dp" />
+        android:layout_marginTop="10.0dp"
+        android:layout_marginBottom="15.0dp" />
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"

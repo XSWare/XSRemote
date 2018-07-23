@@ -3343,14 +3343,17 @@ namespace RemoteControlAndroid
 			// aapt resource value: 0x7f090180
 			public const int AppTheme = 2131296640;
 			
-			// aapt resource value: 0x7f090182
-			public const int AppTheme_AppBarOverlay = 2131296642;
+			// aapt resource value: 0x7f090183
+			public const int AppTheme_AppBarOverlay = 2131296643;
 			
 			// aapt resource value: 0x7f090181
 			public const int AppTheme_NoActionBar = 2131296641;
 			
-			// aapt resource value: 0x7f090183
-			public const int AppTheme_PopupOverlay = 2131296643;
+			// aapt resource value: 0x7f090184
+			public const int AppTheme_PopupOverlay = 2131296644;
+			
+			// aapt resource value: 0x7f090182
+			public const int AppTheme_XSWare = 2131296642;
 			
 			// aapt resource value: 0x7f09009a
 			public const int Base_AlertDialog_AppCompat = 2131296410;

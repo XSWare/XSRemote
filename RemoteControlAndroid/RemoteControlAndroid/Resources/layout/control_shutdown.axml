@@ -3,7 +3,7 @@
     android:orientation="vertical"
     android:gravity="center"
     android:layout_width="match_parent"
-    android:layout_height="180.0dp">
+    android:layout_height="160.0dp">
     <LinearLayout
         android:orientation="horizontal"
         android:gravity="center"
@@ -21,8 +21,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/editDelay"
             android:text="5"
+            android:selectAllOnFocus="true"
             android:textCursorDrawable="@null"
-            android:cursorVisible="false"
             android:textColor="@color/colorLabelText"
             android:background="@color/colorEditUnderscore"
             android:textAlignment="center" />
