@@ -8,9 +8,10 @@
         android:orientation="horizontal"
         android:gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="60.0dp ">
+        android:layout_height="45.0dp ">
         <TextView
             android:text="Delay in minutes:"
+            android:textColor="@color/colorLabelText"
             android:textAlignment="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
@@ -20,13 +21,17 @@
             android:layout_height="wrap_content"
             android:id="@+id/editDelay"
             android:text="5"
+            android:textCursorDrawable="@null"
+            android:cursorVisible="false"
+            android:textColor="@color/colorLabelText"
+            android:background="@color/colorEditUnderscore"
             android:textAlignment="center" />
     </LinearLayout>
     <LinearLayout
         android:orientation="horizontal"
         android:gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="60.0dp">
+        android:layout_width="fill_parent"
+        android:layout_height="45.0dp">
         <Button
             android:text="Turn Off"
             android:layout_width="100.0dp"
