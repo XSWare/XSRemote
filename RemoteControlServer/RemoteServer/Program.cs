@@ -75,13 +75,7 @@ namespace RemoteServer
             if (cmdSplit.Length < 3)
                 return;
 
-            UserAccount user = accounts.GetAccount(cmdSplit[0]);
-
-            if (!user.StillInUse())
-            {
-                accounts.DisposeAccount(user);
-                return;
-            }
+            UserAccount user = accounts.GetElement(cmdSplit[0]);
 
             string deviceCommand = cmdSplit[2];
             for (int i = 3; i < cmdSplit.Length; i++)
@@ -99,6 +93,8 @@ namespace RemoteServer
                 logger.Log(LogLevel.Priority, "Sending command \"{0}\" to device \"{1}\" of user \"{2}\"", deviceCommand, deviceID.ToString(), user.Username);
                 user.SendCommand(deviceID, deviceCommand);
             }
+
+            user.DecrementReferenceCount();
         }
     }
 }

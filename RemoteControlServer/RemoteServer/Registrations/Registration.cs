@@ -32,9 +32,9 @@ namespace RemoteServer.Registrations
             return connection;
         }
 
-        protected override bool Authenticate(out UserAccount user, TCPPacketConnection connection)
+        protected override bool Authenticate(out string username, TCPPacketConnection connection)
         {
-            user = null;
+            username = "";
 
             try
             {
@@ -51,14 +51,13 @@ namespace RemoteServer.Registrations
                 if (userSplit.Length != 2)
                     return false;
 
-                string username = userSplit[0];
+                username = userSplit[0];
 
                 if (!DataBase.Validate(username, Encoding.ASCII.GetBytes(userSplit[1])))
                     return false;
 
                 connection.Send(new byte[1] { (byte)'+' }, 30000);
 
-                user = Accounts.GetAccount(username);
                 return true;
             }
             catch (Exception)

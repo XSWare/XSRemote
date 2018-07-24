@@ -1,5 +1,6 @@
 ﻿using RemoteServer.Connections;
 using RemoteServer.Device;
+using System;
 using System.Net;
 using XSLibrary.Network.Registrations;
 using XSLibrary.ThreadSafety.Containers;
@@ -9,16 +10,19 @@ namespace RemoteServer.User
 {
     class UserAccount: IUserAccount
     {
-        public override event MemoryReleaseHandler OnMemoryCleanUp;
-
         SafeList<ControllableDevice> m_devices;
         UserConnection m_userConnection;
 
         public bool UserConnected { get { return m_userConnection != null; } }
 
-        public UserAccount(string username) : base(username)
+        public UserAccount(string username, Action<string> referenceCallback) : base(username, referenceCallback)
         {
             m_devices = new SafeList<ControllableDevice>();
+        }
+
+        public override bool IsEqual(string ID)
+        {
+            return Username == ID;
         }
 
         public void SetUserConnection(UserConnection connection)
@@ -44,7 +48,7 @@ namespace RemoteServer.User
             m_userConnection.OnDisconnect -= HandleUserDisconnect;
             m_userConnection = null;
 
-            OnMemoryCleanUp?.Invoke(this);
+            DecrementReferenceCount();
         }
 
         public void AddDevice(ControllableDevice device)
@@ -60,12 +64,8 @@ namespace RemoteServer.User
             m_devices.Remove(device);
             device.OnCommandReceived -= HandleDeviceReply;
             device.OnDeviceDisconnect -= DeviceDisconnecting;
-            OnMemoryCleanUp?.Invoke(this);
-        }
 
-        public override bool StillInUse()
-        {
-            return m_devices.Count > 0 || m_userConnection != null;
+            DecrementReferenceCount();
         }
 
         public void SendCommand(int deviceID, string command)
@@ -113,6 +113,10 @@ namespace RemoteServer.User
             ControllableDevice device = sender as ControllableDevice;
             Logger.Log(LogLevel.Priority, "Device {0} disconnected from user \"{1}\".", device.DeviceID, Username);
             RemoveDevice(device);
+        }
+
+        public override void Dispose()
+        {
         }
     }
 }
