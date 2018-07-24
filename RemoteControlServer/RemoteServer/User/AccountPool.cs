@@ -7,7 +7,9 @@ namespace RemoteServer.User
     {
         protected override UserAccount CreateElement(string username, Action<string> referenceCallback)
         {
-            return new UserAccount(username, referenceCallback);
+            UserAccount newUser = new UserAccount(username, referenceCallback);
+            newUser.Logger = Logger;
+            return newUser;
         }
     }
 }

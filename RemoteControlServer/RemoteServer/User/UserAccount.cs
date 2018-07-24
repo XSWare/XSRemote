@@ -37,6 +37,7 @@ namespace RemoteServer.User
         private void HandleUserDisconnect(object sender, EndPoint remote)
         {
             Logger.Log(LogLevel.Priority, "User disconnected from account \"{0}\".", Username);
+            DecrementReferenceCount();
             RemoveUserConnection();
         }
 
@@ -47,8 +48,6 @@ namespace RemoteServer.User
 
             m_userConnection.OnDisconnect -= HandleUserDisconnect;
             m_userConnection = null;
-
-            DecrementReferenceCount();
         }
 
         public void AddDevice(ControllableDevice device)
@@ -64,8 +63,6 @@ namespace RemoteServer.User
             m_devices.Remove(device);
             device.OnCommandReceived -= HandleDeviceReply;
             device.OnDeviceDisconnect -= DeviceDisconnecting;
-
-            DecrementReferenceCount();
         }
 
         public void SendCommand(int deviceID, string command)
@@ -112,6 +109,7 @@ namespace RemoteServer.User
         {
             ControllableDevice device = sender as ControllableDevice;
             Logger.Log(LogLevel.Priority, "Device {0} disconnected from user \"{1}\".", device.DeviceID, Username);
+            DecrementReferenceCount();
             RemoveDevice(device);
         }
 
