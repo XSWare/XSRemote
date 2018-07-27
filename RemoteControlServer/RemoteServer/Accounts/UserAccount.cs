@@ -3,6 +3,7 @@ using RemoteServer.Device;
 using System.Net;
 using XSLibrary.Network.Registrations;
 using XSLibrary.ThreadSafety.Containers;
+using XSLibrary.ThreadSafety.Executors;
 using XSLibrary.Utility;
 
 namespace RemoteServer.Accounts
@@ -10,6 +11,7 @@ namespace RemoteServer.Accounts
     class UserAccount: IUserAccount
     {
         SafeList<ControllableDevice> m_devices;
+        SafeExecutor m_userLock = new SingleThreadExecutor();
         UserConnection m_userConnection;
 
         public bool UserConnected { get { return m_userConnection != null; } }
@@ -21,26 +23,32 @@ namespace RemoteServer.Accounts
 
         public bool SetUserConnection(UserConnection connection)
         {
-            if (m_userConnection != null)
+            return m_userLock.Execute(() =>
             {
-                Logger.Log(LogLevel.Priority, "User tried to connect to account \"{0}\" but it already has a user connection.", Username);
-                return false;
-            }
+                if (m_userConnection != null)
+                {
+                    Logger.Log(LogLevel.Priority, "User tried to connect to account \"{0}\" but it already has a user connection.", Username);
+                    return false;
+                }
 
-            Logger.Log(LogLevel.Priority, "User connected to account \"{0}\".", Username);
-            m_userConnection = connection;
-            connection.OnDisconnect += HandleUserDisconnect;
-            return true;
+                Logger.Log(LogLevel.Priority, "User connected to account \"{0}\".", Username);
+                m_userConnection = connection;
+                connection.OnDisconnect += HandleUserDisconnect;
+                return true;
+            });
         }
 
         private void RemoveUserConnection()
         {
-            if (m_userConnection == null)
-                return;
+            m_userLock.Execute(() =>
+            {
+                if (m_userConnection == null)
+                    return;
 
-            Logger.Log(LogLevel.Priority, "User disconnected from account \"{0}\".", Username);
-            m_userConnection.OnDisconnect -= HandleUserDisconnect;
-            m_userConnection = null;
+                Logger.Log(LogLevel.Priority, "User disconnected from account \"{0}\".", Username);
+                m_userConnection.OnDisconnect -= HandleUserDisconnect;
+                m_userConnection = null;
+            });
         }
 
         public void AddDevice(ControllableDevice device)
@@ -95,8 +103,11 @@ namespace RemoteServer.Accounts
 
             Logger.Log(LogLevel.Information, "Received reply \"{0}\" from device {1} for user \"{2}\".", reply, device.DeviceID, Username);
 
-            if (UserConnected)
-                m_userConnection.Send(string.Format("Device {0} - {1}", device.DeviceID, reply));
+            m_userLock.Execute(() =>
+            {
+                if (UserConnected)
+                    m_userConnection.Send(string.Format("Device {0} - {1}", device.DeviceID, reply));
+            });
         }
 
         private void DeviceDisconnecting(object sender, EndPoint remote)
