@@ -14,7 +14,7 @@ namespace RemoteServer.Registrations
 
         public UserConnection[] UserConnections { get { return m_userConnections.Entries; } }
 
-        public UserRegistration(TCPAcceptor accepter, AccountPool accounts, IUserDataBase dataBase)
+        public UserRegistration(TCPAcceptor accepter, UserPool accounts, IUserDataBase dataBase)
             : base(accepter, accounts, dataBase)
         {
             m_userConnections = new SafeList<UserConnection>();

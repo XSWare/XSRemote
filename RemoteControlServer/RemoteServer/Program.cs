@@ -12,7 +12,7 @@ namespace RemoteServer
     {
         static Logger logger;
         static FileUserBase dataBase = new FileUserBase(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\RemoteControl\\", "accounts.txt");
-        static AccountPool accounts = new AccountPool();
+        static UserPool accounts = new UserPool();
         static DeviceRegistration deviceRegistration;
         static UserRegistration userRegistration;
 
@@ -65,27 +65,37 @@ namespace RemoteServer
 
             string selection = cmdSplit[1];
 
-            if (selection == "add" && cmdSplit.Length == 4)
+            if (selection == "adduser" && cmdSplit.Length == 4)
                 AddUser(cmdSplit[2], cmdSplit[3]);
+            else if (selection == "addadmin" && cmdSplit.Length == 4)
+                AddAdmin(cmdSplit[2], cmdSplit[3]);
             else if (selection == "remove" && cmdSplit.Length == 3)
-                DeleteUser(cmdSplit[2]);
+                DeleteAccount(cmdSplit[2]);
             else if (selection == "changepw" && cmdSplit.Length == 5)
                 ChangePassword(cmdSplit[2], cmdSplit[3], cmdSplit[4]);
         }
 
-        public static void AddUser(string username, string password)
+        private static void AddUser(string username, string password)
         {
-            if (dataBase.AddAccount(username, Encoding.ASCII.GetBytes(password)))
+            AccountCreationData creationData = new AccountCreationData(username, Encoding.ASCII.GetBytes(password), 5);
+            if (dataBase.AddAccount(creationData))
                 logger.Log(LogLevel.Priority, "Added user \"{0}\" to database.", username);
         }
 
-        public static void DeleteUser(string username)
+        private static void AddAdmin(string username, string password)
         {
-            if (dataBase.EraseAccount(username))
-                logger.Log(LogLevel.Priority, "Removed user \"{0}\" from database.", username);
+            AccountCreationData creationData = new AccountCreationData(username, Encoding.ASCII.GetBytes(password), 0);
+            if (dataBase.AddAccount(creationData))
+                logger.Log(LogLevel.Priority, "Added admin \"{0}\" to database.", username);
         }
 
-        public static void ChangePassword(string username, string oldPassword, string newPassword)
+        private static void DeleteAccount(string username)
+        {
+            if (dataBase.EraseAccount(username))
+                logger.Log(LogLevel.Priority, "Removed account \"{0}\" from database.", username);
+        }
+
+        private static void ChangePassword(string username, string oldPassword, string newPassword)
         {
             if (dataBase.ChangePassword(username, Encoding.ASCII.GetBytes(oldPassword), Encoding.ASCII.GetBytes(newPassword)))
                 logger.Log(LogLevel.Priority, "Changed password for user \"{0}\".", username);

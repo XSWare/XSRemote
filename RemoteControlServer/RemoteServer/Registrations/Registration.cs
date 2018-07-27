@@ -18,9 +18,10 @@ namespace RemoteServer.Registrations
 
         IUserDataBase DataBase { get; set; }
 
-        public Registration(TCPAcceptor accepter, AccountPool accounts, IUserDataBase dataBase)
+        public Registration(TCPAcceptor accepter, UserPool accounts, IUserDataBase dataBase)
             : base(accepter, accounts)
         {
+            DataBase = dataBase;
             Crypto = CryptoType.RSALegacy;
             CryptoHandshakeTimeout = 30000;
         }
@@ -55,7 +56,7 @@ namespace RemoteServer.Registrations
 
                 username = userSplit[0];
 
-                if (!DataBase.Validate(username, Encoding.ASCII.GetBytes(userSplit[1])))
+                if (!DataBase.Validate(username, Encoding.ASCII.GetBytes(userSplit[1]), Accounts.AccessLevel))
                     return false;
 
                 connection.Send(new byte[1] { (byte)'+' }, 30000);

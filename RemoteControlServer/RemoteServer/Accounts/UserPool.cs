@@ -1,9 +1,11 @@
-﻿using XSLibrary.ThreadSafety.MemoryPool;
+﻿using XSLibrary.Network.Registrations;
 
 namespace RemoteServer.User
 {
-    class AccountPool : IMemoryPool<string, UserAccount>
+    class UserPool : IAccountPool<UserAccount>
     {
+        public UserPool() : base(5) { }
+
         protected override UserAccount CreateElement(string username)
         {
             return new UserAccount(username) { Logger = Logger };
