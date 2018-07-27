@@ -18,7 +18,13 @@ namespace RemoteServer.Registrations
 
         protected override void HandleVerifiedConnection(AdminAccount user, TCPPacketConnection clientConnection)
         {
-            user.SetConnection(clientConnection);
+            if (user.SetConnection(clientConnection))
+            {
+                clientConnection.InitializeReceiving();
+                clientConnection.OnDisconnect += user.OnAdminDisconnect;
+            }
+            else
+                clientConnection.Disconnect();
         }
     }
 }
