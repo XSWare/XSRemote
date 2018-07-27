@@ -11,8 +11,8 @@ namespace RemoteServer.Registrations
     {
         int m_currentDeviceID;
 
-        public DeviceRegistration(TCPAcceptor accepter, IUserDataBase dataBase, AccountPool accounts)
-            : base(accepter, dataBase, accounts)
+        public DeviceRegistration(TCPAcceptor accepter, AccountPool accounts, IUserDataBase dataBase)
+            : base(accepter, accounts, dataBase)
         {
             m_currentDeviceID = 0;
         }

@@ -1,6 +1,5 @@
 ﻿using RemoteServer.Connections;
 using RemoteServer.Device;
-using System;
 using System.Net;
 using XSLibrary.Network.Registrations;
 using XSLibrary.ThreadSafety.Containers;
@@ -15,7 +14,7 @@ namespace RemoteServer.User
 
         public bool UserConnected { get { return m_userConnection != null; } }
 
-        public UserAccount(string username, Action<string> referenceCallback) : base(username, referenceCallback)
+        public UserAccount(string username) : base(username)
         {
             m_devices = new SafeList<ControllableDevice>();
         }
@@ -25,20 +24,18 @@ namespace RemoteServer.User
             return Username == ID;
         }
 
-        public void SetUserConnection(UserConnection connection)
+        public bool SetUserConnection(UserConnection connection)
         {
-            Logger.Log(LogLevel.Priority, "User connected to account \"{0}\".", Username);
+            if (m_userConnection != null)
+            {
+                Logger.Log(LogLevel.Priority, "User tried to connect to account \"{0}\" but it already has a user connection.", Username);
+                return false;
+            }
 
-            RemoveUserConnection();
+            Logger.Log(LogLevel.Priority, "User connected to account \"{0}\".", Username);
             m_userConnection = connection;
             connection.OnDisconnect += HandleUserDisconnect;
-        }
-
-        private void HandleUserDisconnect(object sender, EndPoint remote)
-        {
-            Logger.Log(LogLevel.Priority, "User disconnected from account \"{0}\".", Username);
-            DecrementReferenceCount();
-            RemoveUserConnection();
+            return true;
         }
 
         private void RemoveUserConnection()
@@ -46,6 +43,7 @@ namespace RemoteServer.User
             if (m_userConnection == null)
                 return;
 
+            Logger.Log(LogLevel.Priority, "User disconnected from account \"{0}\".", Username);
             m_userConnection.OnDisconnect -= HandleUserDisconnect;
             m_userConnection = null;
         }
@@ -60,9 +58,10 @@ namespace RemoteServer.User
 
         public void RemoveDevice(ControllableDevice device)
         {
-            m_devices.Remove(device);
-            device.OnCommandReceived -= HandleDeviceReply;
             device.OnDeviceDisconnect -= DeviceDisconnecting;
+            device.OnCommandReceived -= HandleDeviceReply;
+            m_devices.Remove(device);
+            Logger.Log(LogLevel.Priority, "Device {0} disconnected from user \"{1}\".", device.DeviceID, Username);
         }
 
         public void SendCommand(int deviceID, string command)
@@ -107,10 +106,12 @@ namespace RemoteServer.User
 
         private void DeviceDisconnecting(object sender, EndPoint remote)
         {
-            ControllableDevice device = sender as ControllableDevice;
-            Logger.Log(LogLevel.Priority, "Device {0} disconnected from user \"{1}\".", device.DeviceID, Username);
-            DecrementReferenceCount();
-            RemoveDevice(device);
+            RemoveDevice(sender as ControllableDevice);
+        }
+
+        private void HandleUserDisconnect(object sender, EndPoint remote)
+        {
+            RemoveUserConnection();
         }
 
         public override void Dispose()

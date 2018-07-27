@@ -1,6 +1,7 @@
 ﻿using RemoteServer.Registrations;
 using RemoteServer.User;
 using System;
+using System.Text;
 using XSLibrary.Cryptography.AccountManagement;
 using XSLibrary.Network.Acceptors;
 using XSLibrary.Utility;
@@ -12,8 +13,8 @@ namespace RemoteServer
         static Logger logger;
         static FileUserBase dataBase = new FileUserBase(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\RemoteControl\\", "accounts.txt");
         static AccountPool accounts = new AccountPool();
-        static DeviceRegistration deviceRegistration = new DeviceRegistration(new GuardedAcceptor(22222, 1000), dataBase, accounts);
-        static UserRegistration userRegistration = new UserRegistration(new GuardedAcceptor(22223, 1000), dataBase, accounts);
+        static DeviceRegistration deviceRegistration;
+        static UserRegistration userRegistration;
 
         static void Main(string[] args)
         {
@@ -26,9 +27,13 @@ namespace RemoteServer
 
             logger.Log(LogLevel.Priority, "Server started.");
 
+            GuardedAcceptor deviceAccepter = new GuardedAcceptor(22222, 1000);
+            deviceRegistration = new DeviceRegistration(deviceAccepter, accounts, dataBase);
             deviceRegistration.Logger = logger;
             deviceRegistration.Run();
 
+            GuardedAcceptor userAccepter = new GuardedAcceptor(22223, 1000);
+            userRegistration = new UserRegistration(userAccepter, accounts, dataBase);
             userRegistration.Logger = logger;
             userRegistration.Run();
 
@@ -61,11 +66,29 @@ namespace RemoteServer
             string selection = cmdSplit[1];
 
             if (selection == "add" && cmdSplit.Length == 4)
-                userRegistration.AddUser(cmdSplit[2], cmdSplit[3]);
+                AddUser(cmdSplit[2], cmdSplit[3]);
             else if (selection == "remove" && cmdSplit.Length == 3)
-                userRegistration.DeleteUser(cmdSplit[2]);
+                DeleteUser(cmdSplit[2]);
             else if (selection == "changepw" && cmdSplit.Length == 5)
-                userRegistration.ChangePassword(cmdSplit[2], cmdSplit[3], cmdSplit[4]);
+                ChangePassword(cmdSplit[2], cmdSplit[3], cmdSplit[4]);
+        }
+
+        public static void AddUser(string username, string password)
+        {
+            if (dataBase.AddAccount(username, Encoding.ASCII.GetBytes(password)))
+                logger.Log(LogLevel.Priority, "Added user \"{0}\" to database.", username);
+        }
+
+        public static void DeleteUser(string username)
+        {
+            if (dataBase.EraseAccount(username))
+                logger.Log(LogLevel.Priority, "Removed user \"{0}\" from database.", username);
+        }
+
+        public static void ChangePassword(string username, string oldPassword, string newPassword)
+        {
+            if (dataBase.ChangePassword(username, Encoding.ASCII.GetBytes(oldPassword), Encoding.ASCII.GetBytes(newPassword)))
+                logger.Log(LogLevel.Priority, "Changed password for user \"{0}\".", username);
         }
 
         static void ManualCommand(string command)
@@ -94,7 +117,7 @@ namespace RemoteServer
                 user.SendCommand(deviceID, deviceCommand);
             }
 
-            user.DecrementReferenceCount();
+            accounts.ReleaseElement(user.ID);
         }
     }
 }

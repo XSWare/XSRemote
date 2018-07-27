@@ -16,8 +16,10 @@ namespace RemoteServer.Registrations
         delegate void DisposeHandler();
         event DisposeHandler OnDispose;
 
-        public Registration(TCPAcceptor accepter, IUserDataBase dataBase, AccountPool accounts)
-            : base(accepter, dataBase, accounts)
+        IUserDataBase DataBase { get; set; }
+
+        public Registration(TCPAcceptor accepter, AccountPool accounts, IUserDataBase dataBase)
+            : base(accepter, accounts)
         {
             Crypto = CryptoType.RSALegacy;
             CryptoHandshakeTimeout = 30000;
