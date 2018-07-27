@@ -1,4 +1,4 @@
-﻿using RemoteServer.User;
+﻿using RemoteServer.Accounts;
 using XSLibrary.Network.Connections;
 using RemoteServer.Connections;
 using XSLibrary.ThreadSafety.Containers;
@@ -8,7 +8,7 @@ using XSLibrary.Network.Acceptors;
 
 namespace RemoteServer.Registrations
 {
-    class UserRegistration : Registration
+    class UserRegistration : Registration<UserAccount>
     {
         SafeList<UserConnection> m_userConnections;
 

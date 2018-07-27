@@ -1,6 +1,6 @@
 ﻿using XSLibrary.Network.Registrations;
 
-namespace RemoteServer.User
+namespace RemoteServer.Accounts
 {
     class UserPool : IAccountPool<UserAccount>
     {

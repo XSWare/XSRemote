@@ -1,5 +1,5 @@
 ﻿using XSLibrary.Network.Connections;
-using RemoteServer.User;
+using RemoteServer.Accounts;
 using RemoteServer.Device;
 using RemoteServer.Connections;
 using XSLibrary.Cryptography.AccountManagement;
@@ -7,7 +7,7 @@ using XSLibrary.Network.Acceptors;
 
 namespace RemoteServer.Registrations
 {
-    class DeviceRegistration : Registration
+    class DeviceRegistration : Registration<UserAccount>
     {
         int m_currentDeviceID;
 

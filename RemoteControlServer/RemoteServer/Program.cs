@@ -1,5 +1,5 @@
 ﻿using RemoteServer.Registrations;
-using RemoteServer.User;
+using RemoteServer.Accounts;
 using System;
 using System.Text;
 using XSLibrary.Cryptography.AccountManagement;

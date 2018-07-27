@@ -5,7 +5,7 @@ using XSLibrary.Network.Registrations;
 using XSLibrary.ThreadSafety.Containers;
 using XSLibrary.Utility;
 
-namespace RemoteServer.User
+namespace RemoteServer.Accounts
 {
     class UserAccount: IUserAccount
     {
@@ -17,11 +17,6 @@ namespace RemoteServer.User
         public UserAccount(string username) : base(username)
         {
             m_devices = new SafeList<ControllableDevice>();
-        }
-
-        public override bool IsEqual(string ID)
-        {
-            return Username == ID;
         }
 
         public bool SetUserConnection(UserConnection connection)

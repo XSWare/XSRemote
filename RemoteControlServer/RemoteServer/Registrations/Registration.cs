@@ -1,4 +1,4 @@
-﻿using RemoteServer.User;
+﻿using RemoteServer.Accounts;
 using System;
 using System.Net;
 using System.Net.Sockets;
@@ -11,14 +11,14 @@ using XSLibrary.Network.Registrations;
 
 namespace RemoteServer.Registrations
 {
-    abstract class Registration : IRegistration<TCPPacketConnection, UserAccount>
+    abstract class Registration<AccountType> : IRegistration<TCPPacketConnection, AccountType> where AccountType: IUserAccount
     {
         delegate void DisposeHandler();
         event DisposeHandler OnDispose;
 
         IUserDataBase DataBase { get; set; }
 
-        public Registration(TCPAcceptor accepter, UserPool accounts, IUserDataBase dataBase)
+        public Registration(TCPAcceptor accepter, IAccountPool<AccountType> accounts, IUserDataBase dataBase)
             : base(accepter, accounts)
         {
             DataBase = dataBase;
