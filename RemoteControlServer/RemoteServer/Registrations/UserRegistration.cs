@@ -19,10 +19,13 @@ namespace RemoteServer.Registrations
         {
             UserConnection userConnection = new UserConnection(clientConnection, user);
 
-            if (!user.SetUserConnection(userConnection))
-                return;
-
-            clientConnection.InitializeReceiving();
+            if (user.SetUserConnection(userConnection))
+            {
+                clientConnection.InitializeReceiving();
+                clientConnection.OnDisconnect += user.HandleUserDisconnect;
+            }
+            else
+                clientConnection.Disconnect();
         }
     }
 }
