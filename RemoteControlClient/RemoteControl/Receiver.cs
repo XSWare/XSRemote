@@ -106,7 +106,7 @@ namespace RemoteShutdown
         public void Dispose()
         {
             if(m_commandExecutionActor != null)
-                m_commandExecutionActor.Stop();
+                m_commandExecutionActor.Stop(true);
 
             Connection.Disconnect();
 
