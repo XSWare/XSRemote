@@ -75,7 +75,7 @@ namespace RemoteLog
         private static void HandleDisconnect(object sender, EndPoint arguments)
         {
             connections.Remove(sender as IConnection);
-            networkLog.Log(LogLevel.Priority, "[{0}] Connection close by remote.", arguments);
+            networkLog.Log(LogLevel.Priority, "[{0}] Connection closed by remote.", arguments);
         }
 
         private static void Connection_DataReceivedEvent(object sender, byte[] data, EndPoint source)
