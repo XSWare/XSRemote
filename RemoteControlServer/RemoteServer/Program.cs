@@ -61,8 +61,10 @@ namespace RemoteServer
 
             deviceRegistration.Dispose();
             userRegistration.Dispose();
+            adminRegistration.Dispose();
 
             logger.Log(LogLevel.Priority, "Server shut down.");
+            logger.Dispose();
             Console.In.Read();
         }
 
