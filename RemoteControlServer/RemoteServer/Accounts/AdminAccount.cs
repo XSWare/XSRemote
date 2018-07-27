@@ -27,7 +27,7 @@ namespace RemoteServer.Accounts
                     return false;
                 }
 
-                Logger.Log(LogLevel.Priority, "User connected to account \"{0}\".", Username);
+                Logger.Log(LogLevel.Priority, "Admin connected to account \"{0}\".", Username);
 
                 Connection = connection;
                 connection.Logger = Logger.NoLog;   // must not log the connection which is used for logging
