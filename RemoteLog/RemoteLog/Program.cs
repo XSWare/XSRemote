@@ -60,10 +60,7 @@ namespace RemoteLog
             connector.Login = login;
 
             if (!connector.Connect(remote, out TCPPacketConnection connection))
-            {
-                Console.In.ReadLine();
                 return;
-            }
 
             connections.Add(connection);
             connection.Logger = connectionLogger;
