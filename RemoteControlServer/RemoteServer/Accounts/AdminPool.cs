@@ -1,14 +1,20 @@
 ﻿using XSLibrary.Network.Registrations;
+using XSLibrary.Utility;
 
 namespace RemoteServer.Accounts
 {
     class AdminPool : IAccountPool<AdminAccount>
     {
-        public AdminPool() : base(0) { }
+        MultiLogger ParentLog { get; set; }
+
+        public AdminPool(MultiLogger parentLog) : base(0)
+        {
+            ParentLog = parentLog;
+        }
 
         protected override AdminAccount CreateElement(string ID)
         {
-            return new AdminAccount(ID) { Logger = Logger };
+            return new AdminAccount(ID, ParentLog) { Logger = Logger };
         }
     }
 }

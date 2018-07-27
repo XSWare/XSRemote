@@ -10,11 +10,13 @@ namespace RemoteServer
 {
     class Program
     {
-        static Logger logger;
+        static MultiLogger logger;
         static FileUserBase dataBase = new FileUserBase(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\RemoteControl\\", "accounts.txt");
-        static UserPool accounts = new UserPool();
+        static UserPool users = new UserPool();
+        static AdminPool admins;
         static DeviceRegistration deviceRegistration;
         static UserRegistration userRegistration;
+        static AdminRegistration adminRegistration;
 
         static void Main(string[] args)
         {
@@ -23,19 +25,26 @@ namespace RemoteServer
 #else
             Logger.DefaultLogLevel = LogLevel.Warning;
 #endif
-            logger = new LoggerConsole();
+            logger = new MultiLogger();
+            logger.Logs.Add(new LoggerConsole());
 
             logger.Log(LogLevel.Priority, "Server started.");
 
             GuardedAcceptor deviceAccepter = new GuardedAcceptor(22222, 1000);
-            deviceRegistration = new DeviceRegistration(deviceAccepter, accounts, dataBase);
+            deviceRegistration = new DeviceRegistration(deviceAccepter, users, dataBase);
             deviceRegistration.Logger = logger;
             deviceRegistration.Run();
 
             GuardedAcceptor userAccepter = new GuardedAcceptor(22223, 1000);
-            userRegistration = new UserRegistration(userAccepter, accounts, dataBase);
+            userRegistration = new UserRegistration(userAccepter, users, dataBase);
             userRegistration.Logger = logger;
             userRegistration.Run();
+
+            admins = new AdminPool(logger);
+            GuardedAcceptor adminAccepter = new GuardedAcceptor(22224, 3);
+            adminRegistration = new AdminRegistration(logger, adminAccepter, admins, dataBase);
+            adminRegistration.Logger = logger;
+            adminRegistration.Run();
 
             string cmd;
             while ((cmd = Console.In.ReadLine()) != "exit")
@@ -108,7 +117,7 @@ namespace RemoteServer
             if (cmdSplit.Length < 3)
                 return;
 
-            UserAccount user = accounts.GetElement(cmdSplit[0]);
+            UserAccount user = users.GetElement(cmdSplit[0]);
 
             string deviceCommand = cmdSplit[2];
             for (int i = 3; i < cmdSplit.Length; i++)
@@ -127,7 +136,7 @@ namespace RemoteServer
                 user.SendCommand(deviceID, deviceCommand);
             }
 
-            accounts.ReleaseElement(user.ID);
+            users.ReleaseElement(user.ID);
         }
     }
 }
