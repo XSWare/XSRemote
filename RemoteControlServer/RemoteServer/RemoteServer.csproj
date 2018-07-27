@@ -65,21 +65,9 @@
       <Project>{1ad910b7-df57-42f2-b520-9af8c63b8cf4}</Project>
       <Name>RemoteShutdownLibrary</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\XSLibrary\XSLibrary\XSCryptography\XSCryptography.csproj">
-      <Project>{1b219104-b11e-49e4-861f-5200520fb9e9}</Project>
-      <Name>XSCryptography</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\XSLibrary\XSLibrary\XSNetwork\XSNetwork.csproj">
-      <Project>{36a1d62e-ea81-4b77-ab0b-6753a7f394ed}</Project>
-      <Name>XSNetwork</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\XSLibrary\XSLibrary\XSThreadSafety\XSThreadSafety.csproj">
-      <Project>{1364168D-0353-49F5-9DAC-2A501FD8055A}</Project>
-      <Name>XSThreadSafety</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\XSLibrary\XSLibrary\XSUtility\XSUtility.csproj">
-      <Project>{A37C8BF1-08E7-46BB-8F9E-536A82365FED}</Project>
-      <Name>XSUtility</Name>
+    <ProjectReference Include="..\..\XSLibrary\XSLibrary.csproj">
+      <Project>{3f4fe9f4-ebe9-4a3d-9609-77c6a1e4621e}</Project>
+      <Name>XSLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
