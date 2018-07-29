@@ -7,7 +7,12 @@ namespace RemoteServer.Connections
 {
     abstract class ConnectionBase
     {
-        public event OnDisconnectEvent.EventHandle OnDisconnect;
+        public event OnDisconnectEvent.EventHandle OnDisconnect
+        {
+            add { m_connection.OnDisconnect += value; }
+            remove { m_connection.OnDisconnect -= value; }
+        }
+
         public event DataReceivedHandler OnDataReceived;
 
         public delegate void DataReceivedHandler(object sender, string data);
@@ -23,7 +28,6 @@ namespace RemoteServer.Connections
             m_connection = connection;
 
             m_connection.DataReceivedEvent += ReceiveData;
-            m_connection.OnDisconnect += OnConnectionLoss;
         }
 
         public virtual void Send(string command)
@@ -35,11 +39,5 @@ namespace RemoteServer.Connections
         {
             OnDataReceived(this, TransmissionConverter.ConvertByteToString(data));
         }
-
-        protected void OnConnectionLoss(object sender, EndPoint remote)
-        {
-            OnDisconnect?.Invoke(this, remote);
-        }
-
     }
 }
