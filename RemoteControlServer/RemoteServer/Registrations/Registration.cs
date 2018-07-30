@@ -41,12 +41,8 @@ namespace RemoteServer.Registrations
 
             try
             {
-                int timeoutBuffer = connection.ReceiveTimeout;
-                connection.ReceiveTimeout = AuthenticationTimeout;
-                if (!connection.Receive(out byte[] userData, out EndPoint source))
+                if (!connection.Receive(out byte[] userData, out EndPoint source, AuthenticationTimeout))
                     return false;
-
-                connection.ReceiveTimeout = timeoutBuffer;
 
                 string userString = Encoding.ASCII.GetString(userData);
                 string[] userSplit = userString.Split(' ');
@@ -59,7 +55,7 @@ namespace RemoteServer.Registrations
                 if (!DataBase.Validate(username, Encoding.ASCII.GetBytes(userSplit[1]), Accounts.AccessLevel))
                     return false;
 
-                connection.Send(new byte[1] { (byte)'+' }, 30000);
+                connection.Send(new byte[1] { (byte)'+' }, AuthenticationTimeout);
 
                 return true;
             }
