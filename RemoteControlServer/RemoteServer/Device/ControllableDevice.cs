@@ -9,12 +9,19 @@ namespace RemoteServer.Device
 {
     class ControllableDevice
     {
-        public event OnDisconnectEvent.EventHandle OnDeviceDisconnect;
+        public event OnDisconnectEvent.EventHandle OnDeviceDisconnect
+        {
+            add { DisconnectHandle.Event += value; }
+            remove { DisconnectHandle.Event -= value; }
+        }
+
         public event ConnectionBase.DataReceivedHandler OnCommandReceived;
 
         public int DeviceID { get; private set; }
         DeviceConnection m_connection;
         List<DeviceModule> m_modules;
+
+        OnDisconnectEvent DisconnectHandle { get; set; } = new OnDisconnectEvent();
 
         public ControllableDevice(DeviceConnection connection, int deviceID)
         {
@@ -43,7 +50,7 @@ namespace RemoteServer.Device
 
         private void HandleDisconnect(object sender, EndPoint remote)
         {
-            OnDeviceDisconnect.Invoke(this, remote);
+            DisconnectHandle.Invoke(this, remote);
         }
 
         private DeviceModule GetTargetModule(string command)
