@@ -30,7 +30,7 @@ namespace RemoteServer.Registrations
         {
             TCPPacketConnection connection = new TCPPacketConnection(acceptedSocket);
             OnDispose += connection.Dispose;
-            connection.OnDisconnect += DisconnectHandler;
+            connection.OnDisconnect.Event += DisconnectHandler;
 
             return connection;
         }

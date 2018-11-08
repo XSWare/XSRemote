@@ -45,7 +45,7 @@ namespace RemoteServer.Accounts
                     return;
 
                 Logger.Log(LogLevel.Priority, "User disconnected from account \"{0}\".", Username);
-                m_userConnection.OnDisconnect -= HandleUserDisconnect;
+                m_userConnection.OnDisconnect.Event -= HandleUserDisconnect;
                 m_userConnection = null;
             });
         }
@@ -55,12 +55,12 @@ namespace RemoteServer.Accounts
             Logger.Log(LogLevel.Priority, "Added device {0} to user \"{1}\".", device.DeviceID, Username);
             m_devices.Add(device);
             device.OnCommandReceived += HandleDeviceReply;
-            device.OnDeviceDisconnect += DeviceDisconnecting;
+            device.OnDeviceDisconnect.Event += DeviceDisconnecting;
         }
 
         public void RemoveDevice(ControllableDevice device)
         {
-            device.OnDeviceDisconnect -= DeviceDisconnecting;
+            device.OnDeviceDisconnect.Event -= DeviceDisconnecting;
             device.OnCommandReceived -= HandleDeviceReply;
             m_devices.Remove(device);
             Logger.Log(LogLevel.Priority, "Device {0} disconnected from user \"{1}\".", device.DeviceID, Username);

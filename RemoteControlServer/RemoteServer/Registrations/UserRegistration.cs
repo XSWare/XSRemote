@@ -1,8 +1,6 @@
 ﻿using RemoteServer.Accounts;
 using XSLibrary.Network.Connections;
 using RemoteServer.Connections;
-using XSLibrary.ThreadSafety.Containers;
-using System.Net;
 using XSLibrary.Cryptography.AccountManagement;
 using XSLibrary.Network.Acceptors;
 
@@ -22,7 +20,7 @@ namespace RemoteServer.Registrations
             if (user.SetUserConnection(userConnection))
             {
                 clientConnection.InitializeReceiving();
-                clientConnection.OnDisconnect += user.HandleUserDisconnect;
+                clientConnection.OnDisconnect.Event += user.HandleUserDisconnect;
             }
             else
                 clientConnection.Disconnect();

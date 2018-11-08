@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Net;
 using System.Text;
 using XSLibrary.Cryptography.ConnectionCryptos;
@@ -66,7 +66,7 @@ namespace RemoteLog
             connection.Logger = connectionLogger;
             connection.DataReceivedEvent += Connection_DataReceivedEvent;
             connection.InitializeReceiving();
-            connection.OnDisconnect += HandleDisconnect;
+            connection.OnDisconnect.Event += HandleDisconnect;
         }
 
         private static void HandleDisconnect(object sender, EndPoint arguments)

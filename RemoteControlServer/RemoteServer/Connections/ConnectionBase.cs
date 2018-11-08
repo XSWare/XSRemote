@@ -1,17 +1,14 @@
 ﻿using RemoteShutdownLibrary;
 using System.Net;
 using XSLibrary.Network.Connections;
+using XSLibrary.ThreadSafety.Events;
 using XSLibrary.Utility;
 
 namespace RemoteServer.Connections
 {
     abstract class ConnectionBase
     {
-        public event OnDisconnectEvent.EventHandle OnDisconnect
-        {
-            add { m_connection.OnDisconnect += value; }
-            remove { m_connection.OnDisconnect -= value; }
-        }
+        public IEvent<ConnectionBase, EndPoint> OnDisconnect;
 
         public event DataReceivedHandler OnDataReceived;
 
@@ -28,6 +25,7 @@ namespace RemoteServer.Connections
             m_connection = connection;
 
             m_connection.DataReceivedEvent += ReceiveData;
+            OnDisconnect = m_connection.OnDisconnect.CreateRelay(this);
         }
 
         public virtual void Send(string command)

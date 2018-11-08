@@ -21,7 +21,7 @@ namespace RemoteServer.Registrations
             if (user.SetConnection(clientConnection))
             {
                 clientConnection.InitializeReceiving();
-                clientConnection.OnDisconnect += user.OnAdminDisconnect;
+                clientConnection.OnDisconnect.Event += user.OnAdminDisconnect;
             }
             else
                 clientConnection.Disconnect();

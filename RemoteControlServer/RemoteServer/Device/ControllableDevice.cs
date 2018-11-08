@@ -2,33 +2,26 @@
 using RemoteServer.Device.Modules;
 using RemoteServer.Connections;
 using System.Net;
-using XSLibrary.Network.Connections;
 using XSLibrary.Utility;
+using XSLibrary.ThreadSafety.Events;
 
 namespace RemoteServer.Device
 {
     class ControllableDevice
     {
-        public event OnDisconnectEvent.EventHandle OnDeviceDisconnect
-        {
-            add { DisconnectHandle.Event += value; }
-            remove { DisconnectHandle.Event -= value; }
-        }
-
+        public IEvent<ControllableDevice, EndPoint> OnDeviceDisconnect;
         public event ConnectionBase.DataReceivedHandler OnCommandReceived;
 
         public int DeviceID { get; private set; }
         DeviceConnection m_connection;
         List<DeviceModule> m_modules;
 
-        OnDisconnectEvent DisconnectHandle { get; set; } = new OnDisconnectEvent();
-
         public ControllableDevice(DeviceConnection connection, int deviceID)
         {
             DeviceID = deviceID;
             m_connection = connection;
-            m_connection.OnDisconnect += HandleDisconnect;
             m_connection.OnDataReceived += HandleCommandReceived;
+            OnDeviceDisconnect = m_connection.OnDisconnect.CreateRelay(this);
             m_modules = m_connection.RequestModules();
         }
 
@@ -46,11 +39,6 @@ namespace RemoteServer.Device
         private void HandleCommandReceived(object sender, string command)
         {
             OnCommandReceived?.Invoke(this, command);
-        }
-
-        private void HandleDisconnect(object sender, EndPoint remote)
-        {
-            DisconnectHandle.Invoke(this, remote);
         }
 
         private DeviceModule GetTargetModule(string command)
