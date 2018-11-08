@@ -1,4 +1,4 @@
-﻿using RemoteServer.Registrations;
+using RemoteServer.Registrations;
 using RemoteServer.Accounts;
 using System;
 using System.Text;
@@ -49,9 +49,7 @@ namespace RemoteServer
             string cmd;
             while ((cmd = Console.In.ReadLine()) != "exit")
             {
-                if (cmd == "backlog")
-                    logger.Log(LogLevel.Priority, "Current backlog count: {0}", deviceRegistration);
-                else if (cmd.Length > 7 && cmd.Substring(0, 7) == "account")
+                if (cmd.Length > 7 && cmd.Substring(0, 7) == "account")
                     AccountCommand(cmd);
                 else
                     ManualCommand(cmd);
@@ -117,7 +115,10 @@ namespace RemoteServer
             string[] cmdSplit = command.Split(' ');
 
             if (cmdSplit.Length < 3)
+            {
+                logger.Log(LogLevel.Priority, "Invalid command structure.");
                 return;
+            }
 
             UserAccount user = users.GetElement(cmdSplit[0]);
 
