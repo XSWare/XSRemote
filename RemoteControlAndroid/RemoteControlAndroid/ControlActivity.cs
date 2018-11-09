@@ -51,7 +51,7 @@ namespace RemoteControlAndroid
             FindViewById<Button>(Resource.Id.buttonNext).Click += OnButtonNext;
             FindViewById<Button>(Resource.Id.buttonMute).Click += OnButtonMute;
 
-            CommandCenter.OnDisconnect += HandleDisconnect;
+            CommandCenter.OnDisconnect.Event += HandleDisconnect;
             CommandCenter.OnDataReceived += HandleDataReceived;
 
             keepAliveService = new Intent(this, typeof(KeepAliveService));
@@ -200,7 +200,7 @@ namespace RemoteControlAndroid
 
         private void CleanUpConnection()
         {
-            CommandCenter.OnDisconnect -= HandleDisconnect;
+            CommandCenter.OnDisconnect.Event -= HandleDisconnect;
             CommandCenter.OnDataReceived -= HandleDataReceived;
         }
 

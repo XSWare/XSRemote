@@ -5,6 +5,7 @@ using System.Net;
 using XSLibrary.Cryptography.ConnectionCryptos;
 using XSLibrary.Network.Connections;
 using XSLibrary.Network.Connectors;
+using XSLibrary.ThreadSafety.Events;
 using XSLibrary.Utility;
 
 namespace RemoteControlAndroid
@@ -14,7 +15,7 @@ namespace RemoteControlAndroid
         public delegate void ConnectHandle();
 
         public static event ConnectHandle OnConnect;
-        public static event OnDisconnectEvent.EventHandle OnDisconnect;
+        public static AutoInvokeEvent<CommandCenter, EndPoint> OnDisconnect = new AutoInvokeEvent<CommandCenter, EndPoint>();
         public static event IConnection.DataReceivedHandler OnDataReceived;
 
         public static CommandCenter Instance { get; private set; } = new CommandCenter();
@@ -73,7 +74,7 @@ namespace RemoteControlAndroid
             Instance.m_connection = connection;
             connection.DataReceivedEvent += Instance.HandleDataReceived;
             connection.InitializeReceiving();
-            connection.OnDisconnect += Instance.HandleDisconnect;
+            connection.OnDisconnect.Event += Instance.HandleDisconnect;
         }
 
         public static void SendControlCommand(string cmd)
@@ -122,7 +123,7 @@ namespace RemoteControlAndroid
         {
             if (!DisconnectedGracefully && !Reconnect())
             {
-                OnDisconnect?.Invoke(this, remote);
+                OnDisconnect.Invoke(this, remote);
                 ActiveLogger.Log(LogLevel.Warning, "Disconnected.");
             }
         }
