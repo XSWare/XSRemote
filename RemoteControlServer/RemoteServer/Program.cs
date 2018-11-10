@@ -14,7 +14,6 @@ namespace RemoteServer
         static MultiLogger logger;
         static FileUserBase dataBase = new FileUserBase(dataFolderPath, "accounts.txt");
         static UserPool users = new UserPool();
-        static AdminPool admins;
         static DeviceRegistration deviceRegistration;
         static UserRegistration userRegistration;
         static AdminRegistration adminRegistration;
@@ -42,9 +41,9 @@ namespace RemoteServer
             userRegistration.Logger = logger;
             userRegistration.Run();
 
-            admins = new AdminPool(logger);
+            AdminPool admins = new AdminPool(logger);
             GuardedAcceptor adminAccepter = new GuardedAcceptor(22224, 3);
-            adminRegistration = new AdminRegistration(logger, adminAccepter, admins, dataBase);
+            adminRegistration = new AdminRegistration(adminAccepter, admins, dataBase);
             adminRegistration.Logger = logger;
             adminRegistration.Run();
 
