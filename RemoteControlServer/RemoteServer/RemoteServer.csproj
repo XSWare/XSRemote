@@ -45,6 +45,8 @@
   <ItemGroup>
     <Compile Include="Accounts\AdminAccount.cs" />
     <Compile Include="Accounts\AdminPool.cs" />
+    <Compile Include="AccountCommands.cs" />
+    <Compile Include="CommunicationCommands.cs" />
     <Compile Include="Connections\ConnectionBase.cs" />
     <Compile Include="Registrations\AdminRegistration.cs" />
     <Compile Include="Registrations\UserRegistration.cs" />

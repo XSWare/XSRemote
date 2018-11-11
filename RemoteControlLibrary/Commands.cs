@@ -1,4 +1,4 @@
-﻿namespace RemoteShutdowLibrary
+﻿namespace RemoteShutdownLibrary
 {
     public class Commands
     {
