@@ -16,7 +16,7 @@ namespace RemoteServer
         static DeviceRegistration deviceRegistration;
         static UserRegistration userRegistration;
         static AdminRegistration adminRegistration;
-        static AccountCommands accountCommands;
+        static CommandQueue accountCommands;
         static CommunicationCommands communicationCommands;
 
         static void Main(string[] args)
@@ -32,8 +32,10 @@ namespace RemoteServer
 
             logger.Log(LogLevel.Priority, "Server started.");
 
-            accountCommands = new AccountCommands(dataBase);
-            accountCommands.Logger = logger;
+            accountCommands = new CommandQueue(dataBase, logger);
+            AdminPool admins = new AdminPool(accountCommands, logger);
+            accountCommands.AdminPool = admins;
+            accountCommands.UserPool = users;
 
             communicationCommands = new CommunicationCommands(users);
             communicationCommands.Logger = logger;
@@ -48,7 +50,6 @@ namespace RemoteServer
             userRegistration.Logger = logger;
             userRegistration.Run();
 
-            AdminPool admins = new AdminPool(logger);
             GuardedAcceptor adminAccepter = new GuardedAcceptor(22224, 3);
             adminRegistration = new AdminRegistration(adminAccepter, admins, dataBase);
             adminRegistration.Logger = logger;
@@ -58,7 +59,7 @@ namespace RemoteServer
             while ((cmd = Console.In.ReadLine()) != "exit")
             {
                 if (cmd.Length > 7 && cmd.Substring(0, 7) == "account")
-                    accountCommands.AccountCommand(cmd);
+                    accountCommands.SendMessage(cmd);
                 else
                     communicationCommands.ManualCommand(cmd);
             }
@@ -68,6 +69,7 @@ namespace RemoteServer
             deviceRegistration.Dispose();
             userRegistration.Dispose();
             adminRegistration.Dispose();
+            accountCommands.Stop(true);
 
             logger.Log(LogLevel.Priority, "Server shut down.");
             logger.Dispose();

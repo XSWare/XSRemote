@@ -51,5 +51,10 @@ namespace RemoteServer.Device
 
             return null;
         }
+
+        public void Disconnect()
+        {
+            m_connection.Disconnect();
+        }
     }
 }

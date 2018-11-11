@@ -37,5 +37,10 @@ namespace RemoteServer.Connections
         {
             OnDataReceived(this, TransmissionConverter.ConvertByteToString(data));
         }
+
+        public void Disconnect()
+        {
+            m_connection.Disconnect();
+        }
     }
 }

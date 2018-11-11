@@ -1,21 +1,29 @@
-﻿using System.Text;
+﻿using RemoteServer.Accounts;
+using System.Text;
 using XSLibrary.Cryptography.AccountManagement;
+using XSLibrary.MultithreadingPatterns.Actor;
 using XSLibrary.Utility;
 
 namespace RemoteServer
 {
-    class AccountCommands
+    class CommandQueue : Actor<string>
     {
-        public Logger Logger { get; set; } = Logger.NoLog;
-
         IUserDataBase DataBase { get; set; }
+        public AdminPool AdminPool { get; set; } = null;
+        public UserPool UserPool { get; set; } = null;
 
-        public AccountCommands(IUserDataBase database)
+        public CommandQueue(IUserDataBase database, Logger logger)
+            : base(logger, "Command queue")
         {
             DataBase = database;
         }
 
-        public void AccountCommand(string cmd)
+        protected override void HandleMessage(string message)
+        {
+            AccountCommand(message);
+        }
+
+        private void AccountCommand(string cmd)
         {
             string[] cmdSplit = cmd.Split(' ');
             if (cmdSplit.Length < 2)
@@ -50,13 +58,36 @@ namespace RemoteServer
         private void DeleteAccount(string username)
         {
             if (DataBase.EraseAccount(username))
+            {
                 Logger.Log(LogLevel.Priority, "Removed account \"{0}\" from database.", username);
+                KickUser(username);
+            }
         }
 
         private void ChangePassword(string username, string oldPassword, string newPassword)
         {
             if (DataBase.ChangePassword(username, Encoding.ASCII.GetBytes(oldPassword), Encoding.ASCII.GetBytes(newPassword)))
+            {
                 Logger.Log(LogLevel.Priority, "Changed password for user \"{0}\".", username);
+                KickUser(username);
+            }
+        }
+
+        private void KickUser(string username)
+        {
+            if (AdminPool != null)
+            {
+                AdminAccount admin = AdminPool.GetElement(username);
+                admin.Disconnect();
+                AdminPool.ReleaseElement(username);
+            }
+
+            if (UserPool != null)
+            {
+                UserAccount user = UserPool.GetElement(username);
+                user.Disconnect();
+                UserPool.ReleaseElement(username);
+            }
         }
     }
 }
