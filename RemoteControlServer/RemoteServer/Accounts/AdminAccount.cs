@@ -67,14 +67,13 @@ namespace RemoteServer.Accounts
                 {
                     Connection.OnDisconnect.Event -= OnAdminDisconnect;
                     Connection.Disconnect();
+                    Logger.Log(LogLevel.Priority, "Admin disconnected from account \"{0}\".", Username);
                 }
 
                 Connection = null;
 
                 if (ParentLog.Logs.Remove(NetworkLog))
                     NetworkLog.Dispose();
-
-                Logger.Log(LogLevel.Priority, "Admin disconnected from account \"{0}\".", Username);
             });
         }
     }
