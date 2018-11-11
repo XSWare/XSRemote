@@ -6,7 +6,7 @@ using Android.Runtime;
 using Android.Support.V7.App;
 using Android.Views;
 using Android.Widget;
-using RemoteShutdowLibrary;
+using RemoteShutdownLibrary;
 using System;
 using System.Net;
 using System.Threading;
@@ -63,6 +63,12 @@ namespace RemoteControlAndroid
             CommandCenter.ActiveLogger = logger;
             textDelay.SetSelection(textDelay.SelectionEnd);
             base.OnStart();
+        }
+
+        protected override void OnStop()
+        {
+            Disconnect();
+            base.OnStop();
         }
 
         protected override void OnResume()
@@ -177,18 +183,6 @@ namespace RemoteControlAndroid
                 CleanUpConnection();
                 base.OnBackPressed();
             });
-        }
-
-        public override void OnBackPressed()
-        {
-            Disconnect();
-            base.OnBackPressed();
-        }
-
-        protected override void OnDestroy()
-        {
-            Disconnect();
-            base.OnDestroy();
         }
 
         private void Disconnect()

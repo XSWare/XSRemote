@@ -1,5 +1,4 @@
-﻿using RemoteShutdowLibrary;
-using RemoteShutdownLibrary;
+﻿using RemoteShutdownLibrary;
 using System;
 using System.Net;
 using XSLibrary.Cryptography.ConnectionCryptos;
