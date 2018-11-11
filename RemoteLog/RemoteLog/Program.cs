@@ -1,3 +1,4 @@
+using RemoteShutdownLibrary;
 using System;
 using System.Net;
 using System.Text;
@@ -26,16 +27,26 @@ namespace RemoteLog
             string command = "";
             while ((command = Console.ReadLine()) != "exit")
             {
-                string[] split = command.Split(' ');
-                if (split.Length != 4 || !Int32.TryParse(split[1], out int port))
+                if (connections.Count > 0)
                 {
-                    logger.Log(LogLevel.Priority, "Invalid command format.");
-                    continue;
+                    foreach(IConnection connection in connections.Entries)
+                    {
+                        connection.Send(TransmissionConverter.ConvertStringToByte(command));
+                    }
                 }
+                else
+                {
+                    string[] split = command.Split(' ');
+                    if (split.Length != 4 || !Int32.TryParse(split[1], out int port))
+                    {
+                        logger.Log(LogLevel.Priority, "Invalid command format.");
+                        continue;
+                    }
 
-                string login = split[2] + " " + split[3];
+                    string login = split[2] + " " + split[3];
 
-                Connect(split[0], port, login);
+                    Connect(split[0], port, login);
+                }
             }
 
             foreach(IConnection connection in connections.Entries)

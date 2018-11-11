@@ -49,6 +49,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\RemoteControlLibrary\RemoteShutdownLibrary.csproj">
+      <Project>{1AD910B7-DF57-42F2-B520-9AF8C63B8CF4}</Project>
+      <Name>RemoteShutdownLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\XSLibrary\XSLibrary.csproj">
       <Project>{3f4fe9f4-ebe9-4a3d-9609-77c6a1e4621e}</Project>
       <Name>XSLibrary</Name>
