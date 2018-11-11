@@ -51,14 +51,15 @@ namespace RemoteControlAndroid
             AccountConnector connector = new AccountConnector();
             connector.Crypto = CryptoType.RSALegacy;
             connector.TimeoutCryptoHandshake = 30000;
-            connector.Login = "user password";
+            
 
             return connector;
         }
 
-        public static void Connect(EndPoint remote)
+        public static void Connect(EndPoint remote, string username, string password)
         {
             Instance.m_disconnectedGracefully = false;
+            Instance.m_connector.Login = username + " " + password;
 
             Action<TCPPacketConnection> successCallback = ((connection) =>
             {

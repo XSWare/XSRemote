@@ -13,6 +13,10 @@ namespace RemoteControlAndroid
 	public class MainActivity : AppCompatActivity
 	{
         Logger logger;
+        Configuration configuration = new Configuration();
+        EditText editServerIP;
+        EditText editUsername;
+        EditText editPassword;
 
         const string CONNECTING = "Connecting...";
         const string DISCONNECTED = "Disconnected.";
@@ -32,7 +36,17 @@ namespace RemoteControlAndroid
             Button buttonConnect = FindViewById<Button>(Resource.Id.buttonConnect);
             buttonConnect.Click += OnButtonConnect;
 
+            editServerIP = FindViewById<EditText>(Resource.Id.editIP);
+            editUsername = FindViewById<EditText>(Resource.Id.editUser);
+            editPassword = FindViewById<EditText>(Resource.Id.editPassword);
+
             ResetStatus();
+
+            configuration.Load();
+
+            editServerIP.Text = configuration.ServerIP;
+            editUsername.Text = configuration.Username;
+            editPassword.Text = configuration.Password;
 
             OnButtonConnect(this, new EventArgs());
         }
@@ -64,15 +78,32 @@ namespace RemoteControlAndroid
                 return;
             }
 
-            EditText editIP = FindViewById<EditText>(Resource.Id.editIP);
-
-            if (!IPAddress.TryParse(editIP.Text, out IPAddress ip))
+            string serverIP = editServerIP.Text;
+            if (!IPAddress.TryParse(serverIP, out IPAddress ip))
             {
                 SetStatus("Invalid IP format.");
                 return;
             }
 
-            CommandCenter.Connect(new IPEndPoint(ip, 443));
+            string username = editUsername.Text;
+            if(username.Contains(" "))
+            {
+                SetStatus("Username must not contain space character.");
+                return;
+            }
+
+            string password = editPassword.Text;
+            if (password.Contains(" "))
+            {
+                SetStatus("Password must not contain space character.");
+                return;
+            }
+
+            configuration.ServerIP = serverIP;
+            configuration.Username = username;
+            configuration.Password = password;
+            configuration.Save();
+            CommandCenter.Connect(new IPEndPoint(ip, 443), username, password);
         }
 
         private void ConnectSuccess()
