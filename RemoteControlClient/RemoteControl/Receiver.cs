@@ -36,7 +36,7 @@ namespace RemoteShutdown
         {
             Connection = connection;
             Connection.DataReceivedEvent += OnConnectionReceive;
-            Connection.OnDisconnect += OnServerDisconnect;
+            Connection.OnDisconnect.Event += OnServerDisconnect;
         }
 
         public void Run()

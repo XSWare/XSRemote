@@ -52,7 +52,7 @@ namespace RemoteShutdown
         {
             AccountConnector connector = new AccountConnector();
             connector.Crypto = CryptoType.RSALegacy;
-            connector.Login = "dave Gratuliere123!";
+            connector.Login = "user password";
 
             return connector;
         }
