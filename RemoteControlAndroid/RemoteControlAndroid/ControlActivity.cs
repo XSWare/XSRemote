@@ -185,6 +185,12 @@ namespace RemoteControlAndroid
             });
         }
 
+        public override void OnBackPressed()
+        {
+            Disconnect();
+            base.OnBackPressed();
+        }
+
         private void Disconnect()
         {
             CleanUpConnection();
