@@ -5,5 +5,5 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RemoteControlClientWPF"
         mc:Ignorable="d"
-        Title="XSRemote" Height="300" Width="400">
+        Title="XSRemote" Height="300" Width="400" Closing="OnClosing">
 </Window>

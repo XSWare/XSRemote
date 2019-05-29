@@ -1,11 +1,21 @@
 ﻿using RemoteShutdownLibrary;
 using RemoteShutdown.Functionalty;
+using XSLibrary.Utility;
 
 namespace RemoteShutdown.CommandResolving
 {
     public class MediaPlayerResolver : CommandResolver
     {
         MediaPlayerHandler MediaHandler { get; set; } = new MediaPlayerHandler();
+
+        public MediaPlayerResolver()
+        {
+        }
+
+        public MediaPlayerResolver(Logger logger)
+        {
+            MediaHandler.Logger = logger;
+        }
 
         public override string KeyPhrase { get { return Commands.MEDIA; } }
 

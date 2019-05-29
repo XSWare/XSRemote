@@ -59,6 +59,11 @@ namespace RemoteShutdown
 
         private void OnServerDisconnect(object sender, EndPoint endpoint)
         {
+            m_commandExecutionActor.Stop(true);
+
+            if (m_keepAliveThread != null && m_keepAliveThread.ThreadState != ThreadState.Unstarted)
+                m_keepAliveThread.Join();
+
             Logger.Log(LogLevel.Priority, "Disconnected from server.");
             ServerDisconnect?.Invoke(this, new EventArgs());
         }
@@ -95,9 +100,6 @@ namespace RemoteShutdown
         public void Dispose()
         {
             Connection.Disconnect();
-
-            if (m_keepAliveThread != null && m_keepAliveThread.ThreadState != ThreadState.Unstarted)
-                m_keepAliveThread.Join();
         }
     }
 }

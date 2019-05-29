@@ -5,6 +5,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:RemoteControlClientWPF"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" Background="Yellow">
-    <Button Content="Disconnect" HorizontalAlignment="Center" VerticalAlignment="Center" Click="OnDisconnectClick"/>
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+        <local:ScrollingLog x:Name="m_status"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
+        <Button Content="Disconnect" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Click="OnDisconnectClick"/>
+    </Grid>
 </UserControl>

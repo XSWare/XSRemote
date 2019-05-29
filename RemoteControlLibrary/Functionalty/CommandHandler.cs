@@ -4,6 +4,6 @@ namespace RemoteShutdown.Functionalty
 {
     public class CommandHandler
     {
-        public static Logger Logger { get; set; } = new LoggerConsole();
+        public Logger Logger { get; set; } = Logger.NoLog;
     }
 }
