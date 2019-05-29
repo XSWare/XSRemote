@@ -4,7 +4,7 @@ using System;
 
 namespace RemoteShutdown.CommandResolving
 {
-    class ShutdownCommandResolve : CommandResolver
+    public class ShutdownCommandResolve : CommandResolver
     {
         ShutdownHandler m_shutdownHandler;
 

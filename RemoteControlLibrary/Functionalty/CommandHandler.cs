@@ -2,7 +2,7 @@
 
 namespace RemoteShutdown.Functionalty
 {
-    class CommandHandler
+    public class CommandHandler
     {
         public static Logger Logger { get; set; } = new LoggerConsole();
     }

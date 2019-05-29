@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>RemoteShutdowLibrary</RootNamespace>
     <AssemblyName>RemoteShutdowLibrary</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -41,9 +41,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands.cs" />
+    <Compile Include="CommandResolver\CommandoExecutionActor.cs" />
+    <Compile Include="CommandResolver\CommandResolver.cs" />
+    <Compile Include="CommandResolver\MediaPlayerResolver.cs" />
+    <Compile Include="CommandResolver\ShutdownCommandResolve.cs" />
+    <Compile Include="CommandResolver\VolumeCommandResolver.cs" />
+    <Compile Include="CommandResolver\Commands.cs" />
+    <Compile Include="Functionalty\CommandHandler.cs" />
+    <Compile Include="Functionalty\MediaPlayerHandler.cs" />
+    <Compile Include="Functionalty\ShutdownHandler.cs" />
+    <Compile Include="Functionalty\VolumeHandler.cs" />
+    <Compile Include="Functionalty\WindowsCalls.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TransmissionConverter.cs" />
+    <Compile Include="Connectivity\Receiver.cs" />
+    <Compile Include="Connectivity\TransmissionConverter.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\XSLibrary\XSLibrary.csproj">
+      <Project>{3f4fe9f4-ebe9-4a3d-9609-77c6a1e4621e}</Project>
+      <Name>XSLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

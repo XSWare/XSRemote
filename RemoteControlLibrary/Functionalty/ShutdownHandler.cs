@@ -3,7 +3,7 @@ using XSLibrary.Utility;
 
 namespace RemoteShutdown.Functionalty
 {
-    class ShutdownHandler : CommandHandler
+    public class ShutdownHandler : CommandHandler
     {
         public void Shutdown(int seconds)
         {

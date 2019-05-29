@@ -7,7 +7,7 @@ using XSLibrary.Utility;
 
 namespace RemoteShutdown
 {
-    class DataReceiver : IDisposable
+    public class DataReceiver : IDisposable
     {
         public event EventHandler ServerDisconnect;
 

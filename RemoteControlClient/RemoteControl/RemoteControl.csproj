@@ -43,20 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CommandoExecutionActor.cs" />
-    <Compile Include="CommandResolver\CommandResolver.cs" />
-    <Compile Include="CommandResolver\MediaPlayerResolver.cs" />
-    <Compile Include="CommandResolver\VolumeCommandResolver.cs" />
     <Compile Include="LoopingConnector.cs" />
-    <Compile Include="Functionalty\CommandHandler.cs" />
-    <Compile Include="Functionalty\MediaPlayerHandler.cs" />
-    <Compile Include="Functionalty\ShutdownHandler.cs" />
-    <Compile Include="Functionalty\VolumeHandler.cs" />
-    <Compile Include="Functionalty\WindowsCalls.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="CommandResolver\ShutdownCommandResolve.cs" />
-    <Compile Include="Receiver.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

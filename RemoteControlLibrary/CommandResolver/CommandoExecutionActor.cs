@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace RemoteShutdown
 {
-    class CommandoExecutionActor : Actor<string>
+    public class CommandoExecutionActor : Actor<string>
     {
         List<CommandResolver> m_commandResolvers;
 

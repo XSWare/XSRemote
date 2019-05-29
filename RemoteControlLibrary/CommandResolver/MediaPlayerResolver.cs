@@ -3,7 +3,7 @@ using RemoteShutdown.Functionalty;
 
 namespace RemoteShutdown.CommandResolving
 {
-    class MediaPlayerResolver : CommandResolver
+    public class MediaPlayerResolver : CommandResolver
     {
         MediaPlayerHandler MediaHandler { get; set; } = new MediaPlayerHandler();
 

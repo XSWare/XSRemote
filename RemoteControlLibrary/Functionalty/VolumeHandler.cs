@@ -3,7 +3,7 @@ using XSLibrary.Utility;
 
 namespace RemoteShutdown.Functionalty
 {
-    class VolumeHandler : CommandHandler
+    public class VolumeHandler : CommandHandler
     {
         private const int APPCOMMAND_VOLUME_MUTE = 0x80000;
         private const int APPCOMMAND_VOLUME_UP = 0xA0000;
