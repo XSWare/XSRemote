@@ -11,7 +11,7 @@
             <RowDefinition />
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
-        <local:ScrollingLog x:Name="m_status"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
+        <local:ScrollingLog x:Name="m_status"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="10,0,0,0"/>
         <Button Content="Disconnect" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Click="OnDisconnectClick"/>
     </Grid>
 </UserControl>

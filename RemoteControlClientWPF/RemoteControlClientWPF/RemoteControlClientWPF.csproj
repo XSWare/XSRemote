@@ -131,5 +131,8 @@
   <ItemGroup>
     <Resource Include="LogoSmall.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="XSRemoteBigIcon.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
