@@ -6,7 +6,4 @@
         xmlns:local="clr-namespace:RemoteControlClientWPF"
         mc:Ignorable="d"
         Title="XSRemote" Height="300" Width="400">
-    <local:Login HorizontalAlignment="Center" VerticalAlignment="Center">
-        
-    </local:Login>
 </Window>

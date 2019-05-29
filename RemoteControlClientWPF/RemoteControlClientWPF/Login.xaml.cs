@@ -72,6 +72,8 @@ namespace RemoteControlClientWPF
                 return;
             }
 
+            SetStatus("Connecting...");
+
             EndPoint remote = new IPEndPoint(ip, 80);
 
             TCPPacketConnection connection;
