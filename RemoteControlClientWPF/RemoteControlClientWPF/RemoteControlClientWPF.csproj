@@ -101,5 +101,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\XSLibrary\XSLibrary.csproj">
+      <Project>{3f4fe9f4-ebe9-4a3d-9609-77c6a1e4621e}</Project>
+      <Name>XSLibrary</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
