@@ -1,4 +1,7 @@
-﻿using System;
+﻿using RemoteShutdown.CommandResolving;
+using RemoteShutdown.Functionalty;
+using System;
+using System.Collections.Generic;
 using XSLibrary.Network.Connections;
 using XSLibrary.Utility;
 
@@ -6,61 +9,102 @@ namespace RemoteShutdown
 {
     class Program
     {
+        static Logger m_logger = new LoggerConsole();
+        static CommandoExecutionActor m_commandoExecutionActor;
+
         static void Main(string[] args)
         {
-            Logger logger = new LoggerConsole();
+#if DEBUG
+            m_logger.LogLevel = LogLevel.Detail;
+#else
+            m_logger.LogLevel = LogLevel.Error;
+#endif
 
-
-            LoopingConnector connector = new LoopingConnector();
-            connector.Logger = logger;
+            List<CommandResolver> commandResolvers = new List<CommandResolver>()
+            {
+                new ShutdownCommandResolve(new ShutdownHandler()),
+                new VolumeCommandResolver(new VolumeHandler()),
+                new MediaPlayerResolver()
+            };
+            m_commandoExecutionActor = new CommandoExecutionActor(commandResolvers);
 
             bool reconnect = true;
 
             do
             {
-#if DEBUG
-                logger.LogLevel = LogLevel.Detail;
-#else
-                logger.LogLevel = LogLevel.Error;
-#endif
-                if (!connector.ConnectLoop(out TCPPacketConnection connection))
-                    break;
-
-                logger.Log(LogLevel.Priority, "Connected to server.");
-
-                DataReceiver dataReceiver = new DataReceiver(connection);
-                dataReceiver.Logger = logger;
-                dataReceiver.Run();
-
-                string command = "";
-                while ((command = Console.In.ReadLine()) != "connect")
+                DataReceiver dataReceiver = Connect();
+                if (dataReceiver != null)
                 {
-                    if(command == "exit")
-                    {
-                        reconnect = false;
-                        break;
-                    }
-
-                    if (command == "reconnect")
-                        break;
-
-                    if (command.StartsWith("send ") && command.Length > 5)
-                    {
-                        logger.Log(LogLevel.Priority, "Sending to server: {0}", command.Substring(5));
-                        dataReceiver.SendReply(command.Substring(5));
-                    }
-                    else
-                    {
-                        logger.Log(LogLevel.Priority, "Executing on device: {0}", command);
-                        dataReceiver.ManualCommand(command);
-                    }
+                    reconnect = OnlineCommandLoop(dataReceiver);
+                    dataReceiver.Dispose();
                 }
-
-                dataReceiver.Dispose();
+                else
+                    reconnect = LocalCommandLoop();
+                
             } while (reconnect);
 
-            Console.WriteLine("Press any key to exit.");
-            Console.ReadKey();
+            m_commandoExecutionActor.Stop(true);
+        }
+
+        static DataReceiver Connect()
+        {
+            LoopingConnector connector = new LoopingConnector();
+            connector.Logger = m_logger;
+
+            if (!connector.ConnectLoop(out TCPPacketConnection connection))
+                return null;
+
+            m_logger.Log(LogLevel.Priority, "Connected to server.");
+
+            DataReceiver dataReceiver = new DataReceiver(connection, m_commandoExecutionActor);
+            dataReceiver.Logger = m_logger;
+            dataReceiver.Run();
+
+            return dataReceiver;
+        }
+
+        static bool OnlineCommandLoop(DataReceiver dataReceiver)
+        {
+            string command = "";
+            while ((command = Console.In.ReadLine()) != "connect")
+            {
+                if (command == "exit")
+                    return false;
+
+                if (command == "reconnect")
+                    return true;
+
+                if (command.StartsWith("send ") && command.Length > 5)
+                {
+                    m_logger.Log(LogLevel.Priority, "Sending to server: {0}", command.Substring(5));
+                    dataReceiver.SendReply(command.Substring(5));
+                }
+                else
+                {
+                    m_logger.Log(LogLevel.Priority, "Executing on device: {0}", command);
+                    dataReceiver.ManualCommand(command);
+                }
+            }
+
+            return true;
+        }
+
+        static bool LocalCommandLoop()
+        {
+            Console.WriteLine("Unable to connect. Continuing in local mode.");
+
+            string command = "";
+            while ((command = Console.In.ReadLine()) != "connect")
+            {
+                if (command == "exit")
+                    return false;
+
+                m_logger.Log(LogLevel.Priority, "Executing on device: {0}", command);
+                m_commandoExecutionActor.SendMessage(command);
+
+            }
+
+            return true;
         }
     }
 }

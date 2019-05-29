@@ -1,12 +1,9 @@
-﻿using RemoteShutdown.CommandResolving;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Net;
 using System.Threading;
 using XSLibrary.Network.Connections;
 using RemoteShutdownLibrary;
 using XSLibrary.Utility;
-using RemoteShutdown.Functionalty;
 
 namespace RemoteShutdown
 {
@@ -32,24 +29,16 @@ namespace RemoteShutdown
         public int KeepAliveInterval { get; set; } = 10000;
         int ShutdownCheckInterval { get; set; } = 100;
 
-        public DataReceiver(TCPPacketConnection connection)
+        public DataReceiver(TCPPacketConnection connection, CommandoExecutionActor commandResolvers)
         {
             Connection = connection;
+            m_commandExecutionActor = commandResolvers;
             Connection.DataReceivedEvent += OnConnectionReceive;
             Connection.OnDisconnect.Event += OnServerDisconnect;
         }
 
         public void Run()
         {
-            List<CommandResolver> commandResolvers = new List<CommandResolver>()
-            {
-                new ShutdownCommandResolve(new ShutdownHandler()),
-                new VolumeCommandResolver(new VolumeHandler()),
-                new MediaPlayerResolver()
-            };
-
-            m_commandExecutionActor = new CommandoExecutionActor(commandResolvers);
-
             Connection.Logger = Logger;
             Connection.InitializeReceiving();
 
@@ -105,9 +94,6 @@ namespace RemoteShutdown
 
         public void Dispose()
         {
-            if(m_commandExecutionActor != null)
-                m_commandExecutionActor.Stop(true);
-
             Connection.Disconnect();
 
             if (m_keepAliveThread != null && m_keepAliveThread.ThreadState != ThreadState.Unstarted)
