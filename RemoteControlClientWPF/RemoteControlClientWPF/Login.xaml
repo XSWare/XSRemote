@@ -22,6 +22,11 @@
             <TextBlock Text="Password" Width="70"/>
             <TextBox Name="m_txtPassword" Width="100"/>
         </StackPanel>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,10">
+            <CheckBox Name="m_btnStorePassword" Content="Save password" Margin="0,0,10,0"/>
+            <CheckBox Name="m_btnAutoLogin" Content="Auto login"/>
+        </StackPanel>
+        
         <Button Content="Connect" HorizontalAlignment="Center" Click="OnLoginClick"/>
     </StackPanel>
 </UserControl>

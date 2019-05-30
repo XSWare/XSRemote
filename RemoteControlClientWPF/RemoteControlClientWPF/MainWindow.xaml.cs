@@ -6,19 +6,28 @@ namespace RemoteControlClientWPF
 {
     public partial class MainWindow : Window
     {
+        Login m_login;
+
         TCPPacketConnection Connection { get; set; }
+        
 
         public MainWindow()
         {
             InitializeComponent();
+            m_login = new Login();
+            m_login.SuccessfullyConnected += OnLogin;
+
+            
             OpenLogin();
+
+            if (m_login.AutoLogin)
+                m_login.Connect();
+
         }
 
         private void OpenLogin()
         {
-            Login login = new Login();
-            login.SuccessfullyConnected += OnLogin;
-            Content = login;
+            Content = m_login;
         }
 
         private void OnLogin(object sender, TCPPacketConnection connection)
