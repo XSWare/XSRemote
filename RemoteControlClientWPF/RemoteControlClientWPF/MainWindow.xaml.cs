@@ -17,7 +17,6 @@ namespace RemoteControlClientWPF
             m_login = new Login();
             m_login.SuccessfullyConnected += OnLogin;
 
-            
             OpenLogin();
 
             if (m_login.AutoLogin)

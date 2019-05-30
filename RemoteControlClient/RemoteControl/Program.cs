@@ -19,6 +19,7 @@ namespace RemoteShutdown
 #else
             m_logger.LogLevel = LogLevel.Error;
 #endif
+            Console.Title = "Remote";
 
             List<CommandResolver> commandResolvers = new List<CommandResolver>()
             {

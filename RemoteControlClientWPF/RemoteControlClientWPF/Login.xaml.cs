@@ -49,8 +49,8 @@ namespace RemoteControlClientWPF
 
         public string Password
         {
-            get { return m_txtPassword.Text; }
-            set { m_txtPassword.Text = value; }
+            get { return m_txtPassword.Password; }
+            set { m_txtPassword.Password = value; }
         }
 
         public bool StorePassword
@@ -61,7 +61,7 @@ namespace RemoteControlClientWPF
 
         public bool AutoLogin
         {
-            get { return (bool)m_btnAutoLogin.IsChecked; }
+            get { return IsAutoLoginEnabled() && (bool)m_btnAutoLogin.IsChecked; }
             set { m_btnAutoLogin.IsChecked = value; }
         }
 
@@ -79,6 +79,11 @@ namespace RemoteControlClientWPF
 
             if (Configuration.StorePassword)
                 Password = Configuration.Password;
+
+            StorePassword = Configuration.StorePassword;
+            AutoLogin = Configuration.AutoLogin;
+
+            ApplyAutoLoginReadonly();
         }
 
         private void OnLoginClick(object sender, RoutedEventArgs e)
@@ -124,23 +129,44 @@ namespace RemoteControlClientWPF
 
         private void SaveConfig()
         {
-            Configuration.Server = Server;
-            Configuration.User = Username;
-            Configuration.StorePassword = (bool)m_btnStorePassword.IsChecked;
+            Dispatcher.Invoke(() =>
+            {
+                Configuration.Server = Server;
+                Configuration.User = Username;
+                Configuration.StorePassword = StorePassword;
 
-            if (Configuration.StorePassword)
-                Configuration.Password = Password;
-            else
-                Configuration.Password = "";
+                if (Configuration.StorePassword)
+                    Configuration.Password = Password;
+                else
+                    Configuration.Password = "";
 
-            Configuration.AutoLogin = (bool)m_btnAutoLogin.IsChecked;
+                Configuration.AutoLogin = AutoLogin;
 
-            Configuration.StoreConfig();
+                Configuration.StoreConfig();
+            });
         }
 
         private void SetReadonly(bool readOnly)
         {
+            Dispatcher.Invoke(() =>
+            {
+                m_txtServer.IsEnabled = !readOnly;
+                m_txtUser.IsEnabled = !readOnly;
+                m_txtPassword.IsEnabled = !readOnly;
+                m_btnStorePassword.IsEnabled = !readOnly;
+                m_btnAutoLogin.IsEnabled = !readOnly && IsAutoLoginEnabled();
+                m_btnConnect.IsEnabled = !readOnly;
+            });
+        }
 
+        private void ApplyAutoLoginReadonly()
+        {
+            m_btnAutoLogin.IsEnabled = IsAutoLoginEnabled();
+        }
+
+        private bool IsAutoLoginEnabled()
+        {
+            return StorePassword;
         }
 
         private void SetStatus(string text)
@@ -151,6 +177,11 @@ namespace RemoteControlClientWPF
         private void ClearStatus()
         {
             SetStatus("");
+        }
+
+        private void OnStorePasswordClicked(object sender, RoutedEventArgs e)
+        {
+            ApplyAutoLoginReadonly();
         }
     }
 }

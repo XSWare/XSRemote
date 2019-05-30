@@ -9,18 +9,17 @@ namespace RemoteShutdown.Functionalty
         private const int APPCOMMAND_VOLUME_UP = 0xA0000;
         private const int APPCOMMAND_VOLUME_DOWN = 0x90000;
 
-        private IntPtr GetConsoleWindowHandle()
+        private IntPtr GetWindowHandle()
         {
-            Console.Title = "RemoteControl";
-            return WindowsCalls.FindWindowByCaption(IntPtr.Zero, Console.Title);
+            return WindowsCalls.FindWindowByCaption(IntPtr.Zero, "Remote");
         }
 
         private void SendVolumeMessage(int message)
         {
             WindowsCalls.SendMessageW(
-                GetConsoleWindowHandle(),
+                GetWindowHandle(),
                 WindowsCalls.WM_APPCOMMAND, 
-                GetConsoleWindowHandle(), 
+                GetWindowHandle(), 
                 (IntPtr)message);
         }
 
