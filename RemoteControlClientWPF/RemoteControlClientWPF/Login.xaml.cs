@@ -30,6 +30,9 @@ namespace RemoteControlClientWPF
         public delegate void SuccessfullyConnectedHandler(object sender, TCPPacketConnection connection);
         public event SuccessfullyConnectedHandler SuccessfullyConnected;
 
+        public delegate void LoginFailedHandler(object sender);
+        public event LoginFailedHandler LoginFailed;
+
         AccountConnector m_connector = new AccountConnector();
         TextblockLogger Logger { get; set; }
 
@@ -122,6 +125,8 @@ namespace RemoteControlClientWPF
                     else
                         connection.Disconnect();
                 }
+                else
+                    LoginFailed?.Invoke(this);
 
                 SetReadonly(false);
             }).Start();

@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.IO;
 using System.Net;
+using System.Threading;
 using System.Windows;
 using System.Windows.Forms;
 using XSLibrary.Network.Connections;
@@ -18,20 +19,25 @@ namespace RemoteControlClientWPF
         public MainWindow()
         {
             InitializeComponent();
-
-            m_notifyIcon = new NotifyIcon();
-            using (Stream iconStream = System.Windows.Application.GetResourceStream(new Uri("pack://application:,,,/;component/LogoSmall.ico")).Stream)
-                m_notifyIcon.Icon = new Icon(iconStream);
-
-            m_notifyIcon.MouseDoubleClick += new MouseEventHandler(MyNotifyIcon_MouseDoubleClick);
+            InitializeTrayIcon();
 
             m_login = new Login();
             m_login.SuccessfullyConnected += OnLogin;
+            m_login.LoginFailed += OnLoginFailed;
             OpenLogin();
 
             if (m_login.AutoLogin)
                 m_login.Connect();
 
+        }
+
+        private void InitializeTrayIcon()
+        {
+            m_notifyIcon = new NotifyIcon();
+            using (Stream iconStream = System.Windows.Application.GetResourceStream(new Uri("pack://application:,,,/;component/LogoSmall.ico")).Stream)
+                m_notifyIcon.Icon = new Icon(iconStream);
+
+            m_notifyIcon.MouseDoubleClick += new MouseEventHandler(MyNotifyIcon_MouseDoubleClick);
         }
 
         private void OpenLogin()
@@ -44,6 +50,15 @@ namespace RemoteControlClientWPF
             Content = new Control(connection);
             Connection = connection;
             connection.OnDisconnect.Event += OnDisconnect;
+        }
+
+        private void OnLoginFailed(object sender)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                if (WindowState == WindowState.Minimized)
+                    WindowState = WindowState.Normal;
+            });
         }
 
         private void OnDisconnect(object sender, EndPoint remote)
@@ -78,8 +93,16 @@ namespace RemoteControlClientWPF
             {
                 m_notifyIcon.Visible = false;
                 ShowInTaskbar = true;
+
                 Activate();
             }
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            // initially minimized
+            if(m_login.AutoLogin)
+                WindowState = WindowState.Minimized;
         }
     }
 }

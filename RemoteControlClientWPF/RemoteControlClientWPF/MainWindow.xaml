@@ -7,5 +7,5 @@
         mc:Ignorable="d"
         Height="320" Width="300"
         MinHeight="320" MinWidth="300" 
-        Title="Remote" Closing="OnClosing" StateChanged="OnStateChanged">
+        Title="Remote" Closing="OnClosing" StateChanged="OnStateChanged" Loaded="Window_Loaded">
 </Window>
