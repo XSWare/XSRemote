@@ -14,7 +14,7 @@ namespace RemoteControlAndroid
         public delegate void ConnectHandle();
 
         public static event ConnectHandle OnConnect;
-        public static AutoInvokeEvent<CommandCenter, EndPoint> OnDisconnect = new AutoInvokeEvent<CommandCenter, EndPoint>();
+        public static OneShotEvent<CommandCenter, EndPoint> OnDisconnect = new OneShotEvent<CommandCenter, EndPoint>();
         public static event IConnection.DataReceivedHandler OnDataReceived;
 
         public static CommandCenter Instance { get; private set; } = new CommandCenter();
