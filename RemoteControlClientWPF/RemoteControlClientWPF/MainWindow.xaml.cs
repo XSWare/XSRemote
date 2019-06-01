@@ -2,9 +2,9 @@
 using System.Drawing;
 using System.IO;
 using System.Net;
-using System.Threading;
 using System.Windows;
 using System.Windows.Forms;
+using System.Windows.Threading;
 using XSLibrary.Network.Connections;
 
 namespace RemoteControlClientWPF
@@ -43,6 +43,7 @@ namespace RemoteControlClientWPF
         private void OpenLogin()
         {
             Content = m_login;
+            Dispatcher.Invoke(() => m_login.SetFocus(), DispatcherPriority.Background);
         }
 
         private void OnLogin(object sender, TCPPacketConnection connection)

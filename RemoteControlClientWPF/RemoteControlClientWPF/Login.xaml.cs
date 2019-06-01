@@ -100,6 +100,18 @@ namespace RemoteControlClientWPF
             ApplyAutoLoginReadonly();
         }
 
+        public void SetFocus()
+        {
+            if (m_txtServer.Text.Length == 0)
+                m_txtServer.Focus();
+            else if (m_txtUser.Text.Length == 0)
+                m_txtUser.Focus();
+            else if (m_txtPassword.Password.Length == 0)
+                m_txtPassword.Focus();
+            else
+                m_btnConnect.Focus();
+        }
+
         private void OnLoginClick(object sender, RoutedEventArgs e)
         {
             Connect();
