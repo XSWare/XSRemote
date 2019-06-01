@@ -16,5 +16,8 @@
         public const string VOLUME_UP = "up";
         public const string VOLUME_DOWN = "down";
         public const string VOLUME_MUTE = "mute";
+
+        public const string SERVER = "server";
+        public const string SERVER_MESSAGE = "message";
     }
 }
