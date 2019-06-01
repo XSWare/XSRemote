@@ -1,36 +1,31 @@
 ﻿using RemoteShutdownLibrary;
 using RemoteShutdown.Functionalty;
-using XSLibrary.Utility;
 
 namespace RemoteShutdown.CommandResolving
 {
     public class MediaPlayerResolver : SingleArgumentResolver
     {
-        MediaPlayerHandler MediaHandler { get; set; } = new MediaPlayerHandler();
-
-        public MediaPlayerResolver()
-        {
-        }
-
-        public MediaPlayerResolver(Logger logger)
-        {
-            MediaHandler.Logger = logger;
-        }
-
         public override string KeyPhrase { get { return Commands.MEDIA; } }
+
+        MediaPlayerHandler m_mediaHandler;
+
+        public MediaPlayerResolver(MediaPlayerHandler mediaHandler)
+        {
+            m_mediaHandler = mediaHandler;
+        }
 
         protected override bool Execute(string option, string argument)
         {
             switch (option)
             {
                 case Commands.MEDIA_PLAY:
-                    MediaHandler.StartStop();
+                    m_mediaHandler.StartStop();
                     return true;
                 case Commands.MEDIA_PREVIOUS:
-                    MediaHandler.Previous();
+                    m_mediaHandler.Previous();
                     return true;
                 case Commands.MEDIA_NEXT:
-                    MediaHandler.Next();
+                    m_mediaHandler.Next();
                     return true;
             }
 

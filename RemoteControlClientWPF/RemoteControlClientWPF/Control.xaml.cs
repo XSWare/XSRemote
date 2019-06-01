@@ -41,7 +41,7 @@ namespace RemoteControlClientWPF
             List<ICommandResolver> commandResolver = new List<ICommandResolver>();
             commandResolver.Add(new ShutdownCommandResolve(new ShutdownHandler() { Logger = Logger }));
             commandResolver.Add(new VolumeCommandResolver(new VolumeHandler() { Logger = Logger }));
-            commandResolver.Add(new MediaPlayerResolver(Logger));
+            commandResolver.Add(new MediaPlayerResolver(new MediaPlayerHandler() { Logger = Logger }));
             commandResolver.Add(new ServerCommandResolver(new ServerCommandHandler() { Logger = Logger }));
 
             Receiver = new DataReceiver(connection, new CommandoExecutionActor(commandResolver));

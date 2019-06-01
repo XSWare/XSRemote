@@ -3,7 +3,7 @@ using XSLibrary.Utility;
 
 namespace RemoteShutdown.Functionalty
 {
-    class MediaPlayerHandler : CommandHandler
+    public class MediaPlayerHandler : CommandHandler
     {
         private const int MESSAGE_PLAY = 0x00004978;
         private const int MESSAGE_NEXT = 0x0000497B;
