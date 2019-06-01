@@ -12,15 +12,15 @@
         <TextBlock Name="m_status" HorizontalAlignment="Center" Margin="0,0,0,10" Foreground="Gray"/>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,10">
             <TextBlock Text="Server/IP" Width="70"/>
-            <TextBox Name="m_txtServer" Width="100" Text="80.109.174.197"/>
+            <TextBox Name="m_txtServer" Width="100" Text="80.109.174.197" KeyDown="OnKeyDown"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,10">
             <TextBlock Text="Username" Width="70"/>
-            <TextBox Name="m_txtUser" Width="100"/>
+            <TextBox Name="m_txtUser" Width="100" KeyDown="OnKeyDown"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,10">
             <TextBlock Text="Password" Width="70"/>
-            <PasswordBox Name="m_txtPassword" Width="100" />
+            <PasswordBox Name="m_txtPassword" Width="100" KeyDown="OnKeyDown"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,10">
             <CheckBox Name="m_btnStorePassword" Content="Save password" Click="OnStorePasswordClicked" Margin="0,0,10,0"/>

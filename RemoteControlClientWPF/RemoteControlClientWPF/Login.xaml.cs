@@ -1,8 +1,8 @@
-using System;
 using System.Net;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using XSLibrary.Cryptography.ConnectionCryptos;
 using XSLibrary.Network.Connections;
 using XSLibrary.Network.Connectors;
@@ -203,6 +203,12 @@ namespace RemoteControlClientWPF
         private void OnStorePasswordClicked(object sender, RoutedEventArgs e)
         {
             ApplyAutoLoginReadonly();
+        }
+
+        private void OnKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+                Connect();
         }
     }
 }
