@@ -39,6 +39,8 @@ namespace RemoteServer
                 DeleteAccount(cmdSplit[2]);
             else if (selection == "changepw" && cmdSplit.Length == 5)
                 ChangePassword(cmdSplit[2], cmdSplit[3], cmdSplit[4]);
+            else if (selection == "kick" && cmdSplit.Length == 3)
+                KickUser(cmdSplit[2]);
         }
 
         private void AddUser(string username, string password)
@@ -88,6 +90,8 @@ namespace RemoteServer
                 user.Disconnect();
                 UserPool.ReleaseElement(username);
             }
+
+            Logger.Log(LogLevel.Priority, "Kicked \"{0}\" from the server.", username);
         }
     }
 }
