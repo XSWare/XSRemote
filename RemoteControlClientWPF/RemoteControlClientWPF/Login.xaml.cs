@@ -1,3 +1,4 @@
+using System;
 using System.Net;
 using System.Threading;
 using System.Windows;
@@ -125,8 +126,24 @@ namespace RemoteControlClientWPF
 
             Connecting = true;
 
+            int port = 80;
+            string ipString = Server;
+
+            int portStart = Server.IndexOf(':');
+            if (portStart >= 0)
+            {
+                ipString = Server.Substring(0, portStart);
+                try { port = Convert.ToInt32(Server.Substring(portStart + 1)); }
+                catch
+                {
+                    Logger.Log(LogLevel.Priority, "Invalid port.");
+                    Connecting = false;
+                    return;
+                }
+            }
+
             IPAddress ip;
-            if (!IPAddress.TryParse(Server, out ip))
+            if (!IPAddress.TryParse(ipString, out ip))
             {
                 Logger.Log(LogLevel.Priority, "Invalid server/IP.");
                 Connecting = false;
@@ -135,7 +152,7 @@ namespace RemoteControlClientWPF
 
             SetStatus("Connecting...");
 
-            EndPoint remote = new IPEndPoint(ip, 80);
+            EndPoint remote = new IPEndPoint(ip, port);
 
             TCPPacketConnection connection;
             m_connector.Login = Username + " " + Password;
