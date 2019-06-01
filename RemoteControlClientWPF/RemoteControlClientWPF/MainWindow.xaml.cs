@@ -61,7 +61,7 @@ namespace RemoteControlClientWPF
 
         private void OnDisconnect(object sender, EndPoint remote)
         {
-            OpenLogin();
+            Dispatcher.Invoke(() => OpenLogin());
         }
 
         private void OnClosing(object sender, System.ComponentModel.CancelEventArgs e)
