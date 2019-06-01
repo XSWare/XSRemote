@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Net;
 using System.Threading;
 using System.Windows;
@@ -126,7 +126,7 @@ namespace RemoteControlClientWPF
                         connection.Disconnect();
                 }
                 else
-                    LoginFailed?.Invoke(this);
+                    Dispatcher.Invoke(() => LoginFailed?.Invoke(this));
 
                 SetReadonly(false);
             }).Start();

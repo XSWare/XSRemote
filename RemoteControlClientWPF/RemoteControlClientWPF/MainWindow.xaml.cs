@@ -54,11 +54,8 @@ namespace RemoteControlClientWPF
 
         private void OnLoginFailed(object sender)
         {
-            Dispatcher.Invoke(() =>
-            {
-                if (WindowState == WindowState.Minimized)
-                    WindowState = WindowState.Normal;
-            });
+            if (WindowState == WindowState.Minimized)
+                WindowState = WindowState.Normal;
         }
 
         private void OnDisconnect(object sender, EndPoint remote)
