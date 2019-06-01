@@ -7,9 +7,9 @@ namespace RemoteShutdown
 {
     public class CommandoExecutionActor : Actor<string>
     {
-        List<CommandResolver> m_commandResolvers;
+        List<ICommandResolver> m_commandResolvers;
 
-        public CommandoExecutionActor(List<CommandResolver> commandResolvers)
+        public CommandoExecutionActor(List<ICommandResolver> commandResolvers)
         {
             m_commandResolvers = commandResolvers;
         }
@@ -33,7 +33,7 @@ namespace RemoteShutdown
             string[] commandArguments = new string[argumentCount];
             Array.Copy(commandParts, 1, commandArguments, 0, argumentCount);
 
-            foreach(CommandResolver resolver in m_commandResolvers)
+            foreach(ICommandResolver resolver in m_commandResolvers)
             {
                 if (resolver.ResolveCommand(keyPhrase, commandArguments))
                     return true;

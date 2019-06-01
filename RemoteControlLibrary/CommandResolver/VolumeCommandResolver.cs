@@ -3,7 +3,7 @@ using RemoteShutdown.Functionalty;
 
 namespace RemoteShutdown.CommandResolving
 {
-    public class VolumeCommandResolver : CommandResolver
+    public class VolumeCommandResolver : SingleArgumentResolver
     {
         public override string KeyPhrase { get { return Commands.VOLUME; } }
 

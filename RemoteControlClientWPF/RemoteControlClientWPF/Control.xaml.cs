@@ -38,10 +38,11 @@ namespace RemoteControlClientWPF
 
             Logger.Log(LogLevel.Priority, "Connected to server.");
 
-            List<CommandResolver> commandResolver = new List<CommandResolver>();
+            List<ICommandResolver> commandResolver = new List<ICommandResolver>();
             commandResolver.Add(new ShutdownCommandResolve(new ShutdownHandler() { Logger = Logger }));
             commandResolver.Add(new VolumeCommandResolver(new VolumeHandler() { Logger = Logger }));
             commandResolver.Add(new MediaPlayerResolver(Logger));
+            commandResolver.Add(new ServerCommandResolver(new ServerCommandHandler() { Logger = Logger }));
 
             Receiver = new DataReceiver(connection, new CommandoExecutionActor(commandResolver));
             Receiver.Logger = Logger;

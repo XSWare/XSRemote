@@ -4,7 +4,7 @@ using XSLibrary.Utility;
 
 namespace RemoteShutdown.CommandResolving
 {
-    public class MediaPlayerResolver : CommandResolver
+    public class MediaPlayerResolver : SingleArgumentResolver
     {
         MediaPlayerHandler MediaHandler { get; set; } = new MediaPlayerHandler();
 
