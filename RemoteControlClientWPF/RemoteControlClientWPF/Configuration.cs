@@ -1,6 +1,5 @@
-using System;
 using System.Configuration;
-using System.IO;
+using XSLibrary.Cryptography;
 
 namespace RemoteControlClientWPF
 {
@@ -29,7 +28,7 @@ namespace RemoteControlClientWPF
             StoreBool(KEY_STORE_PASSWORD, StorePassword);
 
             if (StorePassword)
-                StoreValue(KEY_PASSWORD, Password);
+                StoreValue(KEY_PASSWORD, PasswordStorage.Encrypt(Password));
             else
                 StoreValue(KEY_PASSWORD, "");
 
@@ -46,7 +45,13 @@ namespace RemoteControlClientWPF
 
             StorePassword = LoadBool(KEY_STORE_PASSWORD);
             if (StorePassword)
-                Password = LoadValue(KEY_PASSWORD);
+            {
+                string temp;
+                if (PasswordStorage.Decrypt(LoadValue(KEY_PASSWORD), out temp))
+                    Password = temp;
+                else
+                    Password = "";
+            }
             else
                 Password = "";
 
