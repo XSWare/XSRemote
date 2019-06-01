@@ -61,7 +61,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Configuration.cs" />
+    <Compile Include="AppConfiguration.cs" />
     <Compile Include="ScrollingLog.xaml.cs">
       <DependentUpon>ScrollingLog.xaml</DependentUpon>
     </Compile>

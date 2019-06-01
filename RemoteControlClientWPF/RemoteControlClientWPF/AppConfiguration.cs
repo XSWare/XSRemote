@@ -3,13 +3,14 @@ using XSLibrary.Cryptography;
 
 namespace RemoteControlClientWPF
 {
-    class LoginConfiguration
+    public class AppConfiguration
     {
         const string KEY_SERVER = "server";
         const string KEY_USER = "user";
         const string KEY_PASSWORD = "password";
         const string KEY_STORE_PASSWORD = "storepassword";
         const string KEY_AUTOLOGIN = "autologin";
+        const string KEY_NOTIFICATIONS = "notifications";
 
         const string TRUE = "true";
         const string FALSE = "false";
@@ -19,6 +20,7 @@ namespace RemoteControlClientWPF
         public string Password { get; set; } = "";
         public bool StorePassword { get; set; } = false;
         public bool AutoLogin { get; set; } = false;
+        public bool Notifications { get; set; } = false;
 
         public void StoreConfig()
         {
@@ -33,6 +35,7 @@ namespace RemoteControlClientWPF
                 StoreValue(KEY_PASSWORD, "");
 
             StoreBool(KEY_AUTOLOGIN, AutoLogin);
+            StoreBool(KEY_NOTIFICATIONS, Notifications);
         }
 
         public void LoadConfig()
@@ -56,6 +59,7 @@ namespace RemoteControlClientWPF
                 Password = "";
 
             AutoLogin = LoadBool(KEY_AUTOLOGIN);
+            Notifications = LoadBool(KEY_NOTIFICATIONS);
         }
 
         private void StoreValue(string key, string value)

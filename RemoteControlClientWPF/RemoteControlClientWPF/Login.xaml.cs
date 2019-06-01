@@ -37,7 +37,7 @@ namespace RemoteControlClientWPF
         AccountConnector m_connector = new AccountConnector();
         TextblockLogger Logger { get; set; }
 
-        LoginConfiguration Configuration { get; set; } = new LoginConfiguration();
+        AppConfiguration Configuration { get; set; } = new AppConfiguration();
 
         bool m_connecting = false;
         bool Connecting
@@ -88,7 +88,13 @@ namespace RemoteControlClientWPF
             m_connector.Logger = Logger;
             m_connector.Crypto = CryptoType.RSALegacy;
 
-            Configuration.LoadConfig();
+            ApplyAutoLoginReadonly();
+        }
+
+        public void SetConfiguration(AppConfiguration config)
+        {
+            Configuration = config;
+
             Server = Configuration.Server;
             Username = Configuration.User;
 

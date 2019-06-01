@@ -12,6 +12,9 @@
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
         <local:ScrollingLog x:Name="m_status"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="10,0,0,0"/>
-        <Button Content="Disconnect" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Click="OnDisconnectClick"/>
+        <DockPanel Grid.Row="1">
+            <CheckBox Name="m_chkNotifications" Content="Show desktop notifications" DockPanel.Dock="Left" VerticalAlignment="Center" Margin="10,0,0,0" Click="NotificationCheckChanged"/>
+            <Button Content="Disconnect" DockPanel.Dock="Right" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0" Click="OnDisconnectClick"/>
+        </DockPanel> 
     </Grid>
 </UserControl>

@@ -26,16 +26,20 @@ namespace RemoteControlClientWPF
             }
         }
 
-        StatusLogger Logger { get; set; }
+        MultiLogger Logger { get; set; } = new MultiLogger();
+        AppConfiguration Configuration { get; set; }
         DataReceiver Receiver { get; set; }
 
-        public Control(TCPPacketConnection connection)
+        public Control(TCPPacketConnection connection, AppConfiguration config, Logger notificationLogger)
         {
             InitializeComponent();
 
-            Logger = new StatusLogger(this);
-            Logger.LogLevel = LogLevel.Error;
+            Configuration = config;
+            m_chkNotifications.IsChecked = Configuration.Notifications;
 
+            Logger.Logs.Add(new StatusLogger(this));
+            Logger.Logs.Add(notificationLogger);
+            Logger.LogLevel = LogLevel.Error;
             Logger.Log(LogLevel.Priority, "Connected to server.");
 
             List<ICommandResolver> commandResolver = new List<ICommandResolver>();
@@ -52,6 +56,12 @@ namespace RemoteControlClientWPF
         private void OnDisconnectClick(object sender, RoutedEventArgs e)
         {
             Receiver.Dispose();
+        }
+
+        private void NotificationCheckChanged(object sender, RoutedEventArgs e)
+        {
+            Configuration.Notifications = (bool)m_chkNotifications.IsChecked;
+            Configuration.StoreConfig();
         }
     }
 }
