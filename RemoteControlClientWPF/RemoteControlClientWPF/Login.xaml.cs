@@ -38,6 +38,17 @@ namespace RemoteControlClientWPF
 
         LoginConfiguration Configuration { get; set; } = new LoginConfiguration();
 
+        bool m_connecting = false;
+        bool Connecting
+        {
+            get { return m_connecting; }
+            set
+            {
+                m_connecting = value;
+                SetReadonly(m_connecting);
+            }
+        }
+
         public string Server
         {
             get { return m_txtServer.Text; }
@@ -96,14 +107,19 @@ namespace RemoteControlClientWPF
 
         public void Connect()
         {
+            // obviously not threadsafe so don't call it from  different threads
+            if (Connecting)
+                return;
+
+            Connecting = true;
+
             IPAddress ip;
             if (!IPAddress.TryParse(Server, out ip))
             {
                 Logger.Log(LogLevel.Priority, "Invalid server/IP.");
+                Connecting = false;
                 return;
             }
-
-            SetReadonly(true);
 
             SetStatus("Connecting...");
 
@@ -128,7 +144,7 @@ namespace RemoteControlClientWPF
                 else
                     Dispatcher.Invoke(() => LoginFailed?.Invoke(this));
 
-                SetReadonly(false);
+                Connecting = false;
             }).Start();
         }
 
