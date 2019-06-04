@@ -86,7 +86,7 @@ namespace RemoteControlClientWPF
             Logger = new TextblockLogger(m_status);
             Logger.LogLevel = LogLevel.Information;
             m_connector.Logger = Logger;
-            m_connector.Crypto = CryptoType.RSALegacy;
+            m_connector.Crypto = CryptoType.EC25519;
 
             ApplyAutoLoginReadonly();
         }

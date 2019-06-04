@@ -1,5 +1,4 @@
-﻿using RemoteServer.Accounts;
-using System;
+﻿using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -22,7 +21,7 @@ namespace RemoteServer.Registrations
             : base(accepter, accounts)
         {
             DataBase = dataBase;
-            Crypto = CryptoType.RSALegacy;
+            Crypto = CryptoType.EC25519;
             CryptoHandshakeTimeout = 30000;
         }
 

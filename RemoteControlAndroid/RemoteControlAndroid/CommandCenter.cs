@@ -48,7 +48,7 @@ namespace RemoteControlAndroid
         private AccountConnector CreateConnector()
         {
             AccountConnector connector = new AccountConnector();
-            connector.Crypto = CryptoType.RSALegacy;
+            connector.Crypto = CryptoType.EC25519;
             connector.TimeoutCryptoHandshake = 30000;
             
 
