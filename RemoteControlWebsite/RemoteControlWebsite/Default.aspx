@@ -6,7 +6,7 @@
 
 
     </script>
-    <asp:Image runat="server" ImageUrl="~/XSRemoteBigIcon.png"/>
+    <asp:Image runat="server" ImageUrl="~/Content/XSRemoteBigIcon.png" />
     <p class="lead">Register to access your devices from wherever you want.</p>
     <td colspan="2">
         <asp:Label
