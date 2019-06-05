@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -231,6 +231,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\RemoteControlLibrary\RemoteShutdownLibrary.csproj">
+      <Project>{1ad910b7-df57-42f2-b520-9af8c63b8cf4}</Project>
+      <Name>RemoteShutdownLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\XSLibrary\XSLibrary.csproj">
       <Project>{3f4fe9f4-ebe9-4a3d-9609-77c6a1e4621e}</Project>
       <Name>XSLibrary</Name>

@@ -4,6 +4,7 @@ using System;
 using XSLibrary.Cryptography.AccountManagement;
 using XSLibrary.Network.Acceptors;
 using XSLibrary.Utility;
+using RemoteShutdown;
 
 namespace RemoteServer
 {
@@ -11,7 +12,7 @@ namespace RemoteServer
     {
         static string dataFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\RemoteControl\\";
         static MultiLogger logger;
-        static FileUserBase dataBase = new FileUserBase(dataFolderPath, "accounts.txt");
+        static FileUserBase dataBase = new FileUserBase(CommonPaths.ACCOUNT_FOLDER, CommonPaths.ACCOUNT_FILE);
         static UserPool users = new UserPool();
         static DeviceRegistration deviceRegistration;
         static UserRegistration userRegistration;

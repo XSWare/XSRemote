@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RemoteShutdown;
+using System;
 using System.Text;
 using System.Web.UI;
 using XSLibrary.Cryptography.AccountManagement;
@@ -7,8 +8,7 @@ namespace RemoteControlWebsite
 {
     public partial class _Default : Page
     {
-        static string dataFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\RemoteControl\\";
-        static FileUserBase dataBase = new FileUserBase(dataFolderPath, "accounts.txt");
+        static FileUserBase dataBase = new FileUserBase(CommonPaths.ACCOUNT_FOLDER, CommonPaths.ACCOUNT_FILE);
 
         protected void OnRegisterClick(object sender, EventArgs e)
         {
