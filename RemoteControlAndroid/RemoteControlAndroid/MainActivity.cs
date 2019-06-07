@@ -103,7 +103,7 @@ namespace RemoteControlAndroid
             configuration.Username = username;
             configuration.Password = password;
             configuration.Save();
-            CommandCenter.Connect(new IPEndPoint(ip, 443), username, password);
+            CommandCenter.Connect(new IPEndPoint(ip, 22223), username, password);
         }
 
         private void ConnectSuccess()

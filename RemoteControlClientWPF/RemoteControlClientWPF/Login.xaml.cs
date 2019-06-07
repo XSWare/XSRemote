@@ -132,7 +132,7 @@ namespace RemoteControlClientWPF
 
             Connecting = true;
 
-            int port = 80;
+            int port = 22222;
             string ipString = Server;
 
             int portStart = Server.IndexOf(':');
