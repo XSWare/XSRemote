@@ -245,5 +245,17 @@ namespace RemoteControlClientWPF
             if (e.Key == Key.Enter)
                 Connect();
         }
+
+        private void OnTextFieldGotFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
+            textBox.SelectAll();
+        }
+
+        private void OnPasswordFieldGotFocus(object sender, RoutedEventArgs e)
+        {
+            PasswordBox textBox = sender as PasswordBox;
+            textBox.SelectAll();
+        }
     }
 }
