@@ -66,7 +66,7 @@ namespace RemoteLog
             }
 
             AccountConnector connector = new AccountConnector();
-            connector.Crypto = CryptoType.RSALegacy;
+            connector.Crypto = CryptoType.EC25519;
             connector.Logger = logger;
             connector.Login = login;
 
