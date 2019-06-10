@@ -47,5 +47,23 @@ namespace RemoteControlWebsite
             m_txtUser.Text = "";
             m_txtPassword.Text = "";
         }
+
+        protected void OnDownloadAndroidClick(object sender, EventArgs e)
+        {
+            DownloadFile("XSRemote.apk");
+        }
+
+        protected void OnDownloadWindowsClick(object sender, EventArgs e)
+        {
+            DownloadFile("XSRemote_windows.zip");
+        }
+
+        private void DownloadFile(string filename)
+        {
+            Response.ContentType = "application/octect-stream";
+            Response.AppendHeader("content-disposition", "filename=" + filename);
+            Response.TransmitFile(Server.MapPath("~/DownloadableContent/" + filename));
+            Response.End();
+        }
     }
 }

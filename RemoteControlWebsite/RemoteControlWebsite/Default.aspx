@@ -1,4 +1,4 @@
-<%@ Page Title="XSRemote" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="RemoteControlWebsite._Default" %>
+﻿<%@ Page Title="XSRemote" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="RemoteControlWebsite._Default" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
     <asp:Image runat="server" ImageUrl="~/Content/XSRemoteBigIcon.png" />
@@ -58,5 +58,17 @@
         ID="lblStatus"
         runat="server"
         />
-
+    <br />
+    <br />    
+    <br />
+    <br />
+    <asp:Button 
+        runat="server"
+        OnClick="OnDownloadAndroidClick"
+        Text="Download Android app"
+        style="margin-right:20px"/>
+    <asp:Button 
+        runat="server"
+        OnClick="OnDownloadWindowsClick"
+        Text="Download Windows client"/>
 </asp:Content>
