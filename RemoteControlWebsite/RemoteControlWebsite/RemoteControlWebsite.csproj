@@ -130,6 +130,8 @@
     <Content Include="Content\XSRemoteBigIcon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="DownloadableContent\XSRemote.apk" />
+    <Content Include="DownloadableContent\XSRemote_windows.zip" />
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="LogoSmall.ico" />
