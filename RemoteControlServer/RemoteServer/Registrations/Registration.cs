@@ -15,7 +15,8 @@ namespace RemoteServer.Registrations
         delegate void DisposeHandler();
         event DisposeHandler OnDispose;
 
-        public int KeepAliveInterval { get; set; } = 10000;
+        public int KeepAliveTime { get; set; } = 10000;
+        public int KeepAliveInterval { get; set; } = 1000;
 
         IUserDataBase DataBase { get; set; }
 
@@ -58,7 +59,7 @@ namespace RemoteServer.Registrations
 
                 connection.Send(new byte[1] { (byte)'+' }, AuthenticationTimeout);
 
-                connection.StartKeepAliveLoop(KeepAliveInterval, 100);
+                connection.SetUpKeepAlive(KeepAliveTime, KeepAliveInterval);
 
                 return true;
             }

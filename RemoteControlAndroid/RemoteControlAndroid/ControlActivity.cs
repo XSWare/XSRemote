@@ -20,8 +20,6 @@ namespace RemoteControlAndroid
     {
         Logger logger;
 
-        Intent keepAliveService;
-
         EditText textDelay;
         TextView labelStatus;
         Timer timer;
@@ -53,9 +51,6 @@ namespace RemoteControlAndroid
 
             CommandCenter.OnDisconnect.Event += HandleDisconnect;
             CommandCenter.OnDataReceived += HandleDataReceived;
-
-            keepAliveService = new Intent(this, typeof(KeepAliveService));
-            StartService(keepAliveService);
         }
 
         protected override void OnStart()
@@ -194,7 +189,6 @@ namespace RemoteControlAndroid
         private void Disconnect()
         {
             CleanUpConnection();
-            StopService(keepAliveService);
             CommandCenter.Disconnect();
         }
 

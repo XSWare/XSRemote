@@ -22,7 +22,8 @@ namespace RemoteControlAndroid
         public static bool Connected { get { return Instance.m_connection != null && Instance.m_connection.Connected; } }
         public static bool CurrentlyConnecting { get { return Instance.m_connector.CurrentlyConnecting; } }
         public static bool DisconnectedGracefully { get { return Instance.m_disconnectedGracefully; } }
-        public int KeepAliveInterval { get; private set; } = 10000;
+        public int KeepAliveTime { get; private set; } = 10000;
+        public int KeepAliveInterval { get; private set; } = 1000;
 
         Logger m_logger = Logger.NoLog;
         public static Logger ActiveLogger
@@ -75,6 +76,7 @@ namespace RemoteControlAndroid
             connection.DataReceivedEvent += Instance.HandleDataReceived;
             connection.InitializeReceiving();
             connection.OnDisconnect.Event += Instance.HandleDisconnect;
+            connection.SetUpKeepAlive(KeepAliveTime, KeepAliveInterval);
         }
 
         public static void SendControlCommand(string cmd)
@@ -106,12 +108,6 @@ namespace RemoteControlAndroid
 
             if (Connected)
                 Instance.m_connection.Disconnect();
-        }
-
-        public static void SendKeepAlive()
-        {
-            if (Connected)
-                Instance.m_connection.SendKeepAlive();
         }
 
         private void HandleDataReceived(object sender, byte[] data, EndPoint source)
