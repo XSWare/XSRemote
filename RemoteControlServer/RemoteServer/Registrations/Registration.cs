@@ -15,6 +15,8 @@ namespace RemoteServer.Registrations
         delegate void DisposeHandler();
         event DisposeHandler OnDispose;
 
+        public int KeepAliveInterval { get; set; } = 10000;
+
         IUserDataBase DataBase { get; set; }
 
         public Registration(TCPAcceptor accepter, IAccountPool<AccountType> accounts, IUserDataBase dataBase)
@@ -55,6 +57,8 @@ namespace RemoteServer.Registrations
                     return false;
 
                 connection.Send(new byte[1] { (byte)'+' }, AuthenticationTimeout);
+
+                connection.StartKeepAliveLoop(KeepAliveInterval, 100);
 
                 return true;
             }
