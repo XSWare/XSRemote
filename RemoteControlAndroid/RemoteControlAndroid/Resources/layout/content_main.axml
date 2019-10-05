@@ -16,12 +16,12 @@
         android:layout_marginBottom="160.0dp"
         android:id="@+id/labelStatus" />
     <EditText
-        android:inputType="date"
+        android:inputType="textWebEditText"
         android:layout_width="177.0dp"
         android:layout_height="wrap_content"
         android:id="@+id/editIP"
         android:selectAllOnFocus="true"
-        android:text="80.109.174.197"
+        android:text="xsware.at"
         android:textCursorDrawable="@null"
         android:textColor="@color/colorLabelText"
         android:background="@color/colorEditUnderscore"

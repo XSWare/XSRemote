@@ -7,7 +7,7 @@ namespace RemoteControlAndroid
     {
         const string CONFIG_FOLDER = "remotecontrol";
 
-        public string ServerIP = "80.109.174.197";
+        public string ServerIP = "xsware.at";
         public string Username = "username";
         public string Password = "password";
 
@@ -24,7 +24,7 @@ namespace RemoteControlAndroid
         public void Load()
         {
             var prefs = Application.Context.GetSharedPreferences(CONFIG_FOLDER, FileCreationMode.Private);
-            ServerIP = prefs.GetString("serverip", "80.109.174.197");
+            ServerIP = prefs.GetString("serverip", "xsware.at");
             Username = prefs.GetString("username", "username");
             Password = prefs.GetString("password", "password");
         }
