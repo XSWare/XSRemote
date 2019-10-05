@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net;
-using System.Threading;
 using XSLibrary.Network.Connections;
 using RemoteShutdownLibrary;
 using XSLibrary.Utility;
