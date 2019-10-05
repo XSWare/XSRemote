@@ -51,11 +51,11 @@ namespace RemoteControlAndroid
             FindViewById<Button>(Resource.Id.buttonNext).Click += OnButtonNext;
             FindViewById<Button>(Resource.Id.buttonMute).Click += OnButtonMute;
 
-            CommandCenter.OnDisconnect.Event += HandleDisconnect;
-            CommandCenter.OnDataReceived += HandleDataReceived;
-
             keepAliveService = new Intent(this, typeof(KeepAliveService));
             StartService(keepAliveService);
+
+            CommandCenter.OnDisconnect.Event += HandleDisconnect;
+            CommandCenter.OnDataReceived += HandleDataReceived;
         }
 
         protected override void OnStart()

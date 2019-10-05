@@ -75,7 +75,7 @@ namespace RemoteControlAndroid
 
             if (CommandCenter.Connected)
             {
-                StartActivity(typeof(ControlActivity));
+                ConnectSuccess();
                 return;
             }
 

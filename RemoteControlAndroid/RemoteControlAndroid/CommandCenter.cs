@@ -72,6 +72,7 @@ namespace RemoteControlAndroid
         void SetConnection(TCPPacketConnection connection)
         {
             Instance.m_connection = connection;
+            OnDisconnect = new OneShotEvent<CommandCenter, EndPoint>();
             connection.DataReceivedEvent += Instance.HandleDataReceived;
             connection.InitializeReceiving();
             connection.OnDisconnect.Event += Instance.HandleDisconnect;
