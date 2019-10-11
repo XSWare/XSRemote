@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using XSLibrary.Cryptography.ConnectionCryptos;
+using XSLibrary.Network;
 using XSLibrary.Network.Connections;
 using XSLibrary.Network.Connectors;
 using XSLibrary.Utility;
@@ -130,35 +131,16 @@ namespace RemoteControlClientWPF
             if (Connecting)
                 return;
 
-            Connecting = true;
-
-            int port = 22222;
-            string ipString = Server;
-
-            int portStart = Server.IndexOf(':');
-            if (portStart >= 0)
+            EndPoint remote;
+            try { remote = AddressResolver.Resolve(Server, 22222); }
+            catch (Exception ex)
             {
-                ipString = Server.Substring(0, portStart);
-                try { port = Convert.ToInt32(Server.Substring(portStart + 1)); }
-                catch
-                {
-                    Logger.Log(LogLevel.Priority, "Invalid port.");
-                    Connecting = false;
-                    return;
-                }
-            }
-
-            IPAddress ip;
-            if (!IPAddress.TryParse(ipString, out ip))
-            {
-                Logger.Log(LogLevel.Priority, "Invalid server/IP.");
-                Connecting = false;
+                SetStatus(ex.Message);
                 return;
             }
 
+            Connecting = true;
             SetStatus("Connecting...");
-
-            EndPoint remote = new IPEndPoint(ip, port);
 
             TCPPacketConnection connection;
             m_connector.Login = Username + " " + Password;

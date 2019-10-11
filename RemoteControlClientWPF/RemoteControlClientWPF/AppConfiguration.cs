@@ -42,7 +42,7 @@ namespace RemoteControlClientWPF
         {
             Server = LoadValue(KEY_SERVER);
             if (Server == null)
-                Server = "80.109.174.197";
+                Server = "xsware.at";
 
             User = LoadValue(KEY_USER);
 

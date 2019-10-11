@@ -6,6 +6,7 @@ using Android.Support.V7.App;
 using System.Net;
 using XSLibrary.Utility.Logging;
 using XSLibrary.Utility;
+using XSLibrary.Network;
 
 namespace RemoteControlAndroid
 {
@@ -74,14 +75,17 @@ namespace RemoteControlAndroid
 
             if (CommandCenter.Connected)
             {
-                StartActivity(typeof(ControlActivity));
+                ConnectSuccess();
                 return;
             }
 
             string serverIP = editServerIP.Text;
-            if (!IPAddress.TryParse(serverIP, out IPAddress ip))
-            {
-                SetStatus("Invalid IP format.");
+
+            IPEndPoint destination;
+            try { destination = AddressResolver.Resolve(serverIP, 22223); }
+            catch (Exception ex)
+            { 
+                SetStatus(ex.Message);
                 return;
             }
 
@@ -103,7 +107,7 @@ namespace RemoteControlAndroid
             configuration.Username = username;
             configuration.Password = password;
             configuration.Save();
-            CommandCenter.Connect(new IPEndPoint(ip, 22223), username, password);
+            CommandCenter.Connect(destination, username, password);
         }
 
         private void ConnectSuccess()
