@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Net;
 using System.Text;
 using XSLibrary.Cryptography.AccountManagement;
@@ -11,9 +11,6 @@ namespace RemoteServer.Registrations
 {
     abstract class Registration<AccountType> : IRegistration<AccountType> where AccountType : IUserAccount
     {
-        delegate void DisposeHandler();
-        event DisposeHandler OnDispose;
-
         public int KeepAliveTime { get; set; } = 10000;
         public int KeepAliveInterval { get; set; } = 1000;
 
