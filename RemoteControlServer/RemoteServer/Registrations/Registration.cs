@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Net;
 using System.Text;
 using XSLibrary.Cryptography.AccountManagement;
@@ -12,7 +12,7 @@ namespace RemoteServer.Registrations
     abstract class Registration<AccountType> : IRegistration<AccountType> where AccountType : IUserAccount
     {
         public int KeepAliveTime { get; set; } = 10000;
-        public int KeepAliveInterval { get; set; } = 1000;
+        public int KeepAliveInterval { get; set; } = 5000;
 
         IUserDataBase DataBase { get; set; }
 

@@ -24,8 +24,8 @@ namespace RemoteShutdown
             }
         }
 
-        public int KeepAliveInterval { get; set; } = 10000;
-        int ShutdownCheckInterval { get; set; } = 100;
+        public int KeepAliveTime { get; set; } = 10000;
+        public int KeepAliveInterval { get; set; } = 5000;
 
         public DataReceiver(TCPPacketConnection connection, CommandoExecutionActor commandResolvers)
         {
@@ -39,7 +39,7 @@ namespace RemoteShutdown
         {
             Connection.Logger = Logger;
             Connection.InitializeReceiving();
-            Connection.SetUpKeepAlive(10000, 1000);
+            Connection.SetUpKeepAlive(KeepAliveTime, KeepAliveInterval);
         }
 
         public void SendReply(string reply)
