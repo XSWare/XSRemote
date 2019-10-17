@@ -4,15 +4,15 @@ using System;
 using XSLibrary.Cryptography.AccountManagement;
 using XSLibrary.Network.Acceptors;
 using XSLibrary.Utility;
+using RemoteShutdown;
 
 namespace RemoteServer
 {
     class Program
     {
-        static string dataFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\XSRemote\\";
         static MultiLogger logger;
 
-        static IUserDataBase dataBase = new ServiceUserBase(Properties.Settings.Default.UserDataBaseConnectionString);
+        static IUserDataBase dataBase = new ServiceUserBase(CommonPaths.DATA_BASE_PATH);
         static UserPool users = new UserPool();
         static DeviceRegistration deviceRegistration;
         static UserRegistration userRegistration;
@@ -29,7 +29,7 @@ namespace RemoteServer
 #endif
             logger = new MultiLogger();
             logger.Logs.Add(new LoggerConsole());
-            logger.Logs.Add(new FileLogger(dataFolderPath + "log.txt"));
+            logger.Logs.Add(new FileLogger(CommonPaths.APP_FOLDER + "log.txt"));
 
             logger.Log(LogLevel.Priority, "Server started.");
 

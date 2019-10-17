@@ -111,14 +111,5 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="..\..\DataBase\UserDataBase.mdf">
-      <Link>UserDataBase.mdf</Link>
-    </Content>
-    <Content Include="..\..\DataBase\UserDataBase_log.ldf">
-      <Link>UserDataBase_log.ldf</Link>
-      <DependentUpon>UserDataBase.mdf</DependentUpon>
-    </Content>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
