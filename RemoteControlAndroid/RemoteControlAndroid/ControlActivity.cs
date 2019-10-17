@@ -20,8 +20,6 @@ namespace RemoteControlAndroid
     {
         Logger logger;
 
-        Intent keepAliveService;
-
         EditText textDelay;
         TextView labelStatus;
         Timer timer;
@@ -50,9 +48,6 @@ namespace RemoteControlAndroid
             FindViewById<Button>(Resource.Id.buttonPrevious).Click += OnButtonPrevious;
             FindViewById<Button>(Resource.Id.buttonNext).Click += OnButtonNext;
             FindViewById<Button>(Resource.Id.buttonMute).Click += OnButtonMute;
-
-            keepAliveService = new Intent(this, typeof(KeepAliveService));
-            StartService(keepAliveService);
 
             CommandCenter.OnDisconnect.Event += HandleDisconnect;
             CommandCenter.OnDataReceived += HandleDataReceived;
@@ -194,7 +189,6 @@ namespace RemoteControlAndroid
         private void Disconnect()
         {
             CleanUpConnection();
-            StopService(keepAliveService);
             CommandCenter.Disconnect();
         }
 

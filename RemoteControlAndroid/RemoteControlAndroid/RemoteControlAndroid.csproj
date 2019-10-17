@@ -68,7 +68,6 @@
     <Compile Include="CommandCenter.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="ControlActivity.cs" />
-    <Compile Include="KeepAliveService.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

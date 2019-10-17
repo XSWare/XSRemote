@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net;
-using System.Threading;
 using XSLibrary.Network.Connections;
 using RemoteShutdownLibrary;
 using XSLibrary.Utility;
@@ -13,7 +12,6 @@ namespace RemoteShutdown
 
         TCPPacketConnection Connection { get; set; }
         CommandoExecutionActor m_commandExecutionActor;
-        Thread m_keepAliveThread;
 
         Logger m_logger = Logger.NoLog;
         public Logger Logger
@@ -26,8 +24,8 @@ namespace RemoteShutdown
             }
         }
 
-        public int KeepAliveInterval { get; set; } = 10000;
-        int ShutdownCheckInterval { get; set; } = 100;
+        public int KeepAliveTime { get; set; } = 10000;
+        public int KeepAliveInterval { get; set; } = 5000;
 
         public DataReceiver(TCPPacketConnection connection, CommandoExecutionActor commandResolvers)
         {
@@ -41,10 +39,7 @@ namespace RemoteShutdown
         {
             Connection.Logger = Logger;
             Connection.InitializeReceiving();
-
-            m_keepAliveThread = new Thread(KeepAliveLoop);
-            m_keepAliveThread.Name = "Keep alive";
-            m_keepAliveThread.Start();
+            Connection.SetUpKeepAlive(KeepAliveTime, KeepAliveInterval);
         }
 
         public void SendReply(string reply)
@@ -60,28 +55,8 @@ namespace RemoteShutdown
         private void OnServerDisconnect(object sender, EndPoint endpoint)
         {
             m_commandExecutionActor.Stop(true);
-
-            if (m_keepAliveThread != null && m_keepAliveThread.ThreadState != ThreadState.Unstarted)
-                m_keepAliveThread.Join();
-
             Logger.Log(LogLevel.Priority, "Disconnected from server.");
             ServerDisconnect?.Invoke(this, new EventArgs());
-        }
-
-        private void KeepAliveLoop()
-        {
-            int interval = 0;
-            while (Connection.Connected)
-            {
-                Thread.Sleep(ShutdownCheckInterval);
-
-                interval += ShutdownCheckInterval;
-                if (interval >= KeepAliveInterval)
-                {
-                    interval = 0;
-                    Connection.SendKeepAlive();
-                }
-            }
         }
 
         private void OnConnectionReceive(object sender, byte[] data, EndPoint source)
