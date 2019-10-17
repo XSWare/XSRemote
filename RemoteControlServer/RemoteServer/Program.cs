@@ -9,9 +9,10 @@ namespace RemoteServer
 {
     class Program
     {
-        static string dataFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\RemoteControl\\";
+        static string dataFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\XSRemote\\";
         static MultiLogger logger;
-        static IUserDataBase dataBase = new ServiceUserBase("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=\"C:\\Users\\Dave\\Documents\\Visual Studio 2017\\Projects\\XSRemote\\DataBase\\UserDataBase.mdf\";Integrated Security=True");
+
+        static IUserDataBase dataBase = new ServiceUserBase(Properties.Settings.Default.UserDataBaseConnectionString);
         static UserPool users = new UserPool();
         static DeviceRegistration deviceRegistration;
         static UserRegistration userRegistration;
