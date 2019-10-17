@@ -4,7 +4,6 @@ using System;
 using XSLibrary.Cryptography.AccountManagement;
 using XSLibrary.Network.Acceptors;
 using XSLibrary.Utility;
-using RemoteShutdown;
 
 namespace RemoteServer
 {
@@ -12,7 +11,7 @@ namespace RemoteServer
     {
         static string dataFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\RemoteControl\\";
         static MultiLogger logger;
-        static FileUserBase dataBase = new FileUserBase(CommonPaths.ACCOUNT_FOLDER, CommonPaths.ACCOUNT_FILE);
+        static IUserDataBase dataBase = new ServiceUserBase("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=\"C:\\Users\\Dave\\Documents\\Visual Studio 2017\\Projects\\XSRemote\\DataBase\\UserDataBase.mdf\";Integrated Security=True");
         static UserPool users = new UserPool();
         static DeviceRegistration deviceRegistration;
         static UserRegistration userRegistration;
