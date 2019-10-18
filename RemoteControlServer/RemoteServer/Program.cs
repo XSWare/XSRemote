@@ -33,7 +33,7 @@ namespace RemoteServer
 
             logger.Log(LogLevel.Priority, "Server started.");
 
-            dataBase = new ServiceUserBase(CommonPaths.DATABASE_FILEPATH, CommonPaths.DATABASE_SERVER_STRING);
+            dataBase = new LocalSQLUserBase(CommonPaths.DATABASE_FILEPATH, CommonPaths.DATABASE_SERVER_STRING);
 
             accountCommands = new CommandQueue(dataBase, logger);
             AdminPool admins = new AdminPool(accountCommands, logger);
