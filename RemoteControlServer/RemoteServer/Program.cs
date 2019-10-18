@@ -34,7 +34,7 @@ namespace RemoteServer
 
             logger.Log(LogLevel.Priority, "Server started.");
 
-            if (!InitializeDatabase())
+            if (!InitializeDatabase(out dataBase))
             {
                 logger.Dispose();
                 Console.In.Read();
@@ -85,8 +85,10 @@ namespace RemoteServer
             Console.In.Read();
         }
 
-        static bool InitializeDatabase()
+        static bool InitializeDatabase(out IUserDataBase dataBase)
         {
+            dataBase = null;
+
             if (!File.Exists(CommonPaths.DATABASE_FILEPATH))
             {
                 logger.Log(LogLevel.Error, "Database in \"{0}\" not found. Copying local database...", CommonPaths.DATABASE_FILEPATH);
