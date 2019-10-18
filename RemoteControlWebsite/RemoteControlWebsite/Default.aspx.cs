@@ -8,7 +8,7 @@ namespace RemoteControlWebsite
 {
     public partial class _Default : Page
     {
-        static IUserDataBase dataBase = new ServiceUserBase(CommonPaths.DATA_BASE_PATH);
+        static IUserDataBase dataBase = new LocalSQLUserBase(CommonPaths.DATABASE_FILEPATH, CommonPaths.DATABASE_SERVER_STRING);
 
         protected void OnRegisterClick(object sender, EventArgs e)
         {
