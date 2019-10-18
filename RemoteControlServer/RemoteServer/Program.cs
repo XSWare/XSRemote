@@ -5,6 +5,7 @@ using XSLibrary.Cryptography.AccountManagement;
 using XSLibrary.Network.Acceptors;
 using XSLibrary.Utility;
 using RemoteShutdown;
+using System.IO;
 
 namespace RemoteServer
 {
@@ -12,7 +13,7 @@ namespace RemoteServer
     {
         static MultiLogger logger;
 
-        static IUserDataBase dataBase = new ServiceUserBase(CommonPaths.DATA_BASE_PATH);
+        static IUserDataBase dataBase;
         static UserPool users = new UserPool();
         static DeviceRegistration deviceRegistration;
         static UserRegistration userRegistration;
@@ -32,6 +33,13 @@ namespace RemoteServer
             logger.Logs.Add(new FileLogger(CommonPaths.APP_FOLDER + "log.txt"));
 
             logger.Log(LogLevel.Priority, "Server started.");
+
+            if (!InitializeDatabase())
+            {
+                logger.Dispose();
+                Console.In.Read();
+                return;
+            }
 
             accountCommands = new CommandQueue(dataBase, logger);
             AdminPool admins = new AdminPool(accountCommands, logger);
@@ -75,6 +83,28 @@ namespace RemoteServer
             logger.Log(LogLevel.Priority, "Server shut down.");
             logger.Dispose();
             Console.In.Read();
+        }
+
+        static bool InitializeDatabase()
+        {
+            if (!File.Exists(CommonPaths.DATABASE_FILEPATH))
+            {
+                logger.Log(LogLevel.Error, "Database in \"{0}\" not found. Copying local database...", CommonPaths.DATABASE_FILEPATH);
+
+                try
+                {
+                    File.Copy(CommonPaths.DATABASE_FILENAME, CommonPaths.DATABASE_FILEPATH);
+                    logger.Log(LogLevel.Information, "Local database copied to \"{0}\"", CommonPaths.DATABASE_FILEPATH);
+                }
+                catch
+                {
+                    logger.Log(LogLevel.Error, "Could not copy local database! Please create a database and restart the server.");
+                    return false;
+                }
+            }
+
+            dataBase = new ServiceUserBase(CommonPaths.DATABASE_CONNECTION_STRING);
+            return true;
         }
     }
 }
