@@ -49,6 +49,7 @@
     <Compile Include="CommandResolver\VolumeCommandResolver.cs" />
     <Compile Include="CommandResolver\Commands.cs" />
     <Compile Include="CommonPaths.cs" />
+    <Compile Include="DatabaseHandling.cs" />
     <Compile Include="Functionalty\CommandHandler.cs" />
     <Compile Include="Functionalty\MediaPlayerHandler.cs" />
     <Compile Include="Functionalty\ServerCommandHandler.cs" />
