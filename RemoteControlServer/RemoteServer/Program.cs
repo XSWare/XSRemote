@@ -33,12 +33,7 @@ namespace RemoteServer
 
             logger.Log(LogLevel.Priority, "Server started.");
 
-            if (!DatabaseHandling.InitializeDatabase(out dataBase, logger))
-            {
-                logger.Dispose();
-                Console.In.Read();
-                return;
-            }
+            dataBase = new ServiceUserBase(CommonPaths.DATABASE_FILEPATH, CommonPaths.DATABASE_SERVER_STRING);
 
             accountCommands = new CommandQueue(dataBase, logger);
             AdminPool admins = new AdminPool(accountCommands, logger);
