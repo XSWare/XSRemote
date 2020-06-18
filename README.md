@@ -2,7 +2,7 @@
 <img src="Preview/XSRemoteBigIcon.png?raw=true"/>
 </p>
 
-<p align="center">XS Remote is an open source, fullstack, client-server-app with a simple [HTTPS website](https://xsware.at).</p>  
+<p align="center">XS Remote is an open source, fullstack, client-server-app project with a simple <a href="https://xsware.at">HTTPS website</a>.</p>  
 
 <p align="center">
 <img width="350" height="350" src="Preview/website.JPG?raw=true"/>
