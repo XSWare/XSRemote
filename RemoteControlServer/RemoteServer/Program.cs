@@ -10,9 +10,9 @@ namespace RemoteServer
 {
     class Program
     {
-        static string dataFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\RemoteControl\\";
         static MultiLogger logger;
-        static FileUserBase dataBase = new FileUserBase(CommonPaths.ACCOUNT_FOLDER, CommonPaths.ACCOUNT_FILE);
+
+        static IUserDataBase dataBase;
         static UserPool users = new UserPool();
         static DeviceRegistration deviceRegistration;
         static UserRegistration userRegistration;
@@ -29,9 +29,11 @@ namespace RemoteServer
 #endif
             logger = new MultiLogger();
             logger.Logs.Add(new LoggerConsole());
-            logger.Logs.Add(new FileLogger(dataFolderPath + "log.txt"));
+            logger.Logs.Add(new FileLogger(CommonPaths.APP_FOLDER + "log.txt"));
 
             logger.Log(LogLevel.Priority, "Server started.");
+
+            dataBase = new LocalSQLUserBase(CommonPaths.DATABASE_FILEPATH, CommonPaths.DATABASE_SERVER_STRING);
 
             accountCommands = new CommandQueue(dataBase, logger);
             AdminPool admins = new AdminPool(accountCommands, logger);
